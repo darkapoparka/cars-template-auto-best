@@ -316,15 +316,16 @@
     }
     .dn-vehicle-card--listing .dn-vehicle-card__mobile-meta > span {
       display: inline-flex;
-      min-height: 24px;
+      min-height: 20px;
       align-items: center;
-      padding: 2px 6px;
-      border: 1px solid #dce0e5;
+      padding: 0 4px;
+      border: 1px solid #e7e8eb;
       border-radius: 6px;
       background: #f5f6f7;
-      color: #454d59;
+      color: #626873;
       font-size: 14px;
-      line-height: 1.4;
+      font-weight: 400;
+      line-height: 18px;
       white-space: nowrap;
     }
 
@@ -345,15 +346,16 @@
     }
 
     .dn-vehicle-card--listing .dn-vehicle-card__spec {
-      min-height: 24px;
+      min-height: 20px;
       gap: 4px;
-      padding: 2px 4px;
-      border: 1px solid #dce0e5;
+      padding: 0 4px;
+      border: 1px solid #e7e8eb;
       border-radius: 6px;
       background: #f5f6f7;
-      color: #454d59;
+      color: #626873;
       font-size: 14px;
-      line-height: 1.4;
+      font-weight: 400;
+      line-height: 18px;
     }
 
     .dn-vehicle-card--listing .dn-vehicle-card__spec :global(.dn-icon) {
