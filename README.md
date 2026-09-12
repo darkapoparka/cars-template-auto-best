@@ -64,3 +64,5 @@ provenance/                Asset origins and third-party notices
 [Product overview](PRODUCT.md), [template reference](TEMPLATE.md), [agent notes](AGENTS.md), [asset provenance](ASSET_PROVENANCE.md) and [source notices](SOURCE_LICENSE.md) complete the reference.
 
 The template intentionally retains source/sample content for its design. Replace it when creating a real dealer site. Technical setup does not depend on an Agency OS account, CRM, database, or another automotive template.
+
+Current cross-repository ownership, approved releases, dealer-copy workflow and standalone/mounted limits: [Cars integration](docs/CARS-INTEGRATION.md).
