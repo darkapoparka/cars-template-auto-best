@@ -96,7 +96,7 @@
       <div class="dn-search__desktop-form">
         <VehicleSearchDialog filters={desktopFilters}>
           {#snippet children(openFilters, filtersOpen)}
-            <VehicleDiscoveryForm filters={desktopFilters} {openFilters} {filtersOpen} onDraftChange={(filters) => desktopFilters = filters} showFilterAction={false} />
+            <VehicleDiscoveryForm filters={desktopFilters} {openFilters} {filtersOpen} onDraftChange={(filters) => desktopFilters = filters} showFilterAction={false} enableSticky={false} />
           {/snippet}
         </VehicleSearchDialog>
       </div>
