@@ -20,6 +20,9 @@
   let linkDraft = $state<string | null>(null);
   let link = $derived(linkDraft ?? importUrl ?? '');
   let linkError = $state('');
+  let infoError = $state('');
+  let importMode = $state<'listing' | 'criteria'>('listing');
+  let importBrief = $state('');
   let selectedLink = $state('');
   let make = $state('');
   let model = $state('');
@@ -33,12 +36,14 @@
   let photos = $state<{ file: File; url: string }[]>([]);
   let photoError = $state('');
   let feedback = $state('');
+  let completion = $state<'copied' | 'shared' | ''>('');
   let sharing = $state(false);
-  const steps = ['Автомобил', 'Детайли', 'Преглед'];
+  const steps = $derived(selling ? ['Автомобил', 'Детайли', 'Преглед'] : ['Автомобил', 'Контакт', 'Преглед']);
   const summary = $derived([
     selling ? `Автомобил за ${purpose.toLowerCase()}` : 'Запитване за внос',
     selectedLink ? `Обява: ${selectedLink}` : '',
-    `Автомобил: ${[make.trim(), model.trim()].filter(Boolean).join(' ') || 'По избраната обява'}`,
+    !selling && !selectedLink && importBrief.trim() ? `Критерии: ${importBrief.trim()}` : '',
+    `Автомобил: ${[make.trim(), model.trim()].filter(Boolean).join(' ') || (selectedLink ? 'По избраната обява' : 'По описаните критерии')}`, 
     year ? `${selling ? 'Година' : 'Година от'}: ${year}` : '',
     mileage ? `Пробег: ${mileage} км` : '',
     budget ? `${selling ? 'Желана цена' : 'Бюджет'}: ${budget} EUR` : '',
@@ -56,11 +61,16 @@
   };
 
   async function open(event: MouseEvent, withoutLink = false) {
+    if (!selling && withoutLink && !importBrief.trim()) {
+      infoError = 'Опишете накратко какъв автомобил търсите.';
+      return;
+    }
     if (!selling && !withoutLink && !resolveImportUrl(link)) {
-      linkError = link.trim() ? 'Въведете валиден линк с https:// или http://.' : 'Поставете линк или изберете „Нямам обява“.';
+      linkError = link.trim() ? 'Въведете валиден линк с https:// или http://.' : 'Поставете линк към обява.';
       linkInput?.focus();
       return;
     }
+    infoError = '';
     const nextLink = selling || withoutLink ? '' : resolveImportUrl(link) || '';
     if (nextLink !== selectedLink) step = 0;
     selectedLink = nextLink;
@@ -69,6 +79,7 @@
     document.body.style.setProperty('--dn-enquiry-scroll', `-${scrollY}px`);
     opened = true;
     feedback = '';
+    completion = '';
     dialog.showModal();
     await tick();
     heading.focus();
@@ -118,8 +129,10 @@
   async function copy() {
     try {
       await navigator.clipboard.writeText(summary);
-      feedback = 'Текстът е копиран. Снимките не са включени.';
+      completion = selling ? '' : 'copied';
+      feedback = selling ? 'Текстът е копиран. Снимките не са включени.' : 'Текстът е копиран и е готов за изпращане към екипа.';
     } catch {
+      completion = '';
       feedback = 'Копирането не е достъпно. Маркирайте текста от прегледа.';
     }
   }
@@ -138,36 +151,61 @@
         return;
       }
       await navigator.share({ title, text: summary, ...(files.length ? { files } : {}) });
-      feedback = 'Споделянето е приключено. Потвърдете получаването с екипа.';
+      completion = selling ? '' : 'shared';
+      feedback = selling ? 'Споделянето е приключено. Потвърдете получаването с екипа.' : '';
     } catch (error) {
-      if (!(error instanceof Error && error.name === 'AbortError')) feedback = 'Споделянето не успя. Можете да копирате текста и да опитате отново.';
+      if (!(error instanceof Error && error.name === 'AbortError')) {
+        completion = '';
+        feedback = 'Споделянето не успя. Можете да копирате текста и да опитате отново.';
+      }
     } finally { sharing = false; }
   }
 
   onDestroy(() => photos.forEach((photo) => URL.revokeObjectURL(photo.url)));
 </script>
 
-<div class="dn-enquiry-entry">
+<div class="dn-enquiry-entry" class:dn-enquiry-entry--import={!selling}>
   {#if selling}
     <button class="dn-enquiry-primary" type="button" onclick={open} aria-haspopup="dialog">
       Предложи автомобил <Icon name="arrow-right" size={20} />
     </button>
     <a class="dn-enquiry-contact" href={resolve('/contact')}>Свържете се с нас</a>
   {:else}
-    <label class="dn-sr-only" for="enquiry-listing-link">Линк към обявата</label>
-    <div class="dn-enquiry-link-row">
-      <input id="enquiry-listing-link" bind:this={linkInput} value={link} oninput={(event) => { linkDraft = event.currentTarget.value; linkError = ''; }} type="url" inputmode="url" maxlength={2048} placeholder="Линк към обявата" autocomplete="off" autocapitalize="none" spellcheck={false} aria-invalid={linkError ? true : undefined} aria-describedby={linkError ? 'enquiry-link-error' : undefined} />
-      <button type="button" class="dn-enquiry-link-go" onclick={open} aria-label="Продължи с обявата" aria-haspopup="dialog"><Icon name="arrow-right" size={22} /></button>
+    <div class="dn-enquiry-import-segments" role="group" aria-label="Начин за заявка">
+      <button type="button" class:active={importMode === 'listing'} aria-pressed={importMode === 'listing'} onclick={() => { importMode = 'listing'; linkError = ''; infoError = ''; }}>Линк</button>
+      <button type="button" class:active={importMode === 'criteria'} aria-pressed={importMode === 'criteria'} onclick={() => { importMode = 'criteria'; linkError = ''; infoError = ''; }}>Инфо</button>
     </div>
-    {#if linkError}<p class="dn-enquiry-error" id="enquiry-link-error" role="alert">{linkError}</p>{/if}
-    <button class="dn-enquiry-alternative dn-action--enquiry" type="button" onclick={(event) => open(event, true)} aria-haspopup="dialog">Нямам обява — опиши</button>
+
+    {#if importMode === 'listing'}
+      <label class="dn-sr-only" for="enquiry-listing-link">Линк към обява за внос</label>
+      <div class="dn-enquiry-import-field">
+        <Icon name="globe" size={20} strokeWidth={1.8} />
+        <input id="enquiry-listing-link" bind:this={linkInput} value={link} oninput={(event) => { linkDraft = event.currentTarget.value; linkError = ''; }} type="url" inputmode="url" maxlength={2048} placeholder="Поставете линк към обява" autocomplete="off" autocapitalize="none" spellcheck={false} aria-invalid={linkError ? true : undefined} aria-describedby={linkError ? 'enquiry-link-error' : undefined} />
+        <button type="button" class="dn-enquiry-import-go" onclick={open} aria-label="Продължи с обявата" aria-haspopup="dialog"><Icon name="arrow-right" size={20} strokeWidth={2} /></button>
+      </div>
+      {#if linkError}<p class="dn-enquiry-error" id="enquiry-link-error" role="alert">{linkError}</p>{/if}
+    {:else}
+      <div class="dn-enquiry-import-info">
+        <label class="dn-sr-only" for="enquiry-import-info">Опишете автомобила, който търсите</label>
+        <textarea id="enquiry-import-info" bind:value={importBrief} oninput={() => infoError = ''} maxlength={500} rows="2" placeholder="Напр. BMW X5, дизел, 2020+, xDrive…"></textarea>
+        <div class="dn-enquiry-import-info__footer">
+          <label><span>Бюджет до, €</span><input bind:value={budget} inputmode="numeric" pattern={'[0-9]{1,8}'} maxlength={8} placeholder="40000" /></label>
+          <button type="button" class="dn-enquiry-import-go" onclick={(event) => open(event, true)} aria-label="Продължи с описанието" aria-haspopup="dialog"><Icon name="arrow-right" size={20} strokeWidth={2} /></button>
+        </div>
+      </div>
+      {#if infoError}<p class="dn-enquiry-error" role="alert">{infoError}</p>{/if}
+    {/if}
+    <a class="dn-enquiry-import-call" href={brand.phoneHref} aria-label={`Обади се на ${brand.phone}`}>
+      <Icon name="phone" size={17} />
+      <span>Обади се · {brand.phone}</span>
+    </a>
   {/if}
 </div>
 
-<dialog class="dn-enquiry" aria-labelledby="enquiry-title" {@attach attachDialog} onclose={restore} onclick={(event) => { if (event.target === event.currentTarget) dialog.close(); }}>
+<dialog class="dn-enquiry" class:dn-enquiry--import={!selling} aria-labelledby="enquiry-title" {@attach attachDialog} onclose={restore} onclick={(event) => { if (event.target === event.currentTarget) dialog.close(); }}>
   <div class="dn-enquiry-panel">
     <header class="dn-enquiry-header">
-      <div><h2 id="enquiry-title" tabindex="-1" bind:this={heading}>{step === 0 ? title : step === 1 ? 'Още няколко детайла' : 'Преглед на запитването'}</h2></div>
+      <div><h2 id="enquiry-title" tabindex="-1" bind:this={heading}>{step === 0 ? (selling ? title : 'Автомобил за внос') : step === 1 ? (selling ? 'Още няколко детайла' : 'Контакт и предпочитания') : 'Преглед на запитването'}</h2></div>
       <button class="dn-enquiry-close" type="button" aria-label="Затвори запитването" onclick={() => dialog.close()}><Icon name="x" size={22} /></button>
     </header>
     <ol class="dn-enquiry-steps" aria-label="Стъпки на запитването">
@@ -180,14 +218,19 @@
         {#if selling}
           <fieldset class="dn-enquiry-purpose"><legend>Какво предпочитате?</legend>{#each ['Продажба', 'Бартер'] as option (option)}<label><input type="radio" bind:group={purpose} value={option} />{option}</label>{/each}</fieldset>
         {/if}
-        <div class="dn-enquiry-fields">
-          <label>Марка{#if !selectedLink}<span aria-hidden="true"> *</span>{/if}<input bind:value={make} name="make" required={!selectedLink} maxlength={60} placeholder="Напр. Audi" autocomplete="off" /></label>
-          <label>Модел{#if !selectedLink}<span aria-hidden="true"> *</span>{/if}<input bind:value={model} name="model" required={!selectedLink} maxlength={80} placeholder="Напр. A6 Avant" autocomplete="off" /></label>
-          <label>{selling ? 'Година' : 'Година от'}<input bind:value={year} name="year" type="text" inputmode="numeric" pattern={'(19|20)[0-9]{2}'} maxlength={4} placeholder="Напр. 2020" /></label>
-          {#if selling}<label>Пробег, км<input bind:value={mileage} name="mileage" inputmode="numeric" pattern={'[0-9]{1,7}'} maxlength={7} placeholder="Напр. 85000" /></label>{/if}
-          <label class:wide={!selling}>{selling ? 'Желана цена, €' : 'Бюджет, €'} <span class="dn-enquiry-optional">по желание</span><input bind:value={budget} name="budget" inputmode="numeric" pattern={'[0-9]{1,8}'} maxlength={8} placeholder="Напр. 35000" /></label>
+        <div class="dn-enquiry-fields" class:dn-enquiry-fields--import={!selling}>
+          <label>Марка{#if !selectedLink && !importBrief.trim()}<span aria-hidden="true"> *</span>{/if}<input bind:value={make} name="make" required={!selectedLink && !importBrief.trim()} maxlength={60} placeholder="Напр. Audi" autocomplete="off" /></label>
+          <label>Модел{#if !selectedLink && !importBrief.trim()}<span aria-hidden="true"> *</span>{/if}<input bind:value={model} name="model" required={!selectedLink && !importBrief.trim()} maxlength={80} placeholder="Напр. A6 Avant" autocomplete="off" /></label>
+          {#if selling}
+            <label>Година<input bind:value={year} name="year" type="text" inputmode="numeric" pattern={'(19|20)[0-9]{2}'} maxlength={4} placeholder="Напр. 2020" /></label>
+            <label>Пробег, км<input bind:value={mileage} name="mileage" inputmode="numeric" pattern={'[0-9]{1,7}'} maxlength={7} placeholder="Напр. 85000" /></label>
+            <label>Желана цена, € <span class="dn-enquiry-optional">по желание</span><input bind:value={budget} name="budget" inputmode="numeric" pattern={'[0-9]{1,8}'} maxlength={8} placeholder="Напр. 35000" /></label>
+          {:else}
+            <label class="wide">Бюджет до, € <span class="dn-enquiry-optional">по желание</span><input bind:value={budget} name="budget" inputmode="numeric" pattern={'[0-9]{1,8}'} maxlength={8} placeholder="Напр. 40000" /></label>
+            <label class="wide">Година от <span class="dn-enquiry-optional">по желание</span><input bind:value={year} name="year" type="text" inputmode="numeric" pattern={'(19|20)[0-9]{2}'} maxlength={4} placeholder="Напр. 2020" /></label>
+          {/if}
         </div>
-        <p class="dn-enquiry-note">{selectedLink ? 'Добавете предпочитания, ако се различават от обявата.' : '* Задължителни полета.'} Данните остават в тази страница до споделяне.</p>
+        <p class="dn-enquiry-note">{selectedLink ? 'Добавете предпочитания, ако се различават от обявата.' : importBrief.trim() ? 'Описанието от „Инфо“ е добавено към заявката. Допълнете само ако е нужно.' : '* Задължителни полета.'} Данните остават в тази страница до споделяне.</p>
       {:else if step === 1}
         {#if selling}
           <div class="dn-enquiry-photos">
@@ -208,7 +251,13 @@
         <div class="dn-enquiry-review-heading"><h3>Всичко на едно място</h3><button class="dn-enquiry-text-button" type="button" onclick={() => move(0)}>Редактирай</button></div>
         <pre class="dn-enquiry-summary">{summary}</pre>
         {#if photos.length}<div class="dn-enquiry-review-photos">{#each photos as photo (photo.url)}<img src={photo.url} alt={photo.file.name} />{/each}</div>{/if}
-        <div class="dn-enquiry-review-notice"><strong>Запитването още не е изпратено.</strong><p>Споделете го през приложение на устройството или копирайте текста. За директен разговор: <a href={brand.phoneHref}>{brand.phone}</a>.</p></div>
+        <div class="dn-enquiry-review-notice"><strong>{completion ? 'Запитването е подготвено.' : 'Запитването още не е изпратено.'}</strong><p>{selling ? 'Споделете го през приложение на устройството или копирайте текста.' : 'Изберете „Сподели запитването“ или копирайте текста към предпочитано приложение.'} За директен разговор: <a href={brand.phoneHref}>{brand.phone}</a>.</p></div>
+        {#if completion}
+          <div class="dn-enquiry-success" role="status">
+            <Icon name="message" size={20} strokeWidth={1.8} />
+            <div><strong>{completion === 'shared' ? 'Споделянето приключи' : 'Текстът е копиран'}</strong><p>{completion === 'shared' ? 'Ако приложението поиска потвърждение, завършете изпращането там.' : 'Поставете текста в приложението, през което искате да се свържете с екипа.'}</p></div>
+          </div>
+        {/if}
         <button class="dn-enquiry-copy" type="button" onclick={copy}>Копирай текста</button>
       {/if}
       {#if feedback}<p class="dn-enquiry-feedback" role="status">{feedback}</p>{/if}
@@ -224,19 +273,38 @@
 
 <style>
   .dn-enquiry-entry { margin-top: 24px; }
+  .dn-enquiry-entry--import { margin-top: 20px; }
   @media (max-width: 991px) {
     .dn-enquiry-entry { text-align: center; }
+    .dn-enquiry-entry--import { text-align: left; }
   }
   button { cursor: pointer; font: inherit; }
   .dn-enquiry-primary { display: flex; width: 100%; min-height: 52px; align-items: center; justify-content: center; gap: 12px; padding: 12px 20px; border: 0; border-radius: var(--dn-radius-button); background: var(--dn-red); color: #fff; font-size: 16px; font-weight: 600; line-height: 1.4; }
   .dn-enquiry-primary:hover { background: var(--dn-red-hover); }
   .dn-enquiry-primary:disabled { opacity: .6; cursor: wait; }
   .dn-enquiry-entry > p { margin: 10px 0 0; color: #5d626b; font-size: 14px; }
-  .dn-enquiry-alternative { display: flex; width: fit-content; max-width: 100%; min-height: 44px; align-items: center; justify-content: center; gap: 8px; margin: 12px auto 0; padding: 8px 16px; border: 0; border-radius: var(--dn-radius-button); font-size: 14px; font-weight: 600; text-align: center; }
   .dn-enquiry-contact { display: flex; width: fit-content; min-height: 44px; align-items: center; justify-content: center; margin: 8px auto 0; padding: 8px 18px; border-radius: var(--dn-radius-button); background: #f2f3f5; color: #24272c; font-size: 14px; font-weight: 600; }
-  .dn-enquiry-link-row { display: flex; gap: 8px; padding: 6px; background: #f2f3f5; border-radius: 16px; }
-  .dn-enquiry-link-row > input { min-width: 0; flex: 1; padding: 8px 10px; border: 0; border-radius: 10px; background: transparent; color: #202329; font-size: 16px; }
-  .dn-enquiry-link-go { display: grid; width: 48px; height: 48px; flex: 0 0 48px; place-items: center; border: 0; border-radius: 12px; background: var(--dn-red); color: #fff; }
+  .dn-enquiry-import-segments { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 4px; margin-bottom: 12px; padding: 4px; border-radius: var(--dn-radius-button); background: #eef0f2; }
+  .dn-enquiry-import-segments button { min-height: 40px; border: 0; border-radius: var(--dn-radius-button); background: transparent; color: #666d77; font-size: 14px; font-weight: 700; }
+  .dn-enquiry-import-segments button.active { background: #fff; color: #202329; box-shadow: 0 1px 4px rgba(17,22,29,.08); }
+  .dn-enquiry-import-segments button:focus-visible { outline: 2px solid #202329; outline-offset: 2px; }
+  .dn-enquiry-import-field { display: flex; min-height: 54px; align-items: center; gap: 10px; padding: 4px 4px 4px 16px; border-radius: var(--dn-radius-button); background: var(--dn-home-panel); color: var(--dn-muted); }
+  .dn-enquiry-import-field input { width: 100%; min-width: 0; min-height: 46px; padding: 0; border: 0; outline: 0; background: transparent; color: var(--dn-ink); font: inherit; font-size: 16px; }
+  .dn-enquiry-import-field input::placeholder { color: var(--dn-muted); opacity: 1; }
+  .dn-enquiry-import-field:focus-within { outline: 3px solid var(--dn-focus); outline-offset: 2px; }
+  .dn-enquiry-import-go { display: grid; width: 46px; height: 46px; flex: 0 0 46px; place-items: center; padding: 0; border: 0; border-radius: 50%; background: var(--dn-red); color: #fff; }
+  .dn-enquiry-import-go:hover, .dn-enquiry-import-go:focus-visible { background: var(--dn-red-hover); }
+  .dn-enquiry-import-info { overflow: hidden; border-radius: 18px; background: var(--dn-home-panel); }
+  .dn-enquiry-import-info > textarea { display: block; width: 100%; min-height: 72px; margin: 0; padding: 14px 16px 8px; box-sizing: border-box; border: 0; outline: 0; resize: none; background: transparent; color: var(--dn-ink); font: inherit; font-size: 15px; line-height: 1.45; }
+  .dn-enquiry-import-info > textarea::placeholder { color: var(--dn-muted); opacity: 1; }
+  .dn-enquiry-import-info:focus-within { outline: 3px solid var(--dn-focus); outline-offset: 2px; }
+  .dn-enquiry-import-info__footer { display: flex; align-items: end; gap: 10px; padding: 8px 4px 4px 16px; }
+  .dn-enquiry-import-info__footer label { min-width: 0; flex: 1; color: #737a84; font-size: 10px; font-weight: 650; line-height: 1.2; }
+  .dn-enquiry-import-info__footer label > span { display: block; margin-bottom: 2px; }
+  .dn-enquiry-import-info__footer input { width: 100%; min-height: 28px; padding: 0; border: 0; outline: 0; background: transparent; color: var(--dn-ink); font: inherit; font-size: 15px; font-weight: 600; }
+  .dn-enquiry-import-info__footer .dn-enquiry-import-go { margin-left: auto; }
+  .dn-enquiry-import-call { display: flex; width: fit-content; min-height: 44px; align-items: center; justify-content: center; gap: 7px; margin: 10px auto 0; padding: 8px 16px; border-radius: var(--dn-radius-button); background: #f1f2f4; color: #2d3238; font-size: 13px; font-weight: 650; text-decoration: none; }
+  .dn-enquiry-import-call:is(:hover,:focus-visible) { background: #e7e9ec; }
   .dn-enquiry-text-button { display: inline-flex; min-height: 44px; align-items: center; gap: 8px; padding: 8px 0; border: 0; background: transparent; color: #202329; font-size: 14px; font-weight: 600; text-align: left; text-decoration: underline; text-underline-offset: 4px; }
   :global(body:has(.dn-enquiry[open])) { position: fixed; top: var(--dn-enquiry-scroll, 0); width: 100%; overflow: hidden; }
   .dn-enquiry { width: min(620px, calc(100% - 32px)); max-width: none; max-height: calc(100dvh - 48px); margin: auto; padding: 0; border: 0; border-radius: 20px; background: #fff; color: #202329; overflow: hidden; }
@@ -290,10 +358,17 @@
   .dn-enquiry-review-notice { color: #525a66; font-size: 14px; line-height: 1.6; }
   .dn-enquiry-review-notice p { margin: 6px 0 0; }
   .dn-enquiry-review-notice a { color: #202329; text-decoration: underline; }
+  .dn-enquiry-success { display: flex; gap: 11px; margin-top: 14px; padding: 14px; border-radius: 12px; background: #202329; color: #fff; }
+  .dn-enquiry-success :global(svg) { flex: 0 0 20px; margin-top: 1px; color: #ff4a4f; }
+  .dn-enquiry-success strong { font-size: 14px; line-height: 1.35; }
+  .dn-enquiry-success p { margin: 4px 0 0; color: #d3d7dc; font-size: 13px; line-height: 1.45; }
   .dn-enquiry-copy { min-height: 44px; margin-top: 14px; padding: 10px 16px; border: 1px solid #d9dde2; border-radius: 12px; background: #fff; font-size: 14px; font-weight: 600; }
   .dn-enquiry-error, .dn-enquiry-entry > .dn-enquiry-error { color: #a40000; font-size: 14px; line-height: 1.5; }
   .dn-enquiry-feedback { padding: 12px; border-radius: 10px; background: #f2f3f5; font-size: 14px; line-height: 1.5; }
   @media (max-width: 767px) {
+    .dn-enquiry-import-field { min-height: 44px; gap: 8px; padding: 0 0 0 14px; }
+    .dn-enquiry-import-field input { min-height: 44px; }
+    .dn-enquiry-import-go { width: 44px; height: 44px; flex-basis: 44px; }
     .dn-enquiry { inset: auto 0 0; width: 100%; height: calc(100dvh - max(24px,env(safe-area-inset-top))); max-height: 900px; margin: 0; border-radius: 24px 24px 0 0; }
     .dn-enquiry-panel { height: 100%; max-height: 100%; }
     .dn-enquiry-header { padding: 20px 16px 16px; }
@@ -308,10 +383,22 @@
     @keyframes enquiry-enter { from { transform: translateY(32px); } to { transform: translateY(0); } }
   }
   @media (max-width: 767px) {
-    .dn-enquiry-link-row { height: 52px; padding: 4px; gap: 4px; border-radius: var(--dn-radius-button); }
-    .dn-enquiry-link-row > input { height: 44px; padding: 0 12px; border-radius: var(--dn-radius-button); }
-    .dn-enquiry-link-row:focus-within { outline: 2px solid var(--dn-red); outline-offset: 2px; }
-    .dn-enquiry-link-go { width: 44px; height: 44px; flex-basis: 44px; border-radius: 50%; }
+    .dn-enquiry--import .dn-enquiry-steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0;
+      padding: 0 12px 14px;
+    }
+    .dn-enquiry--import .dn-enquiry-steps li {
+      justify-content: center;
+      gap: 5px;
+      min-width: 0;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .dn-enquiry--import .dn-enquiry-fields--import,
+    .dn-enquiry--import .dn-enquiry-contact-fields { grid-template-columns: 1fr; gap: 14px; }
+    .dn-enquiry--import .dn-enquiry-fields--import .wide { grid-column: auto; }
   }
   @media (max-width: 359px) {
     .dn-enquiry-steps { gap: 10px; }

@@ -90,3 +90,5 @@ The standalone source and current working preview have different enquiry/finance
 ## Documentation-only changes
 
 Check relative file links, headings, code paths and npm script names against the checkout. Ensure examples describe implemented APIs and Markdown is UTF-8. Application screenshots and a production rebuild are unnecessary when the diff changes only documentation and no build inputs.
+
+Current cross-repository ownership, approved releases, dealer-copy workflow and standalone/mounted limits: [Cars integration](CARS-INTEGRATION.md).

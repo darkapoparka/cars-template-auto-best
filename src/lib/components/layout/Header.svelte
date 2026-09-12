@@ -3,7 +3,7 @@
   import { afterNavigate } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
-  import { onDestroy, tick } from 'svelte';
+  import { onDestroy, onMount, tick } from 'svelte';
   import type { Attachment } from 'svelte/attachments';
   import Icon from '$components/ui/Icon.svelte';
   import NavigationFeatureCard from './NavigationFeatureCard.svelte';
@@ -24,6 +24,7 @@
   let megaPanel: HTMLDivElement | undefined;
   let megaTrigger: HTMLAnchorElement | undefined;
   let releaseScroll: (() => void) | undefined;
+  let mobileFooterVisible = $state(false);
   const compactDetailHeader = $derived(
     page.url.pathname.startsWith('/blog-detail/') || page.url.pathname.startsWith('/listing-detail-v1/')
   );
@@ -191,6 +192,16 @@
   };
 
 
+  onMount(() => {
+    const footer = document.querySelector<HTMLElement>('.dn-footer');
+    if (!footer || !('IntersectionObserver' in window)) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      mobileFooterVisible = Boolean(entry?.isIntersecting && entry.intersectionRatio > 0.02);
+    }, { threshold: [0, 0.02, 0.2] });
+    observer.observe(footer);
+    return () => observer.disconnect();
+  });
+
   onDestroy(() => {
     releaseScroll?.();
   });
@@ -210,6 +221,7 @@
 <div
   class="dn-header-fixed"
   class:dn-header-fixed--compact={compactDetailHeader}
+  class:dn-header-fixed--vehicle-detail={vehicleDetailHeader}
   class:dn-header-fixed--mobile-surface={mobileSurfaceHeader}
   class:dn-header-fixed--home-overlay={homeOverlayHeader}
   class:dn-header-fixed--contact-overlay={page.url.pathname === '/contact'}
@@ -353,7 +365,7 @@
         </a>
       </nav>
     {:else}
-      <nav class="dn-mobile-bottom-nav" aria-label="Основни действия">
+      <nav class="dn-mobile-bottom-nav" class:dn-mobile-bottom-nav--footer-visible={mobileFooterVisible} aria-label="Основни действия">
         <a
           class:active={page.url.pathname === '/'}
           href={resolve('/')}
@@ -539,6 +551,13 @@
       grid-template-columns: repeat(5, minmax(0, 1fr));
       padding-inline: max(8px, env(safe-area-inset-left)) max(8px, env(safe-area-inset-right));
       padding-top: 3px;
+      transition: transform 180ms ease, opacity 150ms ease;
+    }
+
+    .dn-mobile-bottom-nav--footer-visible {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(100%);
     }
 
     .dn-mobile-bottom-nav a,
@@ -638,6 +657,16 @@
 
     .dn-header-fixed--listing .dn-topbar,
     .dn-header-fixed--listing .dn-header__lower {
+      display: none;
+    }
+
+    .dn-header-fixed--vehicle-detail {
+      height: 0;
+      min-height: 0;
+      background: transparent;
+    }
+
+    .dn-header-fixed--vehicle-detail .dn-header {
       display: none;
     }
 
