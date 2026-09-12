@@ -1,54 +1,36 @@
-# Template reference — Auto Best
+# Template reference
 
-## Identity
-- Repository: `darkapoparka/cars-template-auto-best`
-- Key: `auto-best`
-- Portfolio role: **core**
-- Design position: full-service dealership / strongest all-rounder
-- Stack: SvelteKit + Vite
-- Primary entry: `/`
-- Suggested standalone review port: `6461`
+| Property | Value |
+| --- | --- |
+| Name / key | Auto Best / `auto-best` |
+| Project repository | `darkapoparka/cars-template-auto-best` |
+| Application | One Svelte 5 / SvelteKit application |
+| Main entry | `/` |
+| Homepage variants | One retained homepage; legacy home URLs redirect to it |
+| Default presentation | Bulgarian, euro prices, kilometres |
+| Default identity | Auto Best wordmark with source/sample contact and content data |
+| Runtime content | Typed local modules; no database required |
+| Build target | Vercel adapter |
+| Suggested development URL | `http://127.0.0.1:6461/` |
 
-This is a **template master**, not a sendable dealer demo. The baseline intentionally preserves source/sample material for design fidelity; every lead copy requires a complete identity and content sweep.
+## Main configuration
 
-## Install and run
-```text
-npm ci
-npm run dev -- --host 127.0.0.1 --port 6461 --strictPort
-```
+`src/lib/config/brand.ts` contains names, logo, phone, address and social destinations. `src/lib/config/template.ts` contains preview/published mode, canonical origin, identity/inventory verification flags and optional team/partner sections. Design tokens live in `src/lib/styles/tokens.css`.
 
-## Primary personalization surface
-- `src/lib/config/brand.ts`
-- `src/lib/config/template.ts`
-- `src/lib/data/company.ts`
-- `src/lib/data/inventory.ts`
-- `src/lib/data/home.ts`
-- `src/lib/data/editorial.ts`
-- `src/lib/styles/tokens.css`
-- `src/app.css`
-- `static/`
+These are code-level configuration modules. There is no admin panel, universal theme JSON or one-switch localization system. Headlines, service artwork and some campaign copy live with their components or feature data; [Reuse](REUSE_GUIDE.md) and [Components](docs/COMPONENTS.md) identify them.
 
-Do not assume these are the only identity consumers. Search every retained route, data module, metadata definition and static asset before declaring a skin complete.
+## Defaults that matter when copying
 
-## Representative QA routes
-- `/`
-- `/listing-grid`
-- `/listing-detail-v1/1`
-- `/contact`
-- `/about-us`
-- `/blog`
+The template starts in preview/noindex mode. Sample team and partner sections are disabled. Vehicle records are sample data unless explicitly verified by the implementation. The brand name does not make the existing phone, map, social accounts, video selection or inventory generic.
 
-## Required checks
-- `npm run validate`
-- `npm run quality  # when browser smoke dependencies are available`
+A client copy retains the application structure and changes its content and relevant imagery. A template version should be identified by its actual source commit, not an old date embedded in an inherited manifest. Historical `.template` records describe acquisition/copy operations rather than an application release service.
 
-## Current constraints
-Keep the native SvelteKit composition. Sample/source contact, social, video and stock content may still exist and must be replaced or explicitly disclosed in every lead copy.
+## Source and current working preview
 
-For `modern`, local preview also requires the environment documented in `docs/QA.md`; provider services remain unconfigured unless a lead task explicitly wires them. For `carwow`, use direct Vite for a selectable port because the inherited source dev wrapper fixes port 6517.
+The standalone repository was established on 10 September 2026 from the Cars workspace. The owner currently reviews a development copy at `J:/cars/templates/auto-best` on port 6461. That physical directory and the standalone GitHub repository are distinct; local application changes are not automatically present in a fresh GitHub clone.
 
-## Source lineage
-Split on 2026-09-10 from the live working tree at `J:/cars/templates/auto-best`. The split deliberately captured local working-tree changes, including changes newer than the `cars` repository HEAD. Historical root instructions were archived under `docs/legacy/from-cars-2026-09-10/`; use them only for provenance, never as current operating instructions.
+The standalone source reference for this documentation is `bb2a7d4`. Approved working-preview refinements are identified separately in the component guide. This documentation update does not copy those application changes into the standalone repository.
 
-## Portfolio policy
-Standard showroom lead = three variants: `auto-best`, `carwow`, `modern`. Add `import` only when the dealer's real offer includes sourcing/import/transport/order-from-Europe or equivalent. Do not add a fourth design merely to increase the count.
+## Reference
+
+[Setup](README.md) · [Product](PRODUCT.md) · [Architecture](ARCHITECTURE.md) · [Styling](docs/STYLING.md) · [Reuse](REUSE_GUIDE.md) · [Source lineage](SOURCE_LICENSE.md)
