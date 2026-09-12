@@ -397,7 +397,7 @@
   .dn-listing-filter__quick a,
   .dn-listing-filter__quick button {
     display: inline-flex;
-    min-height: 42px;
+    min-height: 44px;
     flex: 0 0 auto;
     align-items: center;
     gap: 8px;
@@ -543,7 +543,7 @@
   .dn-listing-filter__label { display: block; margin: 0 0 6px 2px; color: var(--dn-muted); font-size: 12px; font-weight: 600; line-height: 18px; }
   .dn-listing-filter__quick--active { display: flex; gap: 8px; padding: 0 18px 14px; overflow-x: auto; }
   .dn-listing-filter__quick button { display: none; }
-  .dn-listing-filter__quick a { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 8px; min-height: 36px; padding: 0 12px; border-radius: var(--dn-pill); background: var(--dn-surface); color: var(--dn-ink); font-size: 13px; font-weight: 600; }
+  .dn-listing-filter__quick a { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 8px; min-height: 44px; padding: 0 12px; border-radius: var(--dn-pill); background: var(--dn-surface); color: var(--dn-ink); font-size: 13px; font-weight: 600; }
   .dn-listing-filter__quick a:hover { background: #e7e8eb; }
 }
 

@@ -248,7 +248,12 @@
         <div class="dn-header__inner">
           <div class="dn-logo-box">
             <a class="dn-logo" href={resolve('/')} aria-label={`${brand.name} — начало`}>
-              <img src={brand.logo} alt={brand.name} width="220" height="58" fetchpriority="high" />
+              <picture>
+                {#if mobileSurfaceHeader || page.url.pathname === '/contact'}
+                  <source media="(max-width: 991px)" srcset={brand.logoOnDark} />
+                {/if}
+                <img src={brand.logo} alt={brand.name} width="220" height="58" fetchpriority="high" />
+              </picture>
             </a>
           </div>
 

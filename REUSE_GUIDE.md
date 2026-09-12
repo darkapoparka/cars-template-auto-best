@@ -2,6 +2,12 @@
 
 The normal workflow is to clone the template, replace its business content and media, and keep the established page layouts and interactions. The result is an independent client project.
 
+## Logo assets
+
+Set both `brand.logo` (light backgrounds) and `brand.logoOnDark` (dark backgrounds) in `src/lib/config/brand.ts`. Both assets must be transparent. For a black-only lead logo, create a faithful white variant; preserve its shape, lettering, proportions and clear space. Use an approved reversed logo if available. Do not compensate for a dark logo with a white rectangle, pill, border, shadow or a background baked into the image.
+
+The shared header selects the light variant on mobile home/contact dark overlays and the regular variant on light headers. The white mobile menu uses the regular variant; the dark footer uses `logoOnDark`. Future dealer-logo placements must select by their actual background. Keep surrounding page/navigation surfaces intact and preserve visible keyboard focus and a minimum 44px logo-link height. Verify both assets in mobile/desktop headers, open menus and the footer before accepting a clone.
+
 ## Create the project
 
 For a standalone client repository:

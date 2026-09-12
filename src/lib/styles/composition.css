@@ -337,7 +337,7 @@
 
 .dn-footer { padding: 40px 0 24px; border-radius: 32px 32px 0 0; background: #1d1e20; color: #bfc3ca; }
 .dn-footer__grid { display: grid; grid-template-columns: 1.25fr .8fr .8fr 1.2fr; align-items: start; gap: 40px; }
-.dn-footer__logo { display: inline-block; border-radius: 8px; }
+.dn-footer__logo { display: inline-flex; min-height: 44px; align-items: center; }
 .dn-footer__logo img { width: 190px; height: 50px; object-fit: contain; }
 .dn-footer strong { display: block; margin-bottom: 16px; color: #fff; font-size: 16px; }
 .dn-footer p { margin: 14px 0 0; max-width: 300px; font-size: 14px; line-height: 1.6; }
@@ -406,7 +406,7 @@
   .dn-footer__intro p,
   .dn-footer__appointment { display: none; }
   .dn-footer__contact { padding: 6px 12px; border-radius: 14px; }
-  .dn-footer__contact-link { min-height: 42px; padding: 5px 0; font-size: 12px; }
+  .dn-footer__contact-link { min-height: 44px; padding: 5px 0; font-size: 12px; }
   .dn-footer__bottom { margin-top: 12px; padding-top: 10px; font-size: 11px; }
   .dn-footer__bottom > span:last-child { display: none; }
 }

@@ -53,8 +53,8 @@
     if (!opened) return;
     opened = false;
     document.body.style.removeProperty('--dn-tradein-scroll');
-    window.scrollTo(0, scrollY);
-    returnFocus?.isConnected && returnFocus.focus();
+    window.scrollTo({ top: scrollY, behavior: 'instant' });
+    returnFocus?.isConnected && returnFocus.focus({ preventScroll: true });
   }
 
   async function move(next: number) {
@@ -347,6 +347,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .dn-tradein-dialog[open] { animation: none; }
     .dn-tradein-progress__bar i { transition: none; }
   }
 </style>

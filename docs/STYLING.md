@@ -87,7 +87,13 @@ There is no universal spacing-scale engine. Existing layouts use small 8–12px 
 
 The control family is rounded: pill actions, rounded input surfaces and compact circular icon buttons. The mobile sell action and import entry control use 44px geometry in the current working design. That is not a blanket instruction to resize every desktop control or every drawer button to 44px.
 
+Inventory filter chips (including removable active filters), results filters/sorting, the header phone link and mobile footer contact links have a minimum 44px hit height. Keep vehicle-card dimensions and their 8px mobile inventory / 10px carousel gaps independent from control sizing. Metadata badges are labels inside the card link, not separate touch targets. Tablet service cards extend the action link over the card; verify the actual hit area before resizing its text. Vehicle-card keyboard focus uses the opaque `--dn-focus` color and an inset outline so the card's clipped corners do not hide it.
+
 ## Responsive composition
+
+Mobile inventory metadata uses 14px text. Fuel/transmission badges omit decorative icons on phones to leave room for full labels; desktop badges retain them. Cards keep a 132px minimum height and grow for wrapped titles. Mobile inventory photos use `object-fit: contain` to preserve the complete source photograph, accepting neutral framing where its aspect ratio differs. The keyboard-only focus border is drawn above the photograph and badges so the complete card remains visibly selected; normal tapping does not display this border.
+
+Keep `scrollbar-gutter: stable` on the root element. Classic desktop scrollbars otherwise change the available page and fixed-navigation width when moving between long pages (Home) and short pages (Sell/Import). Overlay scrollbars on touch devices retain their normal behavior.
 
 | Range | Main behavior |
 | --- | --- |

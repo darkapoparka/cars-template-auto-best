@@ -1232,3 +1232,14 @@
     padding-top: 56px;
   }
 }
+
+/* Short screens need the help tab in flow, clear of form errors and actions. */
+@media (max-width: 767px) and (max-height: 720px) {
+  .dn-contact-section--workflow .dn-contact-intent--workflow :is(.dn-import-info-drawer, .dn-tradein-info-drawer) {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    margin: 20px auto 0;
+    transform: none;
+  }
+}

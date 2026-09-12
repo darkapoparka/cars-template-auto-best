@@ -13,6 +13,7 @@
   let form: HTMLFormElement;
   let heading: HTMLHeadingElement;
   let linkInput = $state<HTMLInputElement>();
+  let infoInput = $state<HTMLTextAreaElement>();
   let returnFocus: HTMLElement | undefined;
   let scrollY = 0;
   let step = $state(0);
@@ -63,6 +64,7 @@
   async function open(event: MouseEvent, withoutLink = false) {
     if (!selling && withoutLink && !importBrief.trim()) {
       infoError = 'Опишете накратко какъв автомобил търсите.';
+      infoInput?.focus();
       return;
     }
     if (!selling && !withoutLink && !resolveImportUrl(link)) {
@@ -88,8 +90,8 @@
   function restore() {
     opened = false;
     document.body.style.removeProperty('--dn-enquiry-scroll');
-    window.scrollTo(0, scrollY);
-    returnFocus?.isConnected && returnFocus.focus();
+    window.scrollTo({ top: scrollY, behavior: 'instant' });
+    returnFocus?.isConnected && returnFocus.focus({ preventScroll: true });
   }
 
   async function move(next: number) {
@@ -187,13 +189,13 @@
     {:else}
       <div class="dn-enquiry-import-info">
         <label class="dn-sr-only" for="enquiry-import-info">Опишете автомобила, който търсите</label>
-        <textarea id="enquiry-import-info" bind:value={importBrief} oninput={() => infoError = ''} maxlength={500} rows="2" placeholder="Напр. BMW X5, дизел, 2020+, xDrive…"></textarea>
+        <textarea id="enquiry-import-info" bind:this={infoInput} bind:value={importBrief} oninput={() => infoError = ''} aria-invalid={infoError ? true : undefined} aria-describedby={infoError ? 'enquiry-info-error' : undefined} maxlength={500} rows="2" placeholder="Напр. BMW X5, дизел, 2020+, xDrive…"></textarea>
         <div class="dn-enquiry-import-info__footer">
           <label><span>Бюджет до, €</span><input bind:value={budget} inputmode="numeric" pattern={'[0-9]{1,8}'} maxlength={8} placeholder="40000" /></label>
           <button type="button" class="dn-enquiry-import-go" onclick={(event) => open(event, true)} aria-label="Продължи с описанието" aria-haspopup="dialog"><Icon name="arrow-right" size={20} strokeWidth={2} /></button>
         </div>
       </div>
-      {#if infoError}<p class="dn-enquiry-error" role="alert">{infoError}</p>{/if}
+      {#if infoError}<p class="dn-enquiry-error" id="enquiry-info-error" role="alert">{infoError}</p>{/if}
     {/if}
     <a class="dn-enquiry-import-call" href={brand.phoneHref} aria-label={`Обади се на ${brand.phone}`}>
       <Icon name="phone" size={17} />
@@ -405,5 +407,9 @@
     .dn-enquiry-steps li { font-size: 12px; }
     .dn-enquiry-fields { gap: 16px 10px; }
     .dn-enquiry-contact-fields { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dn-enquiry[open] { animation: none; }
   }
 </style>

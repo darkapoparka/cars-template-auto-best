@@ -6,10 +6,12 @@
 .dn-topbar__list li:last-child { margin-left: auto; }
 .dn-topbar__list li { display: inline-flex; align-items: center; gap: 8px; }
 .dn-topbar__list li .dn-icon { color: #666c74; }
-.dn-topbar__list a { color: #30343a; font-weight: 600; }
+.dn-topbar__list a { display: inline-flex; min-height: 44px; align-items: center; color: #30343a; font-weight: 600; }
+.dn-topbar__list a:focus-visible { outline: 2px solid var(--dn-focus); outline-offset: 2px; }
 .dn-header__lower { background: #fff; border-top: 1px solid rgba(20,23,29,.06); border-bottom: 1px solid rgba(20,23,29,.06); }
 .dn-header__inner { min-height: 94px; display: grid; grid-template-columns: 270px minmax(420px,1fr) auto; align-items: center; gap: 20px; }
-.dn-logo { display: inline-flex; align-items: center; }
+.dn-logo { display: inline-flex; min-height: 44px; align-items: center; }
+.dn-logo picture { display: flex; align-items: center; }
 .dn-logo img { width: auto; max-width: 230px; height: 64px; object-fit: contain; }
 .dn-nav { display: flex; justify-content: center; }
 .dn-nav__list { display: flex; align-items: center; gap: 6px; margin: 0; padding: 0; list-style: none; }
