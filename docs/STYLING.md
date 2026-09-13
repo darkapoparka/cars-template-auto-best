@@ -15,6 +15,8 @@ Auto Best combines an image-led automotive layout, Onest typography, rounded sur
 
 Svelte component `<style>` blocks own internal presentation. Route sheets such as `contact/contact.css`, `listing-grid/listing.css` and the detail `detail.css` files own page composition and route-specific component adaptations. Route CSS is imported from the corresponding page and is global CSS; its selectors therefore use route/component prefixes.
 
+`Footer.svelte` owns the footer and its optional service links, including their responsive styles. The footer uses the shared white surface, dark logo variant (`brand.logo`), regular navigation type and red phone CTA. Mobile keeps the contact block and company links; desktop includes both navigation columns. The shell's footer visibility/padding relationship remains in `composition.css`.
+
 Svelte adds a scoping class to component selectors, which changes specificity. Moving a selector unchanged from a component to a global sheet can change the result. Explicit `:global(...)` selectors are used where an owner styles child-component output. See the [Svelte scoped styles reference](https://svelte.dev/docs/svelte/scoped-styles).
 
 The `dn-` class prefix is inherited naming, not a runtime dependency on the original dealer. Renaming it is unnecessary for a client skin.
