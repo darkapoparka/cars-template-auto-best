@@ -299,7 +299,11 @@
     .dn-tradein-info-sheet__body { gap: var(--dn-space-5); padding: 0 var(--dn-space-4) max(var(--dn-space-4), env(safe-area-inset-bottom)); }
   }
 
-  .dn-tradein-info-process { padding: var(--dn-space-4); border-radius: 0; background: var(--dn-mobile-canvas); }
+  .dn-tradein-info-process { padding: var(--dn-space-4); border-radius: 0; background: var(--dn-ink); }
+  .dn-tradein-info-process :is(h3, strong) { color: var(--dn-white); }
+  .dn-tradein-info-process p > span { color: var(--dn-muted-on-ink); }
+  .dn-tradein-info-process li { grid-template-columns: 28px minmax(0, 1fr); }
+  .dn-tradein-info-process li > span { display: grid; width: 28px; height: 28px; place-items: center; background: var(--dn-mobile-canvas); color: var(--dn-ink); font-size: var(--dn-text-meta); }
 
   @media (prefers-reduced-motion: reduce) {
     .dn-tradein-info-sheet { transition: none; }
