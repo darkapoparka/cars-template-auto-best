@@ -193,7 +193,7 @@
 
 
   onMount(() => {
-    const footer = document.querySelector<HTMLElement>('.dn-footer');
+    const footer = document.getElementById('dn-site-footer');
     if (!footer || !('IntersectionObserver' in window)) return;
     const observer = new IntersectionObserver(([entry]) => {
       mobileFooterVisible = Boolean(entry?.isIntersecting && entry.intersectionRatio > 0.02);

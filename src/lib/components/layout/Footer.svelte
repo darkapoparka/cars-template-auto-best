@@ -53,7 +53,7 @@
   </section>
 {/if}
 
-<footer class={['dn-footer', { 'dn-footer--mobile-hidden': !showMobileFooter }]}>
+<footer id="dn-site-footer" class={['dn-footer', { 'dn-footer--mobile-hidden': !showMobileFooter }]}>
   <div class="container dn-footer__grid">
     <div class="dn-footer__intro">
       <a class="dn-footer__logo" href={resolve('/')}><img src={brand.logo} alt={brand.name} width="220" height="58" /></a>
