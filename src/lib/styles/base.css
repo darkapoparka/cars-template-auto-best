@@ -1,3 +1,8 @@
+/* Resolve viewport variables on each form dialog, where the attachment updates them. */
+:where(.dn-entry-editor, .dn-tradein-dialog, .dn-enquiry) {
+  --dn-form-dialog-top: calc(var(--dn-dialog-viewport-top, 0px) + env(safe-area-inset-top, 0px));
+  --dn-form-dialog-height: calc(var(--dn-dialog-viewport-height, 100dvh) - env(safe-area-inset-top, 0px) - var(--dn-space-3));
+}
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scrollbar-gutter: stable; }
 body { margin: 0; color: var(--dn-ink); background: #fff; font-family: var(--dn-font); font-size: var(--dn-text-body); line-height: var(--dn-leading-body); -webkit-font-smoothing: antialiased; }

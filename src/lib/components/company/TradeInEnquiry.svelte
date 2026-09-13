@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onDestroy, tick } from 'svelte';
   import Icon from '$components/ui/Icon.svelte';
+  import { dialogViewport } from '$lib/ui/dialog-viewport';
   import { brand } from '$config/brand';
   import { parseVehicleReference } from '$data/vehicle-reference';
   import EnquiryEntryField from './EnquiryEntryField.svelte';
@@ -173,7 +174,7 @@
   </button>
 </div>
 
-<dialog class="dn-tradein-dialog" bind:this={dialog} aria-labelledby="tradein-title" onclose={restore} onclick={(event) => { if (event.target === event.currentTarget) dialog.close(); }}>
+<dialog {@attach dialogViewport} class="dn-tradein-dialog" bind:this={dialog} aria-labelledby="tradein-title" onclose={restore} onclick={(event) => { if (event.target === event.currentTarget) dialog.close(); }}>
   <div class="dn-tradein-panel">
     <header class="dn-tradein-header">
       <div>
@@ -344,7 +345,7 @@
     .dn-tradein-reference-hint { text-align: center; }
     .dn-tradein-entry-segments { margin-top: 16px; }
     .dn-tradein-start { margin-top: var(--dn-space-3); }
-    .dn-tradein-dialog { inset: auto 0 0; width: 100%; height: calc(100dvh - max(18px,env(safe-area-inset-top))); max-height: 920px; margin: 0; border-radius: 24px 24px 0 0; }
+    .dn-tradein-dialog { inset: var(--dn-form-dialog-top) 0 auto; width: 100%; height: var(--dn-form-dialog-height); max-height: var(--dn-form-dialog-height); margin: 0; border-radius: 0 0 var(--dn-radius-lg) var(--dn-radius-lg); }
     .dn-tradein-panel { height: 100%; max-height: 100%; }
     .dn-tradein-header { padding: 18px 16px 12px; }
     .dn-tradein-header h2 { font-size: var(--dn-text-subheading); }
@@ -363,7 +364,7 @@
 
   @media (prefers-reduced-motion: no-preference) and (max-width: 767px) {
     .dn-tradein-dialog[open] { animation: tradein-enter 220ms cubic-bezier(.16,1,.3,1); }
-    @keyframes tradein-enter { from { transform: translateY(32px); } to { transform: translateY(0); } }
+    @keyframes tradein-enter { from { transform: translateY(-12px); } to { transform: translateY(0); } }
   }
 
   @media (prefers-reduced-motion: reduce) {

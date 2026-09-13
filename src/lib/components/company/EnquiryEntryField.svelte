@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onDestroy, tick } from 'svelte';
   import Icon from '$components/ui/Icon.svelte';
+  import { dialogViewport } from '$lib/ui/dialog-viewport';
   import { parseVehicleReference } from '$data/vehicle-reference';
 
   let { id, kind, value, budget = '', onapply }: {
@@ -81,7 +82,7 @@
   <span class:dn-entry-editor-placeholder={!summary}>{summary || copy.placeholder}</span>
 </button>
 
-<dialog id={`${id}-dialog`} class="dn-entry-editor" bind:this={dialog} aria-labelledby={`${id}-title`} onclose={restore} onclick={(event) => { if (event.target === event.currentTarget) dialog.close(); }}>
+<dialog {@attach dialogViewport} id={`${id}-dialog`} class="dn-entry-editor" bind:this={dialog} aria-labelledby={`${id}-title`} onclose={restore} onclick={(event) => { if (event.target === event.currentTarget) dialog.close(); }}>
   <header>
     <h2 id={`${id}-title`}>{copy.title}</h2>
     <button type="button" class="dn-entry-editor-close" aria-label="Затвори редактора" onclick={() => dialog.close()}><Icon name="x" size={22} /></button>
@@ -136,7 +137,7 @@
   .dn-entry-editor-save:hover { background: var(--dn-red-hover); }
   .dn-entry-editor :is(button,input,textarea):focus-visible { outline: 3px solid var(--dn-focus); outline-offset: 2px; }
   @media (max-width: 767px) {
-    .dn-entry-editor { inset: auto 0 0; width: 100%; margin: 0; border-radius: var(--dn-radius-lg) var(--dn-radius-lg) 0 0; }
+    .dn-entry-editor { inset: var(--dn-form-dialog-top) 0 auto; width: 100%; max-height: var(--dn-form-dialog-height); margin: 0; border-radius: 0 0 var(--dn-radius-lg) var(--dn-radius-lg); }
     header { padding-inline: var(--dn-space-4); }
     .dn-entry-editor-fields { padding-inline: var(--dn-space-4); }
     footer { padding: var(--dn-space-3) var(--dn-space-4) max(var(--dn-space-3), env(safe-area-inset-bottom)); }

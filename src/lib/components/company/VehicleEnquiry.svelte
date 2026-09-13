@@ -3,6 +3,7 @@
   import { onDestroy, tick } from 'svelte';
   import type { Attachment } from 'svelte/attachments';
   import Icon from '$components/ui/Icon.svelte';
+  import { dialogViewport } from '$lib/ui/dialog-viewport';
   import { brand } from '$config/brand';
   import { resolveImportUrl } from '$data/company';
   import EnquiryEntryField from './EnquiryEntryField.svelte';
@@ -180,7 +181,7 @@
   {/if}
 </div>
 
-<dialog class="dn-enquiry" class:dn-enquiry--import={!selling} aria-labelledby="enquiry-title" {@attach attachDialog} onclose={restore} onclick={(event) => { if (event.target === event.currentTarget) dialog.close(); }}>
+<dialog {@attach dialogViewport} class="dn-enquiry" class:dn-enquiry--import={!selling} aria-labelledby="enquiry-title" {@attach attachDialog} onclose={restore} onclick={(event) => { if (event.target === event.currentTarget) dialog.close(); }}>
   <div class="dn-enquiry-panel">
     <header class="dn-enquiry-header">
       <div><h2 id="enquiry-title" tabindex="-1" bind:this={heading}>{step === 0 ? (selling ? title : 'Автомобил за внос') : step === 1 ? (selling ? 'Още няколко детайла' : 'Контакт и предпочитания') : 'Преглед на запитването'}</h2></div>
@@ -325,7 +326,7 @@
   .dn-enquiry-error { color: #a40000; font-size: var(--dn-text-meta); line-height: var(--dn-leading-body); }
   .dn-enquiry-feedback { padding: 12px; border-radius: 10px; background: #f2f3f5; font-size: var(--dn-text-meta); line-height: var(--dn-leading-body); }
   @media (max-width: 767px) {
-    .dn-enquiry { inset: auto 0 0; width: 100%; height: calc(100dvh - max(24px,env(safe-area-inset-top))); max-height: 900px; margin: 0; border-radius: 24px 24px 0 0; }
+    .dn-enquiry { inset: var(--dn-form-dialog-top) 0 auto; width: 100%; height: var(--dn-form-dialog-height); max-height: var(--dn-form-dialog-height); margin: 0; border-radius: 0 0 var(--dn-radius-lg) var(--dn-radius-lg); }
     .dn-enquiry-panel { height: 100%; max-height: 100%; }
     .dn-enquiry-header { padding: 20px 16px 16px; }
     .dn-enquiry-header h2 { font-size: var(--dn-text-subheading); }
@@ -336,7 +337,7 @@
   }
   @media (prefers-reduced-motion: no-preference) and (max-width: 767px) {
     .dn-enquiry[open] { animation: enquiry-enter 220ms cubic-bezier(.16,1,.3,1); }
-    @keyframes enquiry-enter { from { transform: translateY(32px); } to { transform: translateY(0); } }
+    @keyframes enquiry-enter { from { transform: translateY(-12px); } to { transform: translateY(0); } }
   }
   @media (max-width: 767px) {
     .dn-enquiry--import .dn-enquiry-steps {
