@@ -125,7 +125,7 @@
   label span { color: var(--dn-muted); font-weight: var(--dn-weight-regular); }
   input, textarea { display: block; width: 100%; min-height: var(--dn-entry-height); padding: var(--dn-space-3); border: 1px solid var(--dn-entry-line); border-radius: var(--dn-radius-control); background: var(--dn-entry-surface); color: var(--dn-ink); font: var(--dn-entry-font); }
   textarea { resize: vertical; }
-  input { text-overflow: ellipsis; }
+  input { border-radius: var(--dn-pill); text-overflow: ellipsis; }
   p { margin: var(--dn-space-2) 0 0; color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
   .dn-entry-editor-budget-label { margin-top: var(--dn-space-5); }
   .dn-entry-editor-error { color: var(--dn-red); }

@@ -231,10 +231,11 @@
       onformdata={cleanFormData}
     >
       <label class="dn-sr-only" for="quick-search-input">Марка, модел или ключова дума</label>
-      <div class="dn-quick-search__input-wrap">
+      <div class="dn-quick-search__input-wrap dn-entry-field">
         <Icon name="search" size={21} strokeWidth={1.8} />
         <input
           id="quick-search-input"
+          class="dn-entry-field__input"
           {@attach attachSearchInput}
           bind:value={query}
           type="search"
@@ -455,37 +456,9 @@
 
   .dn-quick-search__input-wrap {
     display: flex;
-    height: 64px;
     align-items: center;
-    gap: 12px;
-    padding: 0 20px;
-    border: 1px solid transparent;
-    border-radius: var(--dn-radius-control);
-    background: #e9ecef;
-    color: #727780;
-  }
-
-  .dn-quick-search__input-wrap:focus-within {
-    border-color: #c40101;
-    background: #fff;
-  }
-
-  .dn-quick-search__input-wrap input {
-    width: 100%;
-    min-width: 0;
-    height: 100%;
-    border: 0;
-    outline: 0;
-    background: transparent;
-    color: #191c22;
-    font: inherit;
-    font-size: var(--dn-control-size);
-    line-height: var(--dn-leading-lead);
-  }
-
-  .dn-quick-search__input-wrap input::placeholder {
-    color: #777c84;
-    opacity: 1;
+    gap: var(--dn-space-3);
+    padding: 0 var(--dn-space-4);
   }
 
   @media (max-width: 767px) {
@@ -599,23 +572,6 @@
 
     .dn-quick-search__form--mobile-hidden {
       display: none;
-    }
-
-    .dn-quick-search__input-wrap {
-      height: 48px;
-      padding-inline: 16px;
-      border-color: transparent;
-      border-radius: var(--dn-pill);
-      background: #f1f2f4;
-    }
-
-    .dn-quick-search__input-wrap:focus-within {
-      border-color: var(--dn-red);
-      background: #f1f2f4;
-    }
-
-    .dn-quick-search__input-wrap input {
-      font-size: var(--dn-control-size);
     }
 
     .dn-quick-search__mobile-filters {
