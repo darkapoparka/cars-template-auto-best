@@ -57,9 +57,12 @@ try {
         const start = page.locator('.dn-tradein-start');
         const primary = await typeOf(start), call = await typeOf(page.locator('.dn-workflow-call'));
         assert(primary.size > call.size && primary.size === 18 && primary.weight === 500);
-        assert(primary.height >= 48);
+        assert.equal(primary.height,44);
+        assert((await typeOf(page.locator('.dn-tradein-reference'))).height > primary.height);
+        assert.equal((await typeOf(page.locator('.dn-tradein-entry-segments'))).height,44);
         assert.equal(await page.locator('.dn-contact-intent__main .dn-workflow-call').count(),0);
-        assert.equal(await page.locator('.dn-workflow-call').evaluate(e=>getComputedStyle(e).backgroundColor),'rgba(0, 0, 0, 0)');
+        assert.equal(await page.locator('.dn-workflow-call').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(255, 255, 255)');
+        assert.equal(await page.locator('.dn-workflow-call').evaluate(e=>getComputedStyle(e).textDecorationLine),'none');
         const cardBounds=await page.locator('.dn-contact-intent__main').boundingBox();
         const callBounds=await page.locator('.dn-workflow-call').boundingBox();
         assert(callBounds.y >= cardBounds.y + cardBounds.height, 'Call must sit below the entry card');
@@ -77,12 +80,50 @@ try {
         await readable(page,`${width}-sell-review`);
         await page.keyboard.press('Escape');
         assert.equal(await start.evaluate(e=>e===document.activeElement),true);
+
+        const reference=page.locator('#tradein-reference');
+        for(const invalid of ['javascript:alert(1)','WBA0000000000000I']) {
+          await reference.fill(invalid); await start.click();
+          assert(await page.locator('#tradein-reference-error').isVisible());
+          assert.equal(await sell.getAttribute('open'),null);
+        }
+        await reference.fill('mobile.bg/obiava-123456789');
+        await page.getByRole('button',{name:'Бартер',exact:true}).click();
+        await start.click();
+        for(const field of ['make','model','year','mileage']) {
+          await sell.locator(`[name="${field}"]`).fill('');
+          assert.equal(await sell.locator(`[name="${field}"]`).getAttribute('required'),null);
+        }
+        await sell.locator('.dn-tradein-primary').click();
+        await sell.locator('.dn-tradein-primary').click();
+        assert.match(await sell.locator('.dn-tradein-review-card').innerText(),/https:\/\/mobile.bg\/obiava-123456789/);
+        await page.evaluate(()=>Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async text=>{window.__tradeinCopiedText=text;}}}));
+        await sell.locator('.dn-tradein-copy').click();
+        assert.match(await page.evaluate(()=>window.__tradeinCopiedText),/Заявка за бартер[\s\S]*Обява: https:\/\/mobile.bg\/obiava-123456789/);
+        await sell.getByRole('button',{name:'Редактирай',exact:true}).click();
+        await sell.locator('[name="reference"]').fill('');
+        await sell.locator('.dn-tradein-primary').click();
+        assert.equal(await sell.locator('[name="make"]').evaluate(e=>e===document.activeElement),true);
+        await sell.locator('[name="reference"]').fill('invalid');
+        await sell.locator('.dn-tradein-primary').click();
+        assert(await sell.locator('#tradein-reference-edit-error').isVisible());
+        await sell.locator('[name="reference"]').fill('wba00000000000001');
+        await sell.locator('.dn-tradein-primary').click();
+        await sell.locator('.dn-tradein-primary').click();
+        assert.match(await sell.locator('.dn-tradein-review-card').innerText(),/VIN: WBA00000000000001/);
+        await sell.locator('.dn-tradein-copy').click();
+        assert.match(await page.evaluate(()=>window.__tradeinCopiedText),/VIN: WBA00000000000001/);
+        await readable(page,`${width}-sell-vin-review`);
+        await page.keyboard.press('Escape');
+        assert.equal(await start.evaluate(e=>e===document.activeElement),true);
         await page.locator('.dn-tradein-info-drawer__peek').click();
         await readable(page,`${width}-sell-help`); await page.keyboard.press('Escape');
 
         await page.goto(`${base}/contact?topic=import`,{waitUntil:'networkidle'});
         const importStart=page.getByRole('button',{name:/^Заяви внос/});
         assert.equal((await typeOf(importStart)).size,18);
+        assert.equal((await typeOf(importStart)).height,44);
+        assert.equal((await typeOf(page.locator('.dn-enquiry-import-segments'))).height,44);
         assert.equal(await page.locator('.dn-contact-intent__main .dn-workflow-call').count(),0);
         assert.equal(await page.locator('.dn-workflow-call').count(),1);
         const importField=await typeOf(page.locator('#enquiry-listing-link'));

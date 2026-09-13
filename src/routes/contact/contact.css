@@ -1235,7 +1235,7 @@
   .dn-contact-section--workflow .dn-contact-intent--workflow :is(.dn-contact-selected, .dn-tradein-lead) { display: none; }
   .dn-contact-section--workflow .dn-contact-intent--workflow :is(.dn-contact-workflow-title, .dn-tradein-enquiry > h1) {
     margin: 0;
-    font-size: var(--dn-text-heading);
+    font-size: var(--dn-text-subheading);
     font-weight: var(--dn-weight-semibold);
     line-height: var(--dn-leading-heading);
     letter-spacing: var(--dn-tracking-heading);

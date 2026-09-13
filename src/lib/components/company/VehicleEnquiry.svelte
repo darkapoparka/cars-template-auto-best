@@ -283,7 +283,7 @@
   .dn-enquiry-contact { display: flex; width: fit-content; min-height: 44px; align-items: center; justify-content: center; margin: 8px auto 0; padding: 8px 18px; border-radius: var(--dn-radius-button); background: #f2f3f5; color: #24272c; font-size: var(--dn-control-size); font-weight: var(--dn-control-weight); }
   .dn-enquiry-import-segments { margin-bottom: 12px; }
   .dn-enquiry-import-field { display: flex; align-items: center; gap: 10px; padding: 4px 4px 4px 16px; }
-  .dn-enquiry-import-go { margin-top: var(--dn-space-3); }
+  .dn-enquiry-import-go { min-height: var(--dn-entry-action-height); margin-top: var(--dn-space-3); padding-block: var(--dn-space-2); }
   .dn-enquiry-import-go:hover, .dn-enquiry-import-go:focus-visible { background: var(--dn-red-hover); }
   .dn-enquiry-import-info { overflow: hidden; }
   .dn-enquiry-import-info > textarea { display: block; width: 100%; min-height: 72px; margin: 0; padding: 14px 16px 8px; box-sizing: border-box; border: 0; outline: 0; resize: none; background: transparent; color: var(--dn-ink); }

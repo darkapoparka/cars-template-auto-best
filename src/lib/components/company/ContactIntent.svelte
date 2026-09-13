@@ -168,8 +168,9 @@
 </div>
 
 <style>
-  .dn-workflow-call { display: inline-flex; grid-column: 1 / -1; justify-self: center; align-items: center; justify-content: center; gap: var(--dn-space-2); min-height: var(--dn-control-hit-height); padding: var(--dn-space-2) var(--dn-space-4); margin-top: var(--dn-space-3); color: var(--dn-muted); font: var(--dn-control-font); text-decoration: underline; text-underline-offset: var(--dn-space-1); }
-  .dn-workflow-call:hover { color: var(--dn-ink); }
+  .dn-workflow-call { display: inline-flex; grid-column: 1 / -1; justify-self: center; align-items: center; justify-content: center; gap: var(--dn-space-2); min-height: var(--dn-entry-action-height); padding: var(--dn-space-2) var(--dn-space-6); margin-top: var(--dn-space-3); border: 1px solid var(--dn-line); border-radius: var(--dn-radius-button); background: var(--dn-white); color: var(--dn-ink); font: var(--dn-control-font); text-decoration: none; }
+  .dn-workflow-call:hover { background: var(--dn-home-panel); }
+  .dn-workflow-call:focus-visible { outline: 3px solid var(--dn-focus); outline-offset: 2px; }
   .dn-contact-intent--workflow { row-gap: 0; }
   .dn-contact-description--mobile { display: none; }
   .dn-contact-desktop-copy, .dn-contact-visit { display: none; }

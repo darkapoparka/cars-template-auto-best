@@ -2,6 +2,7 @@
   import { onDestroy, tick } from 'svelte';
   import Icon from '$components/ui/Icon.svelte';
   import { brand } from '$config/brand';
+  import { parseVehicleReference } from '$data/vehicle-reference';
 
   let dialog: HTMLDialogElement;
   let form: HTMLFormElement;
@@ -11,6 +12,11 @@
   let scrollY = 0;
   let step = $state(0);
   let purpose = $state('Продажба');
+  let reference = $state('');
+  let referenceError = $state('');
+  let referenceInput = $state<HTMLInputElement>();
+  let openedReference = '';
+  const vehicleReference = $derived(parseVehicleReference(reference));
   let make = $state('');
   let model = $state('');
   let year = $state('');
@@ -25,10 +31,11 @@
   let sharing = $state(false);
 
   const steps = ['Автомобил', 'Снимки и контакт', 'Изпращане'];
-  const vehicleLabel = $derived([make.trim(), model.trim()].filter(Boolean).join(' ') || 'Автомобил');
+  const vehicleLabel = $derived([make.trim(), model.trim()].filter(Boolean).join(' ') || (vehicleReference?.kind === 'listing' ? 'Автомобилът от обявата' : 'Автомобил'));
   const summary = $derived([
     `Заявка за ${purpose.toLowerCase()}`,
     `Автомобил: ${vehicleLabel}`,
+    vehicleReference ? `${vehicleReference.kind === 'vin' ? 'VIN' : 'Обява'}: ${vehicleReference.value}` : '',
     year ? `Година: ${year}` : '',
     mileage ? `Пробег: ${mileage} км` : '',
     price ? `Ориентировъчна цена: ${price} EUR` : '',
@@ -39,6 +46,14 @@
   ].filter(Boolean).join('\n'));
 
   async function open(event: MouseEvent) {
+    if (reference.trim() && !vehicleReference) {
+      referenceError = 'Добави валиден линк към обява или VIN от 17 знака.';
+      referenceInput?.focus();
+      return;
+    }
+    referenceError = '';
+    if (reference !== openedReference) step = 0;
+    openedReference = reference;
     returnFocus = event.currentTarget as HTMLElement;
     scrollY = window.scrollY;
     document.body.style.setProperty('--dn-tradein-scroll', `-${scrollY}px`);
@@ -58,6 +73,11 @@
   }
 
   async function move(next: number) {
+    if (next > step && step === 0 && reference.trim() && !vehicleReference) {
+      referenceError = 'Добави валиден линк към обява или VIN от 17 знака.';
+      form.querySelector<HTMLInputElement>('[name="reference"]')?.focus();
+      return;
+    }
     if (next > step && !form.reportValidity()) return;
     step = next;
     feedback = '';
@@ -135,13 +155,21 @@
 
 <div class="dn-tradein-enquiry">
   <h1>Продай или бартер</h1>
-  <p class="dn-tradein-lead">Опиши автомобила и добави снимки, за да подготвим данните за оценка.</p>
+  <p class="dn-tradein-lead">Започни с обява, VIN или описание на автомобила.</p>
 
   <div class="dn-tradein-entry-segments dn-segmented-control" role="group" aria-label="Избери продажба или бартер">
     {#each ['Продажба', 'Бартер'] as option (option)}
       <button class="dn-segmented-option" type="button" class:active={purpose === option} aria-pressed={purpose === option} onclick={() => purpose = option}>{option}</button>
     {/each}
   </div>
+
+  <label class="dn-sr-only" for="tradein-reference">Линк към обява или VIN</label>
+  <div class="dn-tradein-reference dn-entry-field">
+    <Icon name="car" size={20} />
+    <input id="tradein-reference" class="dn-entry-field__input" bind:this={referenceInput} bind:value={reference} oninput={() => referenceError = ''} maxlength={2048} placeholder="Линк или VIN" autocomplete="off" autocapitalize="none" spellcheck={false} aria-invalid={referenceError ? true : undefined} aria-describedby={referenceError ? 'tradein-reference-error' : 'tradein-reference-hint'} />
+  </div>
+  <p class="dn-tradein-reference-hint" id="tradein-reference-hint">Обява от mobile.bg, cars.bg или VIN · по желание</p>
+  {#if referenceError}<p class="dn-tradein-error" id="tradein-reference-error" role="alert">{referenceError}</p>{/if}
 
   <button class="dn-tradein-start" type="button" onclick={open} aria-haspopup="dialog">
     Заяви оценка
@@ -167,15 +195,17 @@
     <form class="dn-tradein-body" bind:this={form} onsubmit={(event) => { event.preventDefault(); if (step < 2) void move(step + 1); }}>
       {#if step === 0}
         <div class="dn-tradein-fields dn-tradein-fields--vehicle">
-          <label>Марка <span aria-hidden="true">*</span><input bind:value={make} name="make" required maxlength={60} placeholder="Напр. BMW" autocomplete="off" /></label>
-          <label>Модел <span aria-hidden="true">*</span><input bind:value={model} name="model" required maxlength={80} placeholder="Напр. 530d xDrive" autocomplete="off" /></label>
+        <label class="dn-tradein-reference-edit">Линк към обява или VIN <small>по желание</small><input name="reference" bind:value={reference} oninput={() => referenceError = ''} maxlength={2048} autocomplete="off" autocapitalize="none" spellcheck={false} placeholder="Линк или VIN" aria-invalid={referenceError ? true : undefined} aria-describedby={referenceError ? 'tradein-reference-edit-error' : undefined} /></label>
+        {#if referenceError}<p class="dn-tradein-error" id="tradein-reference-edit-error" role="alert">{referenceError}</p>{/if}
+          <label>Марка {#if !vehicleReference}<span aria-hidden="true">*</span>{/if}<input bind:value={make} name="make" required={!vehicleReference} maxlength={60} placeholder="Напр. BMW" autocomplete="off" /></label>
+          <label>Модел {#if !vehicleReference}<span aria-hidden="true">*</span>{/if}<input bind:value={model} name="model" required={!vehicleReference} maxlength={80} placeholder="Напр. 530d xDrive" autocomplete="off" /></label>
           <div class="dn-tradein-pair">
-            <label>Година <span aria-hidden="true">*</span><input bind:value={year} name="year" required inputmode="numeric" pattern={'(19|20)[0-9]{2}'} maxlength={4} placeholder="2020" /></label>
-            <label>Пробег, км <span aria-hidden="true">*</span><input bind:value={mileage} name="mileage" required inputmode="numeric" pattern={'[0-9]{1,7}'} maxlength={7} placeholder="85000" /></label>
+            <label>Година {#if !vehicleReference}<span aria-hidden="true">*</span>{/if}<input bind:value={year} name="year" required={!vehicleReference} inputmode="numeric" pattern={'(19|20)[0-9]{2}'} maxlength={4} placeholder="2020" /></label>
+            <label>Пробег, км {#if !vehicleReference}<span aria-hidden="true">*</span>{/if}<input bind:value={mileage} name="mileage" required={!vehicleReference} inputmode="numeric" pattern={'[0-9]{1,7}'} maxlength={7} placeholder="85000" /></label>
           </div>
           <label>Ориентировъчна цена, € <small>по желание</small><input bind:value={price} name="price" inputmode="numeric" pattern={'[0-9]{1,8}'} maxlength={8} placeholder="Напр. 35000" /></label>
         </div>
-        <p class="dn-tradein-note">* Нужни за смислен първоначален разговор. Това не е автоматична оценка.</p>
+        <p class="dn-tradein-note">{vehicleReference ? 'Обявата или VIN се добавя към заявката. Останалите данни са по желание.' : '* Добави основните данни, ако нямаш обява или VIN.'} Това не е автоматична оценка.</p>
       {:else if step === 1}
         <section class="dn-tradein-photos" aria-labelledby="tradein-photos-title">
           <div class="dn-tradein-section-heading"><div><h3 id="tradein-photos-title">Снимки на автомобила</h3><p>Екстериор, интериор и видими забележки.</p></div><span>{photos.length}/6</span></div>
@@ -198,7 +228,8 @@
         <div class="dn-tradein-review-card">
           <div class="dn-tradein-review-top"><span>{purpose}</span><button type="button" onclick={() => move(0)}>Редактирай</button></div>
           <h3>{vehicleLabel}</h3>
-          <p>{year} · {mileage} км{#if price} · {price} €{/if}</p>
+          {#if year || mileage || price}<p>{[year, mileage ? `${mileage} км` : '', price ? `${price} €` : ''].filter(Boolean).join(' · ')}</p>{/if}
+          {#if vehicleReference}<p class="dn-tradein-review-reference">{vehicleReference.kind === 'vin' ? 'VIN' : 'Обява'}: {vehicleReference.value}</p>{/if}
           {#if notes.trim()}<div class="dn-tradein-review-note">{notes.trim()}</div>{/if}
           {#if name.trim() || phone.trim()}<div class="dn-tradein-review-contact"><strong>Контакт</strong><span>{[name.trim(), phone.trim()].filter(Boolean).join(' · ')}</span></div>{/if}
           {#if photos.length}<div class="dn-tradein-review-photos">{#each photos as photo (photo.url)}<img src={photo.url} alt={photo.file.name} />{/each}</div>{/if}
@@ -233,7 +264,10 @@
   .dn-tradein-enquiry > h1 { max-width: 620px; margin: 0; color: #202329; font-size: var(--dn-text-fluid-section); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-section); letter-spacing: var(--dn-tracking-heading); }
   .dn-tradein-lead { max-width: 48ch; margin: 12px 0 0; color: #555d68; font-size: var(--dn-text-body); line-height: var(--dn-leading-body); }
   .dn-tradein-entry-segments { margin-top: 18px; }
-  .dn-tradein-start { display: flex; width: 100%; min-height: 54px; align-items: center; justify-content: center; gap: 10px; margin-top: 14px; padding: 12px 18px; border: 0; border-radius: var(--dn-radius-button); background: var(--dn-red); color: #fff; font-size: var(--dn-cta-size); font-weight: var(--dn-cta-weight); line-height: var(--dn-leading-control); }
+  .dn-tradein-reference { display: flex; align-items: center; gap: var(--dn-space-2); margin-top: var(--dn-space-3); padding-inline: var(--dn-space-4); }
+  .dn-tradein-reference-hint { margin: var(--dn-space-2) 0 0; color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
+  .dn-tradein-review-reference { overflow-wrap: anywhere; }
+  .dn-tradein-start { display: flex; width: 100%; min-height: var(--dn-entry-action-height); align-items: center; justify-content: center; gap: 10px; margin-top: 14px; padding: var(--dn-space-2) var(--dn-space-5); border: 0; border-radius: var(--dn-radius-button); background: var(--dn-red); color: #fff; font-size: var(--dn-cta-size); font-weight: var(--dn-cta-weight); line-height: var(--dn-leading-control); }
   .dn-tradein-start:is(:hover,:focus-visible), .dn-tradein-primary:is(:hover,:focus-visible) { background: var(--dn-red-hover); }
   :global(body:has(.dn-tradein-dialog[open])) { position: fixed; top: var(--dn-tradein-scroll,0); width: 100%; overflow: hidden; }
   .dn-tradein-dialog { width: min(640px,calc(100% - 32px)); max-width: none; max-height: calc(100dvh - 40px); margin: auto; padding: 0; border: 0; border-radius: 22px; background: #fff; color: #202329; overflow: hidden; }
@@ -314,7 +348,7 @@
     .dn-tradein-enquiry > h1 { margin-inline: auto; font-size: var(--dn-text-heading); text-align: center; }
     .dn-tradein-lead { margin: 10px auto 0; font-size: var(--dn-text-meta); line-height: var(--dn-leading-body); text-align: center; }
     .dn-tradein-entry-segments { margin-top: 16px; }
-    .dn-tradein-start { min-height: 52px; margin-top: var(--dn-space-3); }
+    .dn-tradein-start { margin-top: var(--dn-space-3); }
     .dn-tradein-dialog { inset: auto 0 0; width: 100%; height: calc(100dvh - max(18px,env(safe-area-inset-top))); max-height: 920px; margin: 0; border-radius: 24px 24px 0 0; }
     .dn-tradein-panel { height: 100%; max-height: 100%; }
     .dn-tradein-header { padding: 18px 16px 12px; }
