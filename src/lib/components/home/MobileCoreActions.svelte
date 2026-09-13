@@ -38,7 +38,7 @@
       cta: 'Виж условия',
       href: '/contact?topic=leasing',
       tone: 'dark',
-      image: '/assets/images/template/menu-leasing-v2.png',
+      image: '/assets/images/template/menu-leasing-v2.webp',
       width: 1610,
       height: 977
     }
