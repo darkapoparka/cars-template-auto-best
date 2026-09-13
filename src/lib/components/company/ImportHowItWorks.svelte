@@ -230,23 +230,14 @@
   .dn-import-info-group { display: grid; gap: var(--dn-space-3); }
   .dn-import-info-group h3 { margin: 0; color: var(--dn-ink); font-size: var(--dn-text-lead); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-card); text-align: left; }
   .dn-import-info-list { display: grid; gap: var(--dn-space-4); margin: 0; padding: 0; background: transparent; list-style: none; }
-  .dn-import-info-list > li {
-    display: grid;
-    grid-template-columns: max-content minmax(0,1fr);
-    align-items: start;
-    gap: var(--dn-space-2);
-    min-height: 50px;
-    padding: 0;
-    border-radius: 0;
-    background: transparent;
-  }
+  .dn-import-info-list > li { display: block; min-height: 50px; }
   .dn-import-info-list p,
-  .dn-import-info-steps p { display: grid; gap: var(--dn-space-half); margin: 0; }
+  .dn-import-info-steps p { display: contents; }
   .dn-import-info-list strong,
   .dn-import-info-steps strong { color: var(--dn-ink); font-size: var(--dn-text-body); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-card); }
-  .dn-import-info-list p > span { color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
+  .dn-import-info-list p > span { display: block; margin-top: var(--dn-space-half); color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
   .dn-import-info-steps { display: grid; gap: var(--dn-space-4); margin: 0; padding: 0; background: transparent; list-style: none; }
-  .dn-import-info-steps li { display: grid; grid-template-columns: max-content minmax(0,1fr); align-items: start; gap: var(--dn-space-2); min-height: 0; padding: 0; background: transparent; }  .dn-import-info-list li > span, .dn-import-info-steps li > span { font-variant-numeric: tabular-nums; color: var(--dn-ink); font-size: var(--dn-text-body); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-card); }
+  .dn-import-info-steps li { display: block; }  .dn-import-info-list li > span, .dn-import-info-steps li > span { margin-inline-end: var(--dn-space-2); font-variant-numeric: tabular-nums; color: var(--dn-ink); font-size: var(--dn-text-body); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-card); }
   .dn-import-info-contact { display: grid; gap: var(--dn-space-1); padding: 0; text-align: center; }
   .dn-import-info-contact > strong { color: var(--dn-muted); font-size: var(--dn-text-meta); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-meta); }
   .dn-import-info-contact > span { color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-body); }

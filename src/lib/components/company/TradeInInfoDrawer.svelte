@@ -222,24 +222,15 @@
   .dn-tradein-info-group { display: grid; gap: var(--dn-space-3); }
   .dn-tradein-info-group h3 { margin: 0; color: var(--dn-ink); font-size: var(--dn-text-lead); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-card); text-align: left; }
   .dn-tradein-info-list { display: grid; gap: var(--dn-space-4); margin: 0; padding: 0; background: transparent; list-style: none; }
-  .dn-tradein-info-list > li {
-    display: grid;
-    grid-template-columns: max-content minmax(0,1fr);
-    align-items: start;
-    gap: var(--dn-space-2);
-    min-height: 50px;
-    padding: 0;
-    border-radius: 0;
-    background: transparent;
-  }
+  .dn-tradein-info-list > li { display: block; min-height: 50px; }
   .dn-tradein-info-list p,
-  .dn-tradein-info-steps p { display: grid; gap: var(--dn-space-half); margin: 0; }
+  .dn-tradein-info-steps p { display: contents; }
   .dn-tradein-info-list strong,
   .dn-tradein-info-steps strong { color: var(--dn-ink); font-size: var(--dn-text-body); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-card); }
-  .dn-tradein-info-list p > span { color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
+  .dn-tradein-info-list p > span { display: block; margin-top: var(--dn-space-half); color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
   .dn-tradein-info-steps { display: grid; gap: var(--dn-space-4); margin: 0; padding: 0; background: transparent; list-style: none; }
-  .dn-tradein-info-steps li { display: grid; grid-template-columns: max-content minmax(0,1fr); align-items: start; gap: var(--dn-space-2); min-height: 0; padding: 0; background: transparent; }
-  .dn-tradein-info-list li > span, .dn-tradein-info-steps li > span { font-variant-numeric: tabular-nums; color: var(--dn-ink); font-size: var(--dn-text-body); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-card); }
+  .dn-tradein-info-steps li { display: block; }
+  .dn-tradein-info-list li > span, .dn-tradein-info-steps li > span { margin-inline-end: var(--dn-space-2); font-variant-numeric: tabular-nums; color: var(--dn-ink); font-size: var(--dn-text-body); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-card); }
   .dn-tradein-info-prepare { padding: var(--dn-space-4); border-radius: var(--dn-radius); background: var(--dn-mobile-canvas); color: var(--dn-ink); gap: var(--dn-space-3); }
   .dn-tradein-info-prepare h3 { color: var(--dn-ink); }
   .dn-tradein-info-prepare strong { color: var(--dn-ink); }
