@@ -198,7 +198,7 @@
     margin: 0;
     color: #6b7280;
     font-size: var(--dn-text-body);
-    font-weight: var(--dn-weight-medium);
+    font-weight: var(--dn-weight-regular);
     line-height: var(--dn-leading-heading);
     letter-spacing: var(--dn-tracking-label);
   }
@@ -213,9 +213,9 @@
     font-weight: var(--dn-weight-semibold);
     line-height: var(--dn-leading-meta);
     letter-spacing: var(--dn-tracking-heading);
-    line-clamp: 2;
+    line-clamp: var(--dn-vehicle-card-title-lines, 2);
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: var(--dn-vehicle-card-title-lines, 2);
   }
 
   .dn-vehicle-card__link:focus-visible .dn-vehicle-card__name {

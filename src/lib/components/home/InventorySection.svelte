@@ -94,6 +94,7 @@
   }
 
   .dn-inventory__grid {
+    --dn-vehicle-card-title-lines: 1;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 30px;
