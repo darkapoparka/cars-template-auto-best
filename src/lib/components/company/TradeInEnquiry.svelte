@@ -155,7 +155,7 @@
 
 <div class="dn-tradein-enquiry">
   <h1>Продай или бартер</h1>
-  <p class="dn-tradein-lead">Започни с обява, VIN или описание на автомобила.</p>
+  <p class="dn-tradein-reference-hint" id="tradein-reference-hint">Обява от mobile.bg, cars.bg или VIN</p>
 
   <div class="dn-tradein-entry-segments dn-segmented-control" role="group" aria-label="Избери продажба или бартер">
     {#each ['Продажба', 'Бартер'] as option (option)}
@@ -165,10 +165,8 @@
 
   <label class="dn-sr-only" for="tradein-reference">Линк към обява или VIN</label>
   <div class="dn-tradein-reference dn-entry-field">
-    <Icon name="car" size={20} />
     <input id="tradein-reference" class="dn-entry-field__input" bind:this={referenceInput} bind:value={reference} oninput={() => referenceError = ''} maxlength={2048} placeholder="Линк или VIN" autocomplete="off" autocapitalize="none" spellcheck={false} aria-invalid={referenceError ? true : undefined} aria-describedby={referenceError ? 'tradein-reference-error' : 'tradein-reference-hint'} />
   </div>
-  <p class="dn-tradein-reference-hint" id="tradein-reference-hint">Обява от mobile.bg, cars.bg или VIN · по желание</p>
   {#if referenceError}<p class="dn-tradein-error" id="tradein-reference-error" role="alert">{referenceError}</p>{/if}
 
   <button class="dn-tradein-start" type="button" onclick={open} aria-haspopup="dialog">
@@ -262,9 +260,8 @@
   button { cursor: pointer; font: inherit; }
   .dn-tradein-enquiry { display: grid; gap: 0; }
   .dn-tradein-enquiry > h1 { max-width: 620px; margin: 0; color: #202329; font-size: var(--dn-text-fluid-section); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-section); letter-spacing: var(--dn-tracking-heading); }
-  .dn-tradein-lead { max-width: 48ch; margin: 12px 0 0; color: #555d68; font-size: var(--dn-text-body); line-height: var(--dn-leading-body); }
   .dn-tradein-entry-segments { margin-top: 18px; }
-  .dn-tradein-reference { display: flex; align-items: center; gap: var(--dn-space-2); margin-top: var(--dn-space-3); padding-inline: var(--dn-space-4); }
+  .dn-tradein-reference { display: flex; align-items: center; margin-top: var(--dn-space-3); padding-inline: var(--dn-space-4); }
   .dn-tradein-reference-hint { margin: var(--dn-space-2) 0 0; color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
   .dn-tradein-review-reference { overflow-wrap: anywhere; }
   .dn-tradein-start { display: flex; width: 100%; min-height: var(--dn-entry-action-height); align-items: center; justify-content: center; gap: 10px; margin-top: 14px; padding: var(--dn-space-2) var(--dn-space-5); border: 0; border-radius: var(--dn-radius-button); background: var(--dn-red); color: #fff; font-size: var(--dn-cta-size); font-weight: var(--dn-cta-weight); line-height: var(--dn-leading-control); }
@@ -346,7 +343,7 @@
 
     :global(.dn-contact-intent:has(.dn-tradein-enquiry) > .dn-contact-workflow-call) { display: none; }
     .dn-tradein-enquiry > h1 { margin-inline: auto; font-size: var(--dn-text-heading); text-align: center; }
-    .dn-tradein-lead { margin: 10px auto 0; font-size: var(--dn-text-meta); line-height: var(--dn-leading-body); text-align: center; }
+    .dn-tradein-reference-hint { text-align: center; }
     .dn-tradein-entry-segments { margin-top: 16px; }
     .dn-tradein-start { margin-top: var(--dn-space-3); }
     .dn-tradein-dialog { inset: auto 0 0; width: 100%; height: calc(100dvh - max(18px,env(safe-area-inset-top))); max-height: 920px; margin: 0; border-radius: 24px 24px 0 0; }

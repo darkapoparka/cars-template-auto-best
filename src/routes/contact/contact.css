@@ -1232,7 +1232,7 @@
     padding: var(--dn-space-5) var(--dn-space-4);
     border: 0;
   }
-  .dn-contact-section--workflow .dn-contact-intent--workflow :is(.dn-contact-selected, .dn-tradein-lead) { display: none; }
+  .dn-contact-section--workflow .dn-contact-intent--workflow .dn-contact-selected { display: none; }
   .dn-contact-section--workflow .dn-contact-intent--workflow :is(.dn-contact-workflow-title, .dn-tradein-enquiry > h1) {
     margin: 0;
     font-size: var(--dn-text-subheading);
