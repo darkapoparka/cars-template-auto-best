@@ -1,7 +1,7 @@
 /* Resolve viewport variables on each form dialog, where the attachment updates them. */
 :where(.dn-entry-editor, .dn-tradein-dialog, .dn-enquiry) {
   --dn-form-dialog-top: calc(var(--dn-dialog-viewport-top, 0px) + env(safe-area-inset-top, 0px));
-  --dn-form-dialog-height: calc(var(--dn-dialog-viewport-height, 100dvh) - env(safe-area-inset-top, 0px) - var(--dn-space-3));
+  --dn-form-dialog-height: calc(var(--dn-dialog-viewport-height, 100dvh) - env(safe-area-inset-top, 0px));
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scrollbar-gutter: stable; }
@@ -16,7 +16,7 @@ h1, h2, h3, h4, h5, h6, strong, b { font-weight: var(--dn-weight-semibold); }
 .dn-segmented-control .dn-segmented-option:is(.active, [aria-selected='true']) { background: var(--dn-segment-selected); color: var(--dn-ink); }
 .dn-segmented-control .dn-segmented-option:focus-visible { outline: 3px solid var(--dn-focus); outline-offset: 2px; }
 /* Entry fields carry more emphasis than the mode switch above them. */
-.dn-entry-field { min-height: var(--dn-entry-height); border: 1px solid var(--dn-entry-line); border-radius: var(--dn-pill); background: var(--dn-white); color: var(--dn-ink); font: var(--dn-entry-font); }
+.dn-entry-field { min-height: var(--dn-entry-height); border: 1px solid var(--dn-entry-line); border-radius: var(--dn-pill); background: var(--dn-entry-surface); color: var(--dn-ink); font: var(--dn-entry-font); }
 .dn-entry-field--multiline { border-radius: var(--dn-radius-control); }
 .dn-entry-field .dn-entry-field__input { width: 100%; min-width: 0; min-height: calc(var(--dn-entry-height) - 2px); margin: 0; padding: 0; border: 0; outline: none; background: transparent; color: var(--dn-ink); font: var(--dn-entry-font); }
 .dn-entry-field .dn-entry-field__input::placeholder { color: var(--dn-muted); opacity: 1; }

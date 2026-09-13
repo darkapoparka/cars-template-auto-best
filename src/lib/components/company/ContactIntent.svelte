@@ -9,6 +9,7 @@
   import TradeInEnquiry from './TradeInEnquiry.svelte';
   import TradeInInfoDrawer from './TradeInInfoDrawer.svelte';
   import ImportHowItWorks from './ImportHowItWorks.svelte';
+  import WorkflowSupport from './WorkflowSupport.svelte';
 
   let { topic, vehicle = null, importUrl = null }: { topic: ContactTopic; vehicle?: Vehicle | null; importUrl?: string | null } = $props();
   const preparation = $derived(contactPreparation[topic.id]);
@@ -75,10 +76,7 @@
   </div>
 
   {#if topic.id === 'trade-in' || topic.id === 'import'}
-    <a class="dn-workflow-call" href={brand.phoneHref} aria-label={`Обади се на ${brand.phone}`}>
-      <Icon name="phone" size={20} />
-      <span>Обади се</span>
-    </a>
+    <WorkflowSupport topic={topic.id} />
   {/if}
 
   {#if topic.id === 'trade-in'}
@@ -171,9 +169,6 @@
 <style>
   .dn-contact-workflow-hint { display: none; margin: var(--dn-space-2) 0 0; color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); text-align: center; }
   @media (max-width: 767px) { .dn-contact-workflow-hint { display: block; } }
-  .dn-workflow-call { display: inline-flex; grid-column: 1 / -1; justify-self: center; align-items: center; justify-content: center; gap: var(--dn-space-2); min-height: var(--dn-entry-action-height); padding: var(--dn-space-2) var(--dn-space-6); margin-top: var(--dn-space-3); border: 1px solid var(--dn-line); border-radius: var(--dn-radius-button); background: var(--dn-white); color: var(--dn-ink); font: var(--dn-control-font); text-decoration: none; }
-  .dn-workflow-call:hover { background: var(--dn-home-panel); }
-  .dn-workflow-call:focus-visible { outline: 3px solid var(--dn-focus); outline-offset: 2px; }
   .dn-contact-intent--workflow { row-gap: 0; }
   .dn-contact-description--mobile { display: none; }
   .dn-contact-desktop-copy, .dn-contact-visit { display: none; }

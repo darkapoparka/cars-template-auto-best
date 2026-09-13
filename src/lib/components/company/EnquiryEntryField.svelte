@@ -12,9 +12,9 @@
     onapply: (value: string, budget: string) => void;
   } = $props();
   const copy = $derived({
-    reference: { title: 'Обява или VIN', label: 'Линк към обява или VIN', placeholder: 'Линк или VIN', help: 'Постави линк към обява или 17-знаков VIN.' },
-    listing: { title: 'Обява за внос', label: 'Линк към обява за внос', placeholder: 'Линк към обява', help: 'Постави линк към автомобила, който харесваш.' },
-    criteria: { title: 'Какъв автомобил търсиш?', label: 'Описание на автомобила за внос', placeholder: 'Опиши какво търсиш', help: 'Марка, модел, година и важни предпочитания.' }
+    reference: { title: 'Обява или VIN', label: 'Линк към обява или VIN', placeholder: 'Линк или VIN' },
+    listing: { title: 'Обява за внос', label: 'Линк към обява за внос', placeholder: 'Линк към обява' },
+    criteria: { title: 'Какъв автомобил търсиш?', label: 'Описание на автомобила за внос', placeholder: 'Опиши какво търсиш' }
   }[kind]);
   const summary = $derived(value.trim() ? [value.trim(), kind === 'criteria' && budget ? `до ${budget} €` : ''].filter(Boolean).join(' · ') : '');
   let dialog: HTMLDialogElement;
@@ -89,13 +89,12 @@
   </header>
   <form bind:this={form} onsubmit={save} novalidate>
     <div class="dn-entry-editor-fields">
-      <label for={`${id}-value`}>{copy.label}</label>
+      <label class="dn-sr-only" for={`${id}-value`}>{copy.label}</label>
       {#if kind === 'criteria'}
-        <textarea id={`${id}-value`} name="entry-value" bind:value={draft} oninput={() => error = ''} maxlength={500} rows="5" placeholder="Напр. BMW X5, дизел, 2020+, xDrive…" aria-describedby={`${id}-help`}></textarea>
+        <textarea id={`${id}-value`} name="entry-value" bind:value={draft} oninput={() => error = ''} maxlength={500} rows="5" placeholder="Напр. BMW X5, дизел, 2020+, xDrive…"></textarea>
       {:else}
-        <input id={`${id}-value`} name="entry-value" bind:value={draft} oninput={() => error = ''} maxlength={2048} inputmode={kind === 'listing' ? 'url' : 'text'} autocomplete="off" autocapitalize="none" spellcheck={false} placeholder={copy.placeholder} aria-invalid={error && errorField === 'entry-value' ? true : undefined} aria-describedby={error && errorField === 'entry-value' ? `${id}-error` : `${id}-help`} />
+        <input id={`${id}-value`} name="entry-value" bind:value={draft} oninput={() => error = ''} maxlength={2048} inputmode={kind === 'listing' ? 'url' : 'text'} autocomplete="off" autocapitalize="none" spellcheck={false} placeholder={copy.placeholder} aria-invalid={error && errorField === 'entry-value' ? true : undefined} aria-describedby={error && errorField === 'entry-value' ? `${id}-error` : undefined} />
       {/if}
-      <p id={`${id}-help`}>{copy.help}</p>
       {#if kind === 'criteria'}
         <label class="dn-entry-editor-budget-label" for={`${id}-budget`}>Бюджет до, € <span>по желание</span></label>
         <input id={`${id}-budget`} name="entry-budget" bind:value={budgetDraft} oninput={() => error = ''} inputmode="numeric" maxlength={8} placeholder="40000" aria-invalid={error && errorField === 'entry-budget' ? true : undefined} aria-describedby={error && errorField === 'entry-budget' ? `${id}-error` : undefined} />
@@ -124,7 +123,7 @@
   .dn-entry-editor-fields { overflow-y: auto; overscroll-behavior: contain; padding: var(--dn-space-3) var(--dn-space-6) var(--dn-space-6); }
   label { display: block; margin-bottom: var(--dn-space-2); font-size: var(--dn-text-meta); font-weight: var(--dn-weight-medium); line-height: var(--dn-leading-meta); }
   label span { color: var(--dn-muted); font-weight: var(--dn-weight-regular); }
-  input, textarea { display: block; width: 100%; min-height: var(--dn-entry-height); padding: var(--dn-space-3); border: 1px solid var(--dn-entry-line); border-radius: var(--dn-radius-control); background: var(--dn-white); color: var(--dn-ink); font: var(--dn-entry-font); }
+  input, textarea { display: block; width: 100%; min-height: var(--dn-entry-height); padding: var(--dn-space-3); border: 1px solid var(--dn-entry-line); border-radius: var(--dn-radius-control); background: var(--dn-entry-surface); color: var(--dn-ink); font: var(--dn-entry-font); }
   textarea { resize: vertical; }
   input { text-overflow: ellipsis; }
   p { margin: var(--dn-space-2) 0 0; color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
@@ -137,7 +136,8 @@
   .dn-entry-editor-save:hover { background: var(--dn-red-hover); }
   .dn-entry-editor :is(button,input,textarea):focus-visible { outline: 3px solid var(--dn-focus); outline-offset: 2px; }
   @media (max-width: 767px) {
-    .dn-entry-editor { inset: var(--dn-form-dialog-top) 0 auto; width: 100%; max-height: var(--dn-form-dialog-height); margin: 0; border-radius: 0 0 var(--dn-radius-lg) var(--dn-radius-lg); }
+    .dn-entry-editor { inset: var(--dn-form-dialog-top) 0 auto; width: 100%; height: var(--dn-form-dialog-height); max-height: var(--dn-form-dialog-height); margin: 0; border-radius: 0; }
+    form, .dn-entry-editor-fields { flex: 1; min-height: 0; }
     header { padding-inline: var(--dn-space-4); }
     .dn-entry-editor-fields { padding-inline: var(--dn-space-4); }
     footer { padding: var(--dn-space-3) var(--dn-space-4) max(var(--dn-space-3), env(safe-area-inset-bottom)); }

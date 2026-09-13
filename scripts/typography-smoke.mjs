@@ -63,17 +63,18 @@ try {
         }
         await page.goto(`${base}/contact?topic=trade-in`,{waitUntil:'networkidle'});
         const start = page.locator('.dn-tradein-start');
-        const primary = await typeOf(start), call = await typeOf(page.locator('.dn-workflow-call'));
+        const primary = await typeOf(start), call = await typeOf(page.locator('.dn-workflow-support__call'));
         assert(primary.size > call.size && primary.size === 18 && primary.weight === 500);
         assert.equal(primary.height,44);
         assert((await typeOf(page.locator('.dn-tradein-reference'))).height > primary.height);
         assert.equal((await typeOf(page.locator('.dn-tradein-entry-segments'))).height,44);
         await entryHierarchy(page.locator('.dn-tradein-reference'),page.locator('.dn-tradein-entry-segments'),start);
-        assert.equal(await page.locator('.dn-contact-intent__main .dn-workflow-call').count(),0);
-        assert.equal(await page.locator('.dn-workflow-call').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(255, 255, 255)');
-        assert.equal(await page.locator('.dn-workflow-call').evaluate(e=>getComputedStyle(e).textDecorationLine),'none');
+        assert.equal(await page.locator('.dn-contact-intent__main .dn-workflow-support__call').count(),0);
+        assert.equal(await page.locator('.dn-workflow-showcase').count(),0);
+        assert.match(await page.locator('.dn-workflow-support__call').getAttribute('href'),/^tel:/);
+        assert.equal(await page.locator('.dn-workflow-support__call').evaluate(e=>getComputedStyle(e).textDecorationLine),'none');
         const cardBounds=await page.locator('.dn-contact-intent__main').boundingBox();
-        const callBounds=await page.locator('.dn-workflow-call').boundingBox();
+        const callBounds=await page.locator('.dn-workflow-support__call').boundingBox();
         assert(callBounds.y >= cardBounds.y + cardBounds.height, 'Call must sit below the entry card');
         await readable(page,`${width}-sell`);
         await start.click();
@@ -165,8 +166,8 @@ try {
           assert.equal(await hint.innerText(),'Линк към обява или описание');
           assert(await hint.evaluate(e=>Math.abs(e.getBoundingClientRect().height-parseFloat(getComputedStyle(e).lineHeight))<1));
         }
-        assert.equal(await page.locator('.dn-contact-intent__main .dn-workflow-call').count(),0);
-        assert.equal(await page.locator('.dn-workflow-call').count(),1);
+        assert.equal(await page.locator('.dn-contact-intent__main .dn-workflow-support__call').count(),0);
+        assert.equal(await page.locator('.dn-workflow-support__call').count(),1);
         const importEntry=page.locator('#enquiry-entry');
         const importField=await typeOf(importEntry);
         const importMode=await typeOf(page.getByRole('button',{name:'Линк',exact:true}));

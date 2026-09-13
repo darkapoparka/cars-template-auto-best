@@ -74,6 +74,7 @@
   --dn-tab-font: var(--dn-weight-medium) var(--dn-text-body) / var(--dn-leading-control) var(--dn-font);
   --dn-entry-font: var(--dn-weight-regular) var(--dn-text-lead) / var(--dn-leading-control) var(--dn-font);
   --dn-entry-height: 52px;
+  --dn-entry-surface: var(--dn-home-panel);
   --dn-entry-line: #bbc2cc;
   --dn-control-hit-height: 44px;
   --dn-segment-height: 40px;

@@ -3,8 +3,6 @@
   import ContactHero from '$components/company/ContactHero.svelte';
   import ContactIntent from '$components/company/ContactIntent.svelte';
   import ShowroomMap from '$components/company/ShowroomMap.svelte';
-  import WorkflowShowcase from '$components/company/WorkflowShowcase.svelte';
-  import { template } from '$config/template';
   import { brand } from '$config/brand';
   import type { PageData } from './$types';
 
@@ -26,10 +24,6 @@
 <section class="dn-contact-section" class:dn-contact-section--general={data.topic.id === 'general'} class:dn-contact-section--topic={data.topic.id !== 'general'} class:dn-contact-section--workflow={data.topic.id === 'trade-in' || data.topic.id === 'import'} class:dn-contact-section--import={data.topic.id === 'import'} id="contact-intent" aria-label="Свържете се с екипа">
   <div class="container">
     <ContactIntent vehicle={data.vehicle} topic={data.topic} importUrl={data.importUrl} />
-
-    {#if template.mode === 'preview' && (data.topic.id === 'trade-in' || data.topic.id === 'import')}
-      <WorkflowShowcase topic={data.topic.id} />
-    {/if}
 
     {#if data.topic.id === 'general'}
       <div class="dn-contact-location dn-contact-location--general" aria-labelledby="contact-location-title">
