@@ -101,19 +101,19 @@
     <div class="dn-tradein-info-sheet__body">
       <section class="dn-tradein-info-group dn-tradein-info-prepare" aria-labelledby="tradein-prepare-title">
         <h3 id="tradein-prepare-title">Какво да подготвиш</h3>
-        <div class="dn-tradein-info-list">
-          <div><p><strong>Данни за автомобила</strong><span>Марка, модел, година и пробег.</span></p></div>
-          <div><p><strong>Снимки и състояние</strong><span>Екстериор, интериор и видими забележки.</span></p></div>
-          <div><p><strong>Цена, ако имаш ориентир</strong><span>Полето е по желание и не е автоматична оценка.</span></p></div>
-        </div>
+        <ol class="dn-tradein-info-list">
+          <li><span aria-hidden="true">1.</span><p><strong>Данни за автомобила</strong><span>Марка, модел, година и пробег.</span></p></li>
+          <li><span aria-hidden="true">2.</span><p><strong>Снимки и състояние</strong><span>Екстериор, интериор и видими забележки.</span></p></li>
+          <li><span aria-hidden="true">3.</span><p><strong>Цена, ако имаш ориентир</strong><span>Полето е по желание и не е автоматична оценка.</span></p></li>
+        </ol>
       </section>
 
       <section class="dn-tradein-info-group dn-tradein-info-process" aria-labelledby="tradein-next-title">
         <h3 id="tradein-next-title">Как продължаваме</h3>
         <ol class="dn-tradein-info-steps">
-          <li><span>1</span><p><strong>Попълваш автомобила</strong><span>Преглеждаш данните, преди да ги споделиш.</span></p></li>
-          <li><span>2</span><p><strong>Споделяш или се обаждаш</strong><span>Ти избираш начина за контакт с екипа.</span></p></li>
-          <li><span>3</span><p><strong>Обсъждаме автомобила</strong><span>Уточняваме състоянието и следващата стъпка.</span></p></li>
+          <li><span aria-hidden="true">1.</span><p><strong>Попълваш автомобила</strong><span>Преглеждаш данните, преди да ги споделиш.</span></p></li>
+          <li><span aria-hidden="true">2.</span><p><strong>Споделяш или се обаждаш</strong><span>Ти избираш начина за контакт с екипа.</span></p></li>
+          <li><span aria-hidden="true">3.</span><p><strong>Обсъждаме автомобила</strong><span>Уточняваме състоянието и следващата стъпка.</span></p></li>
         </ol>
       </section>
 
@@ -221,11 +221,11 @@
   }
   .dn-tradein-info-group { display: grid; gap: var(--dn-space-3); }
   .dn-tradein-info-group h3 { margin: 0; color: var(--dn-ink); font-size: var(--dn-text-lead); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-card); text-align: left; }
-  .dn-tradein-info-list { display: grid; gap: var(--dn-space-4); margin: 0; padding: 0; background: transparent; }
-  .dn-tradein-info-list > div {
+  .dn-tradein-info-list { display: grid; gap: var(--dn-space-4); margin: 0; padding: 0; background: transparent; list-style: none; }
+  .dn-tradein-info-list > li {
     display: grid;
-    grid-template-columns: minmax(0,1fr);
-    align-items: center;
+    grid-template-columns: 20px minmax(0,1fr);
+    align-items: start;
     gap: var(--dn-space-3);
     min-height: 50px;
     padding: 0;
@@ -239,19 +239,9 @@
   .dn-tradein-info-list p > span,
   .dn-tradein-info-steps p > span { color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
   .dn-tradein-info-steps { display: grid; gap: var(--dn-space-4); margin: 0; padding: 0; background: transparent; list-style: none; }
-  .dn-tradein-info-steps li { display: grid; grid-template-columns: 28px minmax(0,1fr); align-items: start; gap: var(--dn-space-3); min-height: 50px; padding: 0; background: transparent; }
-  .dn-tradein-info-steps li > span {
-    display: grid;
-    width: 28px;
-    height: 28px;
-    place-items: center;
-    border-radius: 50%;
-    background: var(--dn-surface);
-    color: var(--dn-ink);
-    font-size: var(--dn-text-meta);
-    font-weight: var(--dn-weight-bold);
-  }
-  .dn-tradein-info-prepare { padding: var(--dn-space-4); border-radius: var(--dn-radius); background: var(--dn-mobile-canvas); color: var(--dn-ink); gap: var(--dn-space-3); }
+  .dn-tradein-info-steps li { display: grid; grid-template-columns: 20px minmax(0,1fr); align-items: start; gap: var(--dn-space-3); min-height: 50px; padding: 0; background: transparent; }
+  .dn-tradein-info-list li > span, .dn-tradein-info-steps li > span { color: var(--dn-ink); font-size: var(--dn-text-body); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-card); }
+  .dn-tradein-info-prepare { padding: var(--dn-space-4); border-radius: 0; background: var(--dn-mobile-canvas); color: var(--dn-ink); gap: var(--dn-space-3); }
   .dn-tradein-info-prepare h3 { color: var(--dn-ink); }
   .dn-tradein-info-prepare strong { color: var(--dn-ink); }
   .dn-tradein-info-prepare p > span { color: var(--dn-muted); }
@@ -309,10 +299,7 @@
     .dn-tradein-info-sheet__body { gap: var(--dn-space-5); padding: 0 var(--dn-space-4) max(var(--dn-space-4), env(safe-area-inset-bottom)); }
   }
 
-  .dn-tradein-info-process { padding: var(--dn-space-4); border-radius: var(--dn-radius); background: var(--dn-ink); }
-  .dn-tradein-info-process :is(h3, strong) { color: var(--dn-white); }
-  .dn-tradein-info-process p > span { color: var(--dn-muted-on-ink); }
-  .dn-tradein-info-process li > span { background: var(--dn-white); color: var(--dn-ink); }
+  .dn-tradein-info-process { padding: var(--dn-space-4); border-radius: 0; background: var(--dn-mobile-canvas); }
 
   @media (prefers-reduced-motion: reduce) {
     .dn-tradein-info-sheet { transition: none; }

@@ -105,19 +105,19 @@
     <div class="dn-import-info-sheet__body">
       <section class="dn-import-info-group dn-import-info-prepare" aria-labelledby="import-prepare-title">
         <h3 id="import-prepare-title">Какво да подготвиш</h3>
-        <div class="dn-import-info-list">
-          <div><p><strong>Обява или модел</strong><span>Линк към обява или марка и модел.</span></p></div>
-          <div><p><strong>Бюджет</strong><span>Ориентировъчна сума, ако имаш такава.</span></p></div>
-          <div><p><strong>Предпочитания</strong><span>Година, двигател и важни за теб екстри.</span></p></div>
-        </div>
+        <ol class="dn-import-info-list">
+          <li><span aria-hidden="true">1.</span><p><strong>Обява или модел</strong><span>Линк към обява или марка и модел.</span></p></li>
+          <li><span aria-hidden="true">2.</span><p><strong>Бюджет</strong><span>Ориентировъчна сума, ако имаш такава.</span></p></li>
+          <li><span aria-hidden="true">3.</span><p><strong>Предпочитания</strong><span>Година, двигател и важни за теб екстри.</span></p></li>
+        </ol>
       </section>
 
       <section class="dn-import-info-group dn-import-info-process" aria-labelledby="import-next-title">
         <h3 id="import-next-title">Как продължаваме</h3>
         <ol class="dn-import-info-steps">
-          <li><span>1</span><p><strong>Подготвяш запитването</strong><span>Преглеждаш данните, преди да ги споделиш.</span></p></li>
-          <li><span>2</span><p><strong>Уточняваме търсенето</strong><span>Обсъждаме автомобила и бюджета с теб.</span></p></li>
-          <li><span>3</span><p><strong>Избираме следващата стъпка</strong><span>Според автомобила и условията по сделката.</span></p></li>
+          <li><span aria-hidden="true">1.</span><p><strong>Подготвяш запитването</strong><span>Преглеждаш данните, преди да ги споделиш.</span></p></li>
+          <li><span aria-hidden="true">2.</span><p><strong>Уточняваме търсенето</strong><span>Обсъждаме автомобила и бюджета с теб.</span></p></li>
+          <li><span aria-hidden="true">3.</span><p><strong>Избираме следващата стъпка</strong><span>Според автомобила и условията по сделката.</span></p></li>
         </ol>
       </section>
 
@@ -229,11 +229,11 @@
   }
   .dn-import-info-group { display: grid; gap: var(--dn-space-3); }
   .dn-import-info-group h3 { margin: 0; color: var(--dn-ink); font-size: var(--dn-text-lead); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-card); text-align: left; }
-  .dn-import-info-list { display: grid; gap: var(--dn-space-4); margin: 0; padding: 0; background: transparent; }
-  .dn-import-info-list > div {
+  .dn-import-info-list { display: grid; gap: var(--dn-space-4); margin: 0; padding: 0; background: transparent; list-style: none; }
+  .dn-import-info-list > li {
     display: grid;
-    grid-template-columns: minmax(0,1fr);
-    align-items: center;
+    grid-template-columns: 20px minmax(0,1fr);
+    align-items: start;
     gap: var(--dn-space-3);
     min-height: 50px;
     padding: 0;
@@ -247,17 +247,7 @@
   .dn-import-info-list p > span,
   .dn-import-info-steps p > span { color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
   .dn-import-info-steps { display: grid; gap: var(--dn-space-4); margin: 0; padding: 0; background: transparent; list-style: none; }
-  .dn-import-info-steps li { display: grid; grid-template-columns: 28px minmax(0,1fr); align-items: start; gap: var(--dn-space-3); min-height: 50px; padding: 0; background: transparent; }  .dn-import-info-steps li > span {
-    display: grid;
-    width: 28px;
-    height: 28px;
-    place-items: center;
-    border-radius: 50%;
-    background: var(--dn-surface);
-    color: var(--dn-ink);
-    font-size: var(--dn-text-meta);
-    font-weight: var(--dn-weight-bold);
-  }
+  .dn-import-info-steps li { display: grid; grid-template-columns: 20px minmax(0,1fr); align-items: start; gap: var(--dn-space-3); min-height: 50px; padding: 0; background: transparent; }  .dn-import-info-list li > span, .dn-import-info-steps li > span { color: var(--dn-ink); font-size: var(--dn-text-body); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-card); }
   .dn-import-info-contact { display: grid; gap: var(--dn-space-1); padding: 0; text-align: center; }
   .dn-import-info-contact > strong { color: var(--dn-ink); font-size: var(--dn-text-lead); line-height: var(--dn-cta-leading); }
   .dn-import-info-contact > span { color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-body); }
@@ -279,7 +269,7 @@
   .dn-import-info-contact__actions a:last-child:hover { background: var(--dn-surface); }
   .dn-import-info-contact__actions a:last-child { border: 1px solid var(--dn-line); background: transparent; color: var(--dn-ink); }
 
-  .dn-import-info-prepare { padding: var(--dn-space-4); border-radius: var(--dn-radius); background: var(--dn-mobile-canvas); color: var(--dn-ink); gap: var(--dn-space-3); }
+  .dn-import-info-prepare { padding: var(--dn-space-4); border-radius: 0; background: var(--dn-mobile-canvas); color: var(--dn-ink); gap: var(--dn-space-3); }
   .dn-import-info-prepare h3 { color: var(--dn-ink); }
   .dn-import-info-prepare strong { color: var(--dn-ink); }
   .dn-import-info-prepare p > span { color: var(--dn-muted); }
@@ -329,10 +319,7 @@
     .dn-import-info-sheet__body { gap: var(--dn-space-5); padding: 0 var(--dn-space-4) max(var(--dn-space-4), env(safe-area-inset-bottom)); }
   }
 
-  .dn-import-info-process { padding: var(--dn-space-4); border-radius: var(--dn-radius); background: var(--dn-ink); }
-  .dn-import-info-process :is(h3, strong) { color: var(--dn-white); }
-  .dn-import-info-process p > span { color: var(--dn-muted-on-ink); }
-  .dn-import-info-process li > span { background: var(--dn-white); color: var(--dn-ink); }
+  .dn-import-info-process { padding: var(--dn-space-4); border-radius: 0; background: var(--dn-mobile-canvas); }
 
   @media (prefers-reduced-motion: reduce) {
     .dn-import-info-sheet { transition: none; }
