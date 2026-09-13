@@ -178,7 +178,11 @@
   }
 
   @media (max-width: 767px) {
-    .dn-search__mobile-modes { display: grid; }
+    .dn-search__mobile-modes {
+      display: grid;
+      width: var(--dn-entry-segment-width);
+      justify-self: center;
+    }
     .dn-search__buy { display: contents; }
     .dn-search-wrap {
       margin-top: -52px;
@@ -263,7 +267,7 @@
       display: flex;
       width: fit-content;
       max-width: 100%;
-      min-height: 44px;
+      min-height: var(--dn-entry-action-height);
       justify-self: center;
       align-items: center;
       justify-content: center;
