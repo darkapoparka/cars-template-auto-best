@@ -323,7 +323,7 @@
   .dn-import-info-process :is(h3, strong) { color: var(--dn-white); }
   .dn-import-info-process p > span { color: var(--dn-muted-on-ink); }
   .dn-import-info-process li { grid-template-columns: 28px minmax(0, 1fr); }
-  .dn-import-info-process li > span { display: grid; width: 28px; height: 28px; place-items: center; background: var(--dn-mobile-canvas); color: var(--dn-ink); font-size: var(--dn-text-meta); }
+  .dn-import-info-process li > span { color: var(--dn-white); }
 
   @media (prefers-reduced-motion: reduce) {
     .dn-import-info-sheet { transition: none; }
