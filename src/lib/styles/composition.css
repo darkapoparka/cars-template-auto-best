@@ -438,7 +438,7 @@
   .dn-app-shell .dn-contact-hero.dn-contact-hero--general { background: #101114; }
   .dn-app-shell .dn-about-hero.dn-route-hero { background: #1d1f23; }
   .dn-app-shell .dn-blog-hero.dn-route-hero { background: #f0c84b; color: #202329; }
-  .dn-app-shell .dn-contact-hero:not(.dn-contact-hero--general) { background: #a90f1c; color: #fff; }
+  .dn-app-shell .dn-contact-hero:not(.dn-contact-hero--general) { background: var(--dn-workflow-canvas); color: #fff; }
   .dn-app-shell :is(.dn-hero__media, .dn-hero__overlay, .dn-about-hero__media, .dn-about-hero__overlay, .dn-contact-hero__media, .dn-contact-hero__overlay, .dn-blog-hero__media, .dn-blog-hero__overlay) { display: none; }
   .dn-app-shell .dn-blog-hero :is(h1, p) { color: #202329; }
   .dn-app-shell .dn-contact-hero:not(.dn-contact-hero--general) :is(h1, p) { color: #fff; }

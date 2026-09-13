@@ -1029,12 +1029,13 @@
   }
 }
 
-/* Mobile workflow parity: Sell and Import share the same card footprint and canvas. */
+/* Continue the mobile workflow hero color through the page to the fixed navigation. */
 @media (max-width: 767px) {
-  body:has(.dn-contact-hero--workflow) {
-    background: var(--dn-mobile-canvas);
+  body:has(.dn-contact-hero--workflow),
+  .dn-app-shell:has(.dn-contact-hero--workflow),
+  .dn-app-shell .dn-contact-section--workflow {
+    background: var(--dn-workflow-canvas);
   }
-
 }
 
 /* Contact desktop alignment with the shared route-hero system. */
