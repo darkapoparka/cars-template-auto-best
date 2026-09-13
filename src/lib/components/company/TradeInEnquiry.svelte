@@ -242,8 +242,8 @@
   .dn-tradein-entry-segments button:focus-visible { outline: 2px solid #202329; outline-offset: 2px; }
   .dn-tradein-start { display: flex; width: 100%; min-height: 54px; align-items: center; justify-content: center; gap: 10px; margin-top: 14px; padding: 12px 18px; border: 0; border-radius: var(--dn-radius-button); background: var(--dn-red); color: #fff; font-size: 16px; font-weight: 700; line-height: 1.35; }
   .dn-tradein-start:is(:hover,:focus-visible), .dn-tradein-primary:is(:hover,:focus-visible) { background: var(--dn-red-hover); }
-  .dn-tradein-call { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; gap: 7px; justify-self: center; margin-top: 10px; padding: 8px 16px; border-radius: var(--dn-radius-button); background: #f1f2f4; color: #2d3238; font-size: 13px; font-weight: 650; text-decoration: none; }
-  .dn-tradein-call:is(:hover,:focus-visible) { background: #e7e9ec; }
+  .dn-tradein-call { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; gap: 7px; justify-self: center; margin-top: 10px; padding: 8px 16px; border-radius: var(--dn-radius-button); background: var(--dn-ink); color: var(--dn-white); font-size: 13px; font-weight: 650; text-decoration: none; }
+  .dn-tradein-call:is(:hover,:focus-visible) { background: var(--dn-ink-hover); }
   :global(body:has(.dn-tradein-dialog[open])) { position: fixed; top: var(--dn-tradein-scroll,0); width: 100%; overflow: hidden; }
   .dn-tradein-dialog { width: min(640px,calc(100% - 32px)); max-width: none; max-height: calc(100dvh - 40px); margin: auto; padding: 0; border: 0; border-radius: 22px; background: #fff; color: #202329; overflow: hidden; }
   .dn-tradein-dialog::backdrop { background: rgba(7,9,12,.68); backdrop-filter: blur(2px); }

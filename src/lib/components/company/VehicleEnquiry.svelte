@@ -305,8 +305,8 @@
   .dn-enquiry-import-info__footer label > span { display: block; margin-bottom: 2px; }
   .dn-enquiry-import-info__footer input { width: 100%; min-height: 28px; padding: 0; border: 0; outline: 0; background: transparent; color: var(--dn-ink); font: inherit; font-size: 15px; font-weight: 600; }
   .dn-enquiry-import-info__footer .dn-enquiry-import-go { margin-left: auto; }
-  .dn-enquiry-import-call { display: flex; width: fit-content; min-height: 44px; align-items: center; justify-content: center; gap: 7px; margin: 10px auto 0; padding: 8px 16px; border-radius: var(--dn-radius-button); background: #f1f2f4; color: #2d3238; font-size: 13px; font-weight: 650; text-decoration: none; }
-  .dn-enquiry-import-call:is(:hover,:focus-visible) { background: #e7e9ec; }
+  .dn-enquiry-import-call { display: flex; width: fit-content; min-height: 44px; align-items: center; justify-content: center; gap: 7px; margin: 10px auto 0; padding: 8px 16px; border-radius: var(--dn-radius-button); background: var(--dn-ink); color: var(--dn-white); font-size: 13px; font-weight: 650; text-decoration: none; }
+  .dn-enquiry-import-call:is(:hover,:focus-visible) { background: var(--dn-ink-hover); }
   .dn-enquiry-text-button { display: inline-flex; min-height: 44px; align-items: center; gap: 8px; padding: 8px 0; border: 0; background: transparent; color: #202329; font-size: 14px; font-weight: 600; text-align: left; text-decoration: underline; text-underline-offset: 4px; }
   :global(body:has(.dn-enquiry[open])) { position: fixed; top: var(--dn-enquiry-scroll, 0); width: 100%; overflow: hidden; }
   .dn-enquiry { width: min(620px, calc(100% - 32px)); max-width: none; max-height: calc(100dvh - 48px); margin: auto; padding: 0; border: 0; border-radius: 20px; background: #fff; color: #202329; overflow: hidden; }

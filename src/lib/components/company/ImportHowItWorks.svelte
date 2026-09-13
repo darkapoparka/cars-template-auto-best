@@ -282,15 +282,15 @@
     .dn-import-info-drawer {
       position: fixed;
       left: 50%;
-      bottom: calc(var(--dn-mobile-nav-height) + env(safe-area-inset-bottom) + 10px);
+      bottom: calc(var(--dn-mobile-nav-height) + env(safe-area-inset-bottom));
       z-index: 1890;
-      width: min(230px, calc(100% - 72px));
+      width: min(300px, calc(100% - 48px));
       margin: 0;
       transform: translateX(-50%);
     }
     .dn-import-info-drawer__peek {
       width: 100%;
-      min-height: 45px;
+      min-height: 52px;
       padding: 14px 14px 7px;
       border-radius: 16px 16px 0 0;
       box-shadow: none;
@@ -323,7 +323,6 @@
   }
 
   @media (max-width: 374px) {
-    .dn-import-info-drawer { width: min(218px, calc(100% - 68px)); }
     .dn-import-info-drawer__peek { font-size: 12px; }
   }
 
