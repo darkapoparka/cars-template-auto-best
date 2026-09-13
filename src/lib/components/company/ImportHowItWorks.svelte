@@ -232,9 +232,9 @@
   .dn-import-info-list { display: grid; gap: var(--dn-space-4); margin: 0; padding: 0; background: transparent; list-style: none; }
   .dn-import-info-list > li {
     display: grid;
-    grid-template-columns: 20px minmax(0,1fr);
+    grid-template-columns: max-content minmax(0,1fr);
     align-items: start;
-    gap: var(--dn-space-3);
+    gap: var(--dn-space-2);
     min-height: 50px;
     padding: 0;
     border-radius: 0;
@@ -247,7 +247,7 @@
   .dn-import-info-list p > span,
   .dn-import-info-steps p > span { color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
   .dn-import-info-steps { display: grid; gap: var(--dn-space-4); margin: 0; padding: 0; background: transparent; list-style: none; }
-  .dn-import-info-steps li { display: grid; grid-template-columns: 20px minmax(0,1fr); align-items: start; gap: var(--dn-space-3); min-height: 50px; padding: 0; background: transparent; }  .dn-import-info-list li > span, .dn-import-info-steps li > span { color: var(--dn-ink); font-size: var(--dn-text-body); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-card); }
+  .dn-import-info-steps li { display: grid; grid-template-columns: max-content minmax(0,1fr); align-items: start; gap: var(--dn-space-2); min-height: 50px; padding: 0; background: transparent; }  .dn-import-info-list li > span, .dn-import-info-steps li > span { font-variant-numeric: tabular-nums; color: var(--dn-ink); font-size: var(--dn-text-body); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-card); }
   .dn-import-info-contact { display: grid; gap: var(--dn-space-1); padding: 0; text-align: center; }
   .dn-import-info-contact > strong { color: var(--dn-ink); font-size: var(--dn-text-lead); line-height: var(--dn-cta-leading); }
   .dn-import-info-contact > span { color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-body); }
@@ -322,7 +322,6 @@
   .dn-import-info-process { padding: var(--dn-space-4); border-radius: var(--dn-radius); background: var(--dn-ink); }
   .dn-import-info-process :is(h3, strong) { color: var(--dn-white); }
   .dn-import-info-process p > span { color: var(--dn-muted-on-ink); }
-  .dn-import-info-process li { grid-template-columns: 28px minmax(0, 1fr); }
   .dn-import-info-process li > span { color: var(--dn-white); }
 
   @media (prefers-reduced-motion: reduce) {
