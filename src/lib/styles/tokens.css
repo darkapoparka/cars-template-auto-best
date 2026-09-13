@@ -55,6 +55,8 @@
   --dn-home-heading-size: var(--dn-text-section-compact);
   --dn-home-heading-banner-height: 176px;
   --dn-home-section-space: 32px;
+  --dn-home-carousel-card-width: min(250px, calc(100vw - 96px));
+  --dn-home-carousel-gap: 10px;
   --dn-home-search-surface: #202329;
   --dn-home-search-line: #414650;
   --dn-home-search-muted: #d4d8df;

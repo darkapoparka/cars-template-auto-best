@@ -347,10 +347,10 @@
 
     .dn-editorial__layout {
       display: grid;
-      grid-auto-columns: min(278px, calc(100vw - 78px));
+      grid-auto-columns: var(--dn-home-carousel-card-width);
       grid-auto-flow: column;
       grid-template-columns: none;
-      gap: 10px;
+      gap: var(--dn-home-carousel-gap);
       overflow-x: auto;
       padding: 0 0 4px;
       scroll-padding-left: 0;

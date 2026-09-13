@@ -183,10 +183,10 @@
       --dn-vehicle-card-spec-padding: calc(var(--dn-space-1) + var(--dn-space-half));
       --dn-vehicle-card-price-gap: var(--dn-space-2);
       display: grid;
-      grid-auto-columns: min(250px, calc(100vw - 96px));
+      grid-auto-columns: var(--dn-home-carousel-card-width);
       grid-auto-flow: column;
       grid-template-columns: none;
-      gap: 10px;
+      gap: var(--dn-home-carousel-gap);
       overflow-x: auto;
       padding: 0 12px 12px;
       scroll-padding-left: 12px;
