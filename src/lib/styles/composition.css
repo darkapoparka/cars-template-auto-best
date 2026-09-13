@@ -338,18 +338,6 @@
   .dn-header__inner { min-height: 68px; display: flex; justify-content: space-between; gap: 12px; }
   .dn-logo img { height: 42px; max-width: 148px; }
   .dn-mobile-toggle { display: block; }
-  .dn-mobile-menu__backdrop { position: fixed; inset: 0; z-index: 1990; border: 0; background: rgba(10, 13, 18, .54); }
-  .dn-mobile-menu { position: fixed; right: 0; bottom: 0; left: 0; z-index: 2000; display: flex; max-height: calc(100dvh - 68px); flex-direction: column; padding: 18px 20px calc(20px + env(safe-area-inset-bottom)); overflow-y: auto; border-radius: 24px 24px 0 0; background: #fff; box-shadow: 0 -24px 70px rgba(10, 13, 18, .24); }
-  .dn-mobile-menu__header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-  .dn-mobile-menu__brand { display: inline-flex; min-height: 44px; align-items: center; border-radius: 8px; }
-  .dn-mobile-menu__brand img { display: block; width: 160px; height: 44px; object-fit: contain; }
-  .dn-mobile-menu__close { display: inline-grid; flex: 0 0 44px; width: 44px; height: 44px; place-items: center; border: 0; border-radius: var(--dn-radius-button); background: #f2f3f5; color: #202329; }
-  .dn-mobile-menu nav { display: grid; gap: 8px; margin-top: 20px; }
-  .dn-mobile-menu nav a { min-height: 48px; display: flex; align-items: center; padding: 10px 16px; border: 0; border-radius: 12px; background: #f2f3f5; color: #202329; font-size: var(--dn-text-body); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-meta); text-decoration: none; }
-  .dn-mobile-menu nav a[aria-current="page"] { background: #e8eaed; color: var(--dn-red); }
-  .dn-mobile-menu nav a:hover, .dn-mobile-menu nav a:active { background: #e8eaed; }
-  .dn-mobile-menu :is(a, button):focus-visible { outline: 2px solid #202329; outline-offset: 2px; }
-  .dn-mobile-menu__cta { min-height: 48px; display: flex; align-items: center; justify-content: center; margin-top: 16px; border-radius: var(--dn-radius-button); background: var(--dn-red); color: #fff; font-weight: var(--dn-cta-weight); }
   .dn-section { padding-block: 64px; }
   .dn-section-heading { align-items: flex-start; }
   .dn-section-heading h2 { font-size: var(--dn-text-section-compact); }
