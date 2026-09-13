@@ -242,6 +242,8 @@ try {
           assert(drawerBox.y + drawerBox.height <= navBox.y + 1, `${topic}: drawer must stay above bottom nav`);
           assert(supportBox.y + supportBox.height <= drawerBox.y - 8, `${topic}: support banner must clear drawer`);
           assert(Math.abs(actionBox.width - 220) < 1 && Math.abs(actionBox.height - 44) < 1, `${topic}: compact CTA geometry`);
+          assert.equal((await page.locator('.dn-workflow-support__call').innerText()).trim(), 'Говори с екипа');
+          assert.equal(await page.locator('.dn-workflow-support h2').isVisible(), false, `${topic}: short viewport uses one clear support CTA`);
           await drawer.click();
           assert((await dialog.boundingBox()).y >= 63, `${topic}: sheet keeps visible top breathing room`);
           assert.equal(await page.locator('.dn-mobile-bottom-nav').evaluate(e => getComputedStyle(e).visibility), 'hidden');

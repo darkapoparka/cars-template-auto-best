@@ -10,8 +10,8 @@
   <div class="dn-workflow-support__copy">
     <h2 id="workflow-support-title">Имаш въпроси?</h2>
     <p>{topic === 'import' ? 'Помагаме с обявата и избора на автомобил.' : 'Помагаме с оценката и следващите стъпки.'}</p>
-    <a class="dn-workflow-support__call" href={brand.phoneHref} aria-label={`Обади се на ${brand.phone}`}>
-      Обади се <Icon name="arrow-right" size={18} />
+    <a class="dn-workflow-support__call" href={brand.phoneHref} aria-label={`Говори с екипа на ${brand.phone}`}>
+      Говори с екипа <Icon name="arrow-right" size={18} />
     </a>
   </div>
   <img src={asset('/assets/images/lead/day-night-contact-phone-red-v1.webp')} alt="" width="900" height="1352" />
@@ -41,8 +41,8 @@
       gap: var(--dn-space-3);
       padding: var(--dn-space-2) 0 var(--dn-space-2) var(--dn-space-4);
     }
-    h2 { flex: 0 0 auto; font-size: var(--dn-text-body); }
-    a { min-height: var(--dn-control-hit-height); white-space: nowrap; }
+    h2 { display: none; }
+    a { min-height: var(--dn-control-hit-height); font-size: var(--dn-text-body); font-weight: var(--dn-weight-semibold); white-space: nowrap; }
     img { width: 34%; object-position: center 8%; }
   }
   @media (min-width: 768px) {
