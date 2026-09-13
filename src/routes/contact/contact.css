@@ -1035,15 +1035,6 @@
     background: var(--dn-mobile-canvas);
   }
 
-  .dn-contact-section--workflow .dn-contact-intent--tradein .dn-contact-intent__main {
-    padding-bottom: 14.4px !important;
-  }
-}
-
-@media (max-width: 767px) {
-  .dn-contact-section--workflow .dn-contact-intent--tradein .dn-contact-intent__main {
-    min-height: 291.5625px;
-  }
 }
 
 /* Contact desktop alignment with the shared route-hero system. */
@@ -1235,10 +1226,54 @@
 
 /* Keep the docked help tab clear of the last form controls on short screens. */
 @media (max-width: 767px) {
+  /* Shared entry geometry keeps Sell and Import aligned during navigation. */
+  .dn-contact-section--workflow .dn-contact-intent--workflow .dn-contact-intent__main {
+    min-height: 0;
+    padding: var(--dn-space-5) var(--dn-space-4);
+    border: 0;
+  }
+  .dn-contact-section--workflow .dn-contact-intent--workflow :is(.dn-contact-selected, .dn-tradein-lead) { display: none; }
+  .dn-contact-section--workflow .dn-contact-intent--workflow :is(.dn-contact-workflow-title, .dn-tradein-enquiry > h1) {
+    margin: 0;
+    font-size: var(--dn-text-heading);
+    font-weight: var(--dn-weight-semibold);
+    line-height: var(--dn-leading-heading);
+    letter-spacing: -.025em;
+  }
+  .dn-contact-section--workflow .dn-contact-intent--workflow :is(.dn-enquiry-entry--import, .dn-tradein-entry-segments) {
+    margin-top: var(--dn-space-4);
+  }
+  .dn-contact-section--workflow .dn-contact-intent--workflow :is(.dn-enquiry-import-segments, .dn-tradein-entry-segments) {
+    padding: var(--dn-space-1);
+    margin-bottom: 0;
+  }
+  .dn-contact-section--workflow .dn-contact-intent--workflow :is(.dn-enquiry-import-segments, .dn-tradein-entry-segments) button {
+    min-height: 44px;
+    font-size: var(--dn-text-body);
+    font-weight: var(--dn-weight-semibold);
+  }
+  .dn-contact-section--workflow .dn-contact-intent--workflow :is(.dn-enquiry-import-field, .dn-enquiry-import-info, .dn-tradein-start) { margin-top: var(--dn-space-3); }
+  .dn-contact-section--workflow .dn-contact-intent--workflow :is(.dn-enquiry-import-field, .dn-tradein-start) {
+    height: 48px;
+    min-height: 48px;
+    font-size: var(--dn-text-body);
+  }
+  .dn-contact-section--workflow .dn-contact-intent--workflow :is(.dn-enquiry-import-call, .dn-tradein-call) {
+    min-height: 44px;
+    margin-top: var(--dn-space-3);
+    padding: var(--dn-space-2) var(--dn-space-5);
+    font-size: var(--dn-text-body);
+    font-weight: var(--dn-weight-semibold);
+    line-height: var(--dn-leading-body);
+  }
   .dn-contact-section--workflow {
     padding-bottom: 68px;
   }
   html:has(.dn-contact-hero--workflow) {
     scroll-padding-bottom: calc(var(--dn-mobile-nav-height) + env(safe-area-inset-bottom) + 68px);
   }
+}
+
+@media (max-width: 374px) {
+  .dn-contact-section--workflow .dn-contact-intent--workflow :is(.dn-contact-workflow-title, .dn-tradein-enquiry > h1) { font-size: var(--dn-text-subheading); }
 }

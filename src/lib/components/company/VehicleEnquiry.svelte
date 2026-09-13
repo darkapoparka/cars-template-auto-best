@@ -199,7 +199,7 @@
     {/if}
     <a class="dn-enquiry-import-call" href={brand.phoneHref} aria-label={`Обади се на ${brand.phone}`}>
       <Icon name="phone" size={17} />
-      <span>Обади се · {brand.phone}</span>
+      <span>Обади се</span>
     </a>
   {/if}
 </div>

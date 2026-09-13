@@ -149,7 +149,7 @@
   </button>
   <a class="dn-tradein-call" href={brand.phoneHref} aria-label={`Обади се на ${brand.phone}`}>
     <Icon name="phone" size={17} />
-    <span>Обади се · {brand.phone}</span>
+    <span>Обади се</span>
   </a>
 </div>
 
@@ -318,7 +318,7 @@
     :global(.dn-contact-intent:has(.dn-tradein-enquiry) .dn-contact-intent__main) { background: #fff; }
   }
   @media (max-width: 767px) {
-    :global(.dn-contact-intent:has(.dn-tradein-enquiry) .dn-contact-intent__main) { padding: 22px 18px 14.4px; }
+
     :global(.dn-contact-intent:has(.dn-tradein-enquiry) > .dn-contact-workflow-call) { display: none; }
     .dn-tradein-enquiry > h1 { margin-inline: auto; font-size: 27px; text-align: center; }
     .dn-tradein-lead { margin: 10px auto 0; font-size: 14px; line-height: 1.5; text-align: center; }
