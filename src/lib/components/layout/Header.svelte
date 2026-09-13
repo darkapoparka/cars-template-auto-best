@@ -589,7 +589,7 @@
 
     .dn-mobile-bottom-nav a.active,
     .dn-mobile-bottom-nav button.active {
-      color: var(--dn-red);
+      color: var(--dn-ink);
     }
 
     .dn-mobile-bottom-nav__icon {
