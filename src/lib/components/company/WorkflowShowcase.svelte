@@ -23,7 +23,7 @@
 <style>
   .dn-workflow-showcase { max-width: 760px; margin: var(--dn-space-6) auto 0; }
   header { display: flex; align-items: baseline; flex-wrap: wrap; gap: var(--dn-space-2); margin-bottom: var(--dn-space-4); }
-  h2 { margin: 0; color: var(--dn-ink); font-size: var(--dn-text-card); font-weight: var(--dn-weight-medium); line-height: var(--dn-leading-heading); letter-spacing: -.02em; }
+  h2 { margin: 0; color: var(--dn-ink); font-size: var(--dn-text-card); font-weight: var(--dn-weight-medium); line-height: var(--dn-leading-heading); letter-spacing: var(--dn-tracking-heading); }
   .dn-workflow-showcase__demo { color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
   ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--dn-space-3); margin: 0; padding: 0; list-style: none; }
   li { min-width: 0; }

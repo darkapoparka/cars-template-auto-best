@@ -54,17 +54,24 @@ The root layout imports `@fontsource-variable/onest`. `--dn-font` is `Onest Vari
 
 | Token | Size | Typical use |
 | --- | --- | --- |
-| `--dn-text-badge` | `0.75rem` | Compact badges |
+| `--dn-text-caption` | `0.75rem` | Nonessential video durations |
+| `--dn-text-badge` | `0.875rem` | Compact badges |
 | `--dn-text-meta` | `0.875rem` | Supporting metadata |
-| `--dn-text-body` | `1rem` | Body copy and default action type |
-| `--dn-text-lead` | `1.125rem` | Introductory copy |
+| `--dn-text-body` | `1rem` | Body copy, inputs and ordinary controls |
+| `--dn-text-lead` | `1.125rem` | Introductory copy, primary actions and entry tabs |
 | `--dn-text-card` | `1.25rem` | Card headings |
 | `--dn-text-subheading` | `1.5rem` | Subheadings |
 | `--dn-text-heading` | `1.875rem` | Headings |
+| `--dn-text-section-compact` | `2rem` | Compact desktop section titles |
 | `--dn-text-section` | `2.625rem` | Large section titles |
+| `--dn-text-hero` / `--dn-text-hero-large` | `3rem` / `3.5rem` | Hero titles |
 | `--dn-text-display` | `3.75rem` | Display text |
 
-Component-specific sizes also exist; the table is not a command to normalize every heading. Mobile section headings commonly use 22px, and mobile service titles use 18px in the current working design. The shared action shorthand is `--dn-cta-font`, with weight 600, body-size text and 1.3 line-height. Heading tracking and responsive sizes are owned by the relevant component.
+All live-text typography values belong to `tokens.css`. Components and route sheets select semantic roles; they must not introduce numeric font sizes, font weights, line heights, tracking, or local font shorthands. `check:typography`, included in `validate`, enforces this boundary. Fluid section, hero and display roles also live in tokens. Responsive layouts may select a smaller heading role, but must not shrink ordinary controls below the control role to make them fit.
+
+Use regular 400 for prose, medium 500 for navigation/actions and semibold 600 for headings and emphasis. Primary actions use `--dn-cta-font` (18px/500 at the default root size); ordinary controls use `--dn-control-font` (16px/500). Both use 1.3 line-height. Call actions are secondary 16px controls. `--dn-tab-font` supplies 18px/500 entry tabs. The shared `.dn-segmented-control` / `.dn-segmented-option` style owns Buy/Import, Sale/Trade-in and Link/Info controls, including selection and keyboard focus; components retain their existing tab/group behavior.
+
+Body copy is 16px with 1.5 leading; long editorial prose uses 1.65. Labels, supporting metadata, helper text and the mobile dock use the 14px meta role. Nonessential video duration text may use the 12px caption role. Mobile section headings use 24px and service titles use 18px. Make controls and cards reflow around the type instead of adding smaller local overrides. Include `textarea` in native font inheritance.
 
 ## Shape, spacing and layout
 
@@ -85,7 +92,7 @@ Component-specific sizes also exist; the table is not a command to normalize eve
 
 There is no universal spacing-scale engine. Existing layouts use small 8–12px gaps, 12–24px internal padding and larger section spacing where appropriate. Mobile cards also use local 14px corners; drawers commonly use 24px top corners. Keep the owning value rather than inventing an additional global token for a one-off adjustment.
 
-The control family is rounded: pill actions, rounded input surfaces and compact circular icon buttons. The mobile sell action and import entry control use 44px geometry in the current working design. That is not a blanket instruction to resize every desktop control or every drawer button to 44px.
+The control family is rounded: pill actions, rounded input surfaces and compact circular icon buttons. Entry tabs have at least a 44px hit height. Sell and import primary actions have at least 52px height and explicit text labels. The import link/criteria field is separate from its primary action, so a small icon does not have to communicate the entire request action. Other controls retain their owning geometry and expand when text wraps.
 
 Inventory filter chips (including removable active filters), results filters/sorting, the header phone link and mobile footer contact links have a minimum 44px hit height. Keep vehicle-card dimensions and their 8px mobile inventory / 10px carousel gaps independent from control sizing. Metadata badges are labels inside the card link, not separate touch targets. Tablet service cards extend the action link over the card; verify the actual hit area before resizing its text. Vehicle-card keyboard focus uses the opaque `--dn-focus` color and an inset outline so the card's clipped corners do not hide it.
 
@@ -106,7 +113,7 @@ Additional 359/374/380px and 1199px rules handle particular text, grid and contr
 
 ## Homepage patterns
 
-**Hero and search.** The hero and its vehicle artwork remain separate from the search panel. Mobile Buy/Import tabs have a light enclosing panel and a dark selected tab; primary actions are red. Desktop discovery is its own presentation. The older charcoal-search token names do not mean the current entire search panel should be recolored charcoal.
+**Hero and search.** The hero and its vehicle artwork remain separate from the search panel. Buy/Import tabs share the rounded rectangular segmented control with Sell/Import: a light enclosing panel and dark selected tab. Primary actions are red. Desktop discovery is its own presentation. The older charcoal-search token names do not mean the current entire search panel should be recolored charcoal.
 
 **Mobile services.** The current preview has four illustrated cards in a 2-by-2 grid below search. Text sits above a centered lower image region. Inventory, sell, import and leasing each retain their own color and existing generated artwork. This is distinct from the wider desktop campaign pair.
 

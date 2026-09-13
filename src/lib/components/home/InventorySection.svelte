@@ -56,10 +56,10 @@
     width: auto;
     margin: 0;
     color: #171a20;
-    font-size: 42px;
-    font-weight: 650;
-    line-height: 1.12;
-    letter-spacing: -0.03em;
+    font-size: var(--dn-text-section);
+    font-weight: var(--dn-weight-semibold);
+    line-height: var(--dn-leading-section);
+    letter-spacing: var(--dn-tracking-heading);
     text-align: center;
   }
 
@@ -72,9 +72,9 @@
     border-radius: var(--dn-radius-button);
     background: #c40101;
     color: #fff;
-    font-size: var(--dn-text-lead);
-    font-weight: 600;
-    line-height: 1.3;
+    font-size: var(--dn-control-size);
+    font-weight: var(--dn-control-weight);
+    line-height: var(--dn-leading-control);
     transition: background-color 180ms ease-out;
   }
 
@@ -124,7 +124,7 @@
 
     .dn-inventory__heading h2 {
       width: auto;
-      font-size: 2.25rem;
+      font-size: var(--dn-text-section-compact);
       text-align: center;
     }
 
@@ -158,9 +158,9 @@
     }
 
     .dn-inventory__heading h2 {
-      font-size: 22px;
-      font-weight: 700;
-      line-height: 1.15;
+      font-size: var(--dn-text-subheading);
+      font-weight: var(--dn-weight-semibold);
+      line-height: var(--dn-leading-heading);
       text-align: left;
     }
 
@@ -218,7 +218,7 @@
     }
 
     .dn-inventory__heading h2 {
-      font-size: 36px;
+      font-size: var(--dn-text-section-compact);
       text-align: left;
     }
 
@@ -228,7 +228,7 @@
       border-radius: 10px;
       background: transparent;
       color: #24272c;
-      font-size: 16px;
+      font-size: var(--dn-control-size);
       white-space: nowrap;
     }
 

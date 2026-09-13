@@ -177,7 +177,7 @@
     .dn-contact-intent--general .dn-contact-card__links,
     .dn-contact-intent--general .dn-contact-card__actions { display: none; }
     .dn-contact-visit { display: grid; gap: 18px; margin-top: 24px; }
-    .dn-contact-visit p { display: flex; align-items: flex-start; gap: 14px; margin: 0; color: #525a66; font-size: 16px; line-height: 1.5; }
+    .dn-contact-visit p { display: flex; align-items: flex-start; gap: 14px; margin: 0; color: #525a66; font-size: var(--dn-text-body); line-height: var(--dn-leading-body); }
     .dn-contact-visit :global(svg) { flex-shrink: 0; color: var(--dn-red); }
     .dn-contact-visit > a { justify-self: start; gap: 10px; min-height: 52px; background: #eef0f2; color: #202329; }
     .dn-contact-visit > a:hover { background: #e3e6ea; }
@@ -192,9 +192,9 @@
 
   @media (max-width: 991px) {
     .dn-contact-preparation { display: block; margin-top: 24px; }
-    .dn-contact-preparation h2 { margin: 0; font-size: 17px; font-weight: 600; line-height: 1.4; }
+    .dn-contact-preparation h2 { margin: 0; font-size: var(--dn-text-lead); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-meta); }
     .dn-contact-preparation ul { display: grid; gap: 12px; margin: 14px 0 0; padding-left: 20px; list-style: disc; }
-    .dn-contact-preparation li { padding-left: 4px; color: #525a66; font-size: 15px; line-height: 1.5; }
+    .dn-contact-preparation li { padding-left: 4px; color: #525a66; font-size: var(--dn-text-body); line-height: var(--dn-leading-body); }
     .dn-contact-preparation li::marker { color: var(--dn-red); }
   }
 

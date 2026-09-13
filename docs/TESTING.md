@@ -11,6 +11,8 @@ Tests cover different layers: source/type checks, domain logic, runtime media, b
 | `npm run preview` | Serve built output locally |
 | `npm run check` | SvelteKit synchronization and Svelte/TypeScript diagnostics |
 | `npm run check:architecture` | Native source architecture checks |
+| `npm run check:typography` | Reject local typography values outside the shared token owner |
+| `npm run smoke:typography` | Current Sell/Import flows, entry tabs, action hierarchy and clipped controls at 320/390/768/1440px |
 | `npm run check:assets` | Static media and source-reference checks |
 | `npm run validate` | Static/domain checks followed by type check and build |
 | `npm run quality` | Combined validation and browser suite chain |
@@ -59,6 +61,7 @@ For the built preview, use that preview URL instead. `scripts/browser.mjs` contr
 | `scripts/enquiry-smoke.mjs` | Enquiry entry, steps, review, local photos and sharing/copy behavior |
 | `scripts/mobile-filter-smoke.mjs` | Mobile filter draft, nested choices, application and empty results |
 | `scripts/desktop-discovery-smoke.mjs` | Desktop discovery and sticky-control behavior |
+| `scripts/typography-smoke.mjs` | Primary/secondary type hierarchy, keyboard tab switching, current sell/import validation and review screens, Escape/focus return, control reflow and screenshots |
 
 Additional mobile/accessibility/resilience and visual-comparison tools exist in the newer local working source but are not package scripts in this standalone baseline. Do not assume a fresh clone includes them.
 

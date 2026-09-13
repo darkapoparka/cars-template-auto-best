@@ -33,8 +33,9 @@
 <section class="dn-search-wrap" aria-label="Търсене на автомобил">
   <div class="container">
     <div class="dn-search">
-      <div class="dn-search__mobile-modes" role="tablist" aria-label="Основна цел">
+      <div class="dn-search__mobile-modes dn-segmented-control" role="tablist" aria-label="Основна цел">
         <button
+          class="dn-segmented-option"
           bind:this={buyTab}
           id="home-buy-tab"
           type="button"
@@ -46,6 +47,7 @@
           onkeydown={handleModeKey}
         >Купи</button>
         <button
+          class="dn-segmented-option"
           bind:this={importTab}
           id="home-import-tab"
           type="button"
@@ -175,6 +177,7 @@
   }
 
   @media (max-width: 767px) {
+    .dn-search__mobile-modes { display: grid; }
     .dn-search__buy { display: contents; }
     .dn-search-wrap {
       margin-top: -52px;
@@ -192,37 +195,6 @@
       border: 1px solid var(--dn-line);
       border-radius: 20px;
       background: var(--dn-white);
-    }
-
-    .dn-search__mobile-modes {
-      display: grid;
-      min-height: 50px;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 4px;
-      padding: 3px;
-      border-radius: var(--dn-radius-button);
-      background: var(--dn-home-panel);
-    }
-
-    .dn-search__mobile-modes button {
-      display: inline-flex;
-      min-width: 0;
-      min-height: 44px;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
-      border: 0;
-      border-radius: var(--dn-radius-button);
-      background: transparent;
-      color: var(--dn-muted);
-      font-size: 14px;
-      font-weight: 650;
-      cursor: pointer;
-    }
-
-    .dn-search__mobile-modes [aria-selected='true'] {
-      background: var(--dn-ink);
-      color: #fff;
     }
 
     .dn-search :global(.dn-quick-search__trigger) {
@@ -265,7 +237,7 @@
       outline: none;
       background: transparent;
       color: var(--dn-ink);
-      font-size: 16px;
+      font-size: var(--dn-control-size);
     }
 
     .dn-search__import-field input::placeholder {
@@ -280,8 +252,8 @@
 
     .dn-search__import-error {
       margin: 0;
-      font-size: 14px;
-      line-height: 1.5;
+      font-size: var(--dn-text-meta);
+      line-height: var(--dn-leading-body);
     }
 
     .dn-search__import-error {
@@ -311,8 +283,8 @@
       border-radius: var(--dn-radius-button);
       background: var(--dn-mobile-surface);
       color: #30363f;
-      font-size: 13px;
-      font-weight: 650;
+      font-size: var(--dn-control-size);
+      font-weight: var(--dn-control-weight);
       white-space: nowrap;
     }
 
@@ -331,8 +303,8 @@
       border-radius: var(--dn-radius-button);
       background: var(--dn-red);
       color: #fff;
-      font-size: 14px;
-      font-weight: 700;
+      font-size: var(--dn-cta-size);
+      font-weight: var(--dn-cta-weight);
       cursor: pointer;
     }
 

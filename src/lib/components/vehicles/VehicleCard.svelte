@@ -155,9 +155,9 @@
     border-radius: var(--dn-pill);
     background: rgba(20, 23, 29, 0.86);
     color: #fff;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 18px;
+    font-size: var(--dn-text-body);
+    font-weight: var(--dn-weight-semibold);
+    line-height: var(--dn-leading-meta);
     white-space: nowrap;
     backdrop-filter: blur(5px);
   }
@@ -198,9 +198,9 @@
     margin: 0;
     color: #6b7280;
     font-size: var(--dn-text-body);
-    font-weight: 500;
-    line-height: 1.3;
-    letter-spacing: 0.01em;
+    font-weight: var(--dn-weight-medium);
+    line-height: var(--dn-leading-heading);
+    letter-spacing: var(--dn-tracking-label);
   }
 
   .dn-vehicle-card__name {
@@ -209,10 +209,10 @@
     margin: 0;
     overflow: hidden;
     color: #11151c;
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 1.32;
-    letter-spacing: -0.015em;
+    font-size: var(--dn-text-card);
+    font-weight: var(--dn-weight-semibold);
+    line-height: var(--dn-leading-meta);
+    letter-spacing: var(--dn-tracking-heading);
     line-clamp: 2;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
@@ -254,9 +254,9 @@
     border-radius: 8px;
     background: #f0f2f4;
     color: #5f6671;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1.3;
+    font-size: var(--dn-text-meta);
+    font-weight: var(--dn-weight-medium);
+    line-height: var(--dn-leading-heading);
     white-space: nowrap;
   }
 
@@ -267,9 +267,9 @@
     padding-top: 14px;
     color: #11151c;
     font-size: var(--dn-text-subheading);
-    font-weight: 600;
-    line-height: 1.2;
-    letter-spacing: -0.02em;
+    font-weight: var(--dn-weight-semibold);
+    line-height: var(--dn-leading-heading);
+    letter-spacing: var(--dn-tracking-heading);
     font-variant-numeric: tabular-nums;
   }
 
@@ -286,7 +286,7 @@
     }
 
     .dn-vehicle-card__name {
-      font-size: 18px;
+      font-size: var(--dn-text-lead);
     }
 
     .dn-vehicle-card--listing {
@@ -337,8 +337,8 @@
       gap: 6px;
       margin: 0;
       color: #626a75;
-      font-size: 14px;
-      line-height: 1.4;
+      font-size: var(--dn-text-meta);
+      line-height: var(--dn-leading-meta);
       font-variant-numeric: tabular-nums;
     }
     .dn-vehicle-card--listing .dn-vehicle-card__mobile-meta > span {
@@ -350,22 +350,22 @@
       border-radius: 6px;
       background: #f5f6f7;
       color: #626873;
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 18px;
+      font-size: var(--dn-text-meta);
+      font-weight: var(--dn-weight-regular);
+      line-height: var(--dn-leading-meta);
       white-space: nowrap;
     }
 
     .dn-vehicle-card--listing .dn-vehicle-card__category p {
-      font-size: 12px;
-      line-height: 1.2;
+      font-size: var(--dn-text-body);
+      line-height: var(--dn-leading-heading);
     }
 
     .dn-vehicle-card--listing .dn-vehicle-card__name {
       display: block;
-      font-size: 18px;
-      font-weight: 500;
-      line-height: 24px;
+      font-size: var(--dn-text-lead);
+      font-weight: var(--dn-weight-medium);
+      line-height: var(--dn-leading-body);
       white-space: nowrap;
       text-overflow: ellipsis;
       -webkit-line-clamp: 1;
@@ -386,9 +386,9 @@
       border-radius: 6px;
       background: #f5f6f7;
       color: #626873;
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 18px;
+      font-size: var(--dn-text-meta);
+      font-weight: var(--dn-weight-regular);
+      line-height: var(--dn-leading-meta);
     }
 
     .dn-vehicle-card--listing .dn-vehicle-card__spec :global(.dn-icon) {
@@ -399,9 +399,9 @@
       margin-top: 0;
       padding-top: 0;
       color: #11151c;
-      font-size: 20px;
-      font-weight: 650;
-      line-height: 1.1;
+      font-size: var(--dn-text-card);
+      font-weight: var(--dn-weight-semibold);
+      line-height: var(--dn-leading-section);
     }
   }
 

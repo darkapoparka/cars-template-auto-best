@@ -140,8 +140,8 @@
     background: var(--dn-ink);
     color: var(--dn-white);
     font: inherit;
-    font-size: var(--dn-text-meta);
-    font-weight: var(--dn-weight-bold);
+    font-size: var(--dn-control-size);
+    font-weight: var(--dn-control-weight);
     cursor: pointer;
   }
   .dn-tradein-info-drawer__peek :global(svg) { transform: rotate(180deg); }
@@ -195,7 +195,7 @@
     background: var(--dn-white);
     color: var(--dn-ink);
   }
-  .dn-tradein-info-sheet__header h2 { margin: 0; color: var(--dn-ink); font-size: var(--dn-text-subheading); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-heading); letter-spacing: -.025em; }
+  .dn-tradein-info-sheet__header h2 { margin: 0; color: var(--dn-ink); font-size: var(--dn-text-subheading); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-heading); letter-spacing: var(--dn-tracking-heading); }
   .dn-tradein-info-sheet__header h2:focus { outline: none; }
   .dn-tradein-info-sheet__close {
     display: grid;
@@ -237,7 +237,7 @@
   .dn-tradein-info-prepare p > span { color: var(--dn-muted); }
   .dn-tradein-info-sheet__header, .dn-tradein-info-sheet__grabber { flex-shrink: 0; }
   .dn-tradein-info-actions { display: grid; grid-template-columns: 1fr 1fr; gap: var(--dn-space-3); padding-top: 0; }
-  .dn-tradein-info-actions :is(button, a) { display: flex; align-items: center; justify-content: center; gap: var(--dn-space-2); min-height: 44px; padding: var(--dn-space-3) var(--dn-space-3); border: 1px solid var(--dn-line); border-radius: var(--dn-radius-button); background: transparent; color: var(--dn-ink); font: inherit; font-size: var(--dn-text-meta); font-weight: var(--dn-weight-semibold); text-decoration: none; cursor: pointer; }
+  .dn-tradein-info-actions :is(button, a) { display: flex; align-items: center; justify-content: center; gap: var(--dn-space-2); min-height: 44px; padding: var(--dn-space-3) var(--dn-space-3); border: 1px solid var(--dn-line); border-radius: var(--dn-radius-button); background: transparent; color: var(--dn-ink); font: inherit; font-size: var(--dn-control-size); font-weight: var(--dn-control-weight); text-decoration: none; cursor: pointer; }
   .dn-tradein-info-actions button { background: var(--dn-red); color: var(--dn-white); border-color: transparent; }
   .dn-tradein-info-actions button:hover { background: var(--dn-red-hover); }
   .dn-tradein-info-actions a:hover { background: var(--dn-surface); }

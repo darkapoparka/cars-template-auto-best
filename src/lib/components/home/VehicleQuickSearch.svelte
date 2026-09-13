@@ -352,7 +352,7 @@
     background: #f8f9fa;
     color: #686d75;
     font: inherit;
-    font-size: 16px;
+    font-size: var(--dn-text-body);
     text-align: left;
     cursor: pointer;
     transition: border-color 160ms ease-out, background-color 160ms ease-out;
@@ -380,8 +380,8 @@
 
   .dn-quick-search__hint {
     color: #2d3036;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: var(--dn-text-meta);
+    font-weight: var(--dn-weight-semibold);
   }
 
   .dn-quick-search__label-mobile,
@@ -426,9 +426,9 @@
   .dn-quick-search__header h2 {
     margin: 0;
     font-size: var(--dn-text-subheading);
-    font-weight: 650;
-    line-height: 1.25;
-    letter-spacing: -0.02em;
+    font-weight: var(--dn-weight-semibold);
+    line-height: var(--dn-leading-heading);
+    letter-spacing: var(--dn-tracking-heading);
   }
 
   .dn-quick-search__reset,
@@ -494,7 +494,7 @@
     background: transparent;
     color: #191c22;
     font: inherit;
-    font-size: var(--dn-text-lead);
+    font-size: var(--dn-control-size);
     line-height: var(--dn-leading-lead);
   }
 
@@ -547,8 +547,8 @@
 
     .dn-quick-search__header h2 {
       text-align: center;
-      font-size: 18px;
-      letter-spacing: -0.01em;
+      font-size: var(--dn-text-lead);
+      letter-spacing: var(--dn-tracking-heading);
     }
 
     .dn-quick-search__reset {
@@ -562,8 +562,8 @@
       color: var(--dn-red);
       cursor: pointer;
       font: inherit;
-      font-size: 13px;
-      font-weight: 650;
+      font-size: var(--dn-text-meta);
+      font-weight: var(--dn-weight-semibold);
     }
 
     .dn-quick-search__back {
@@ -630,7 +630,7 @@
     }
 
     .dn-quick-search__input-wrap input {
-      font-size: var(--dn-text-body);
+      font-size: var(--dn-control-size);
     }
 
     .dn-quick-search__mobile-filters {
@@ -668,14 +668,14 @@
     }
 
     .dn-quick-search__filter-row strong {
-      font-size: 15px;
-      font-weight: 650;
+      font-size: var(--dn-text-body);
+      font-weight: var(--dn-weight-semibold);
     }
 
     .dn-quick-search__filter-row > span {
       overflow: hidden;
       color: #626975;
-      font-size: 14px;
+      font-size: var(--dn-text-meta);
       text-align: right;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -718,9 +718,9 @@
       color: #24272c;
       cursor: pointer;
       font: inherit;
-      font-size: 14px;
-      font-weight: 650;
-      line-height: 1.25;
+      font-size: var(--dn-text-meta);
+      font-weight: var(--dn-weight-semibold);
+      line-height: var(--dn-leading-heading);
       transition: background-color 140ms ease-out, color 140ms ease-out;
     }
 
@@ -753,9 +753,7 @@
       background: var(--dn-red);
       color: #fff;
       cursor: pointer;
-      font: inherit;
-      font-size: 15px;
-      font-weight: 700;
+      font: var(--dn-cta-font);
     }
 
     .dn-quick-search__mobile-footer button:disabled {

@@ -573,7 +573,7 @@
       min-height: 52px;
       place-items: center;
       align-content: center;
-      grid-template-rows: 26px 16px;
+      grid-template-rows: 26px auto;
       gap: 2px;
       padding: 4px 1px;
       border: 0;
@@ -581,9 +581,9 @@
       background: transparent;
       color: #4f5662;
       font: inherit;
-      font-size: 12px;
-      font-weight: 650;
-      line-height: 1.15;
+      font-size: var(--dn-text-meta);
+      font-weight: var(--dn-control-weight);
+      line-height: var(--dn-leading-control);
       cursor: pointer;
     }
 
@@ -632,8 +632,8 @@
       justify-content: center;
       gap: 7px;
       border-radius: var(--dn-radius-button);
-      font-size: 15px;
-      font-weight: 700;
+      font-size: var(--dn-text-body);
+      font-weight: var(--dn-control-weight);
       text-align: center;
     }
 
