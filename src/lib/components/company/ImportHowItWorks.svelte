@@ -269,7 +269,7 @@
   .dn-import-info-contact__actions a:last-child:hover { background: var(--dn-surface); }
   .dn-import-info-contact__actions a:last-child { border: 1px solid var(--dn-line); background: transparent; color: var(--dn-ink); }
 
-  .dn-import-info-prepare { padding: var(--dn-space-4); border-radius: 0; background: var(--dn-mobile-canvas); color: var(--dn-ink); gap: var(--dn-space-3); }
+  .dn-import-info-prepare { padding: var(--dn-space-4); border-radius: var(--dn-radius); background: var(--dn-mobile-canvas); color: var(--dn-ink); gap: var(--dn-space-3); }
   .dn-import-info-prepare h3 { color: var(--dn-ink); }
   .dn-import-info-prepare strong { color: var(--dn-ink); }
   .dn-import-info-prepare p > span { color: var(--dn-muted); }
@@ -319,7 +319,7 @@
     .dn-import-info-sheet__body { gap: var(--dn-space-5); padding: 0 var(--dn-space-4) max(var(--dn-space-4), env(safe-area-inset-bottom)); }
   }
 
-  .dn-import-info-process { padding: var(--dn-space-4); border-radius: 0; background: var(--dn-ink); }
+  .dn-import-info-process { padding: var(--dn-space-4); border-radius: var(--dn-radius); background: var(--dn-ink); }
   .dn-import-info-process :is(h3, strong) { color: var(--dn-white); }
   .dn-import-info-process p > span { color: var(--dn-muted-on-ink); }
   .dn-import-info-process li { grid-template-columns: 28px minmax(0, 1fr); }
