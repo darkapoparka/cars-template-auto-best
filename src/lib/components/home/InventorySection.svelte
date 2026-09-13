@@ -175,8 +175,14 @@
     .dn-inventory__all { display: none; }
 
     .dn-inventory__grid {
+      --dn-vehicle-card-image-ratio: 16 / 9;
+      --dn-vehicle-card-content-padding: var(--dn-space-3);
+      --dn-vehicle-card-specs-gap: var(--dn-space-2);
+      --dn-vehicle-card-spec-icon-gap: var(--dn-space-1);
+      --dn-vehicle-card-spec-padding: calc(var(--dn-space-1) + var(--dn-space-half));
+      --dn-vehicle-card-price-gap: var(--dn-space-2);
       display: grid;
-      grid-auto-columns: min(270px, calc(100vw - 96px));
+      grid-auto-columns: min(250px, calc(100vw - 96px));
       grid-auto-flow: column;
       grid-template-columns: none;
       gap: 10px;

@@ -130,7 +130,7 @@
   .dn-vehicle-card__visual {
     position: relative;
     overflow: hidden;
-    aspect-ratio: 3 / 2;
+    aspect-ratio: var(--dn-vehicle-card-image-ratio, 3 / 2);
     background: #eceff2;
   }
 
@@ -186,7 +186,7 @@
     display: flex;
     flex: 1;
     flex-direction: column;
-    padding: 16px 16px 18px;
+    padding: var(--dn-vehicle-card-content-padding, 16px 16px 18px);
     background: transparent;
   }
 
@@ -239,7 +239,7 @@
     align-items: stretch;
     flex-wrap: nowrap;
     gap: 8px;
-    margin-top: 12px;
+    margin-top: var(--dn-vehicle-card-specs-gap, 12px);
   }
 
   .dn-vehicle-card__spec {
@@ -248,8 +248,8 @@
     min-height: 30px;
     flex: 0 1 auto;
     align-items: center;
-    gap: 6px;
-    padding: 0 10px;
+    gap: var(--dn-vehicle-card-spec-icon-gap, 6px);
+    padding: 0 var(--dn-vehicle-card-spec-padding, 10px);
     overflow: hidden;
     border-radius: 8px;
     background: #f0f2f4;
@@ -264,7 +264,7 @@
 
   .dn-vehicle-card__amount {
     margin-top: auto;
-    padding-top: 14px;
+    padding-top: var(--dn-vehicle-card-price-gap, 14px);
     color: #11151c;
     font-size: var(--dn-text-subheading);
     font-weight: var(--dn-weight-semibold);
