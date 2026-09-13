@@ -277,12 +277,12 @@
     .dn-tradein-info-dialog {
       inset: auto 0 0;
       width: 100%;
-      max-height: calc(100dvh - max(24px, env(safe-area-inset-top)));
+      max-height: calc(100dvh - max(64px, env(safe-area-inset-top)));
       margin: 0;
       border-radius: var(--dn-radius-lg) var(--dn-radius-lg) 0 0;
     }
     .dn-tradein-info-sheet {
-      max-height: calc(100dvh - max(24px, env(safe-area-inset-top)));
+      max-height: calc(100dvh - max(64px, env(safe-area-inset-top)));
       border-radius: var(--dn-radius-lg) var(--dn-radius-lg) 0 0;
     }
     .dn-tradein-info-sheet__header { padding: var(--dn-space-1) var(--dn-space-4) var(--dn-space-3); }

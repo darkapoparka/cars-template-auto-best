@@ -1256,18 +1256,3 @@
   .dn-contact-section--workflow .dn-contact-intent--workflow :is(.dn-contact-workflow-title, .dn-tradein-enquiry > h1) { font-size: var(--dn-text-subheading); }
 }
 
-/* Short viewports need help in the page flow so it cannot cover the support action. */
-@media (max-width: 767px) and (max-height: 700px) {
-  .dn-contact-section--workflow .dn-contact-intent--workflow :is(.dn-import-info-drawer, .dn-tradein-info-drawer) {
-    position: static;
-    transform: none;
-    margin: var(--dn-space-4) auto 0;
-  }
-  .dn-contact-section--workflow .dn-contact-intent--workflow :is(.dn-import-info-drawer__peek, .dn-tradein-info-drawer__peek) {
-    min-height: var(--dn-control-hit-height);
-    padding: var(--dn-space-2) var(--dn-space-4);
-    border-radius: var(--dn-pill);
-  }
-  .dn-contact-section--workflow .dn-contact-intent--workflow :is(.dn-import-info-drawer__handle, .dn-tradein-info-drawer__handle) { display: none; }
-  .dn-contact-section--workflow { padding-bottom: var(--dn-space-4); }
-}

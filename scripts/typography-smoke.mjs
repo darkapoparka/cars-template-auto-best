@@ -224,4 +224,30 @@ try {
       } finally { await page.close(); }
     });
   }
+
+  for (const height of [667,712]) {
+    await suite.check(`mobile workflow dock 385x${height}`, async () => {
+      const page = await browser.newPage({ viewport: { width: 385, height }, reducedMotion: 'reduce' });
+      try {
+        for (const topic of ['trade-in','import']) {
+          await page.goto(`${base}/contact?topic=${topic}`, { waitUntil: 'networkidle' });
+          const drawer = page.locator(topic === 'import' ? '.dn-import-info-drawer__peek' : '.dn-tradein-info-drawer__peek');
+          const dialog = page.locator(topic === 'import' ? '.dn-import-info-dialog' : '.dn-tradein-info-dialog');
+          const action = page.getByRole('button', { name: topic === 'import' ? /^Заяви внос/ : /^Заяви оценка/ });
+          const [drawerBox, navBox, supportBox, actionBox] = await Promise.all([
+            drawer.boundingBox(), page.locator('.dn-mobile-bottom-nav').boundingBox(),
+            page.locator('.dn-workflow-support').boundingBox(), action.boundingBox()
+          ]);
+          assert(drawerBox && navBox && supportBox && actionBox);
+          assert(drawerBox.y + drawerBox.height <= navBox.y + 1, `${topic}: drawer must stay above bottom nav`);
+          assert(supportBox.y + supportBox.height <= drawerBox.y - 8, `${topic}: support banner must clear drawer`);
+          assert(Math.abs(actionBox.width - 220) < 1 && Math.abs(actionBox.height - 44) < 1, `${topic}: compact CTA geometry`);
+          await drawer.click();
+          assert((await dialog.boundingBox()).y >= 63, `${topic}: sheet keeps visible top breathing room`);
+          assert.equal(await page.locator('.dn-mobile-bottom-nav').evaluate(e => getComputedStyle(e).visibility), 'hidden');
+          await page.keyboard.press('Escape');
+        }
+      } finally { await page.close(); }
+    });
+  }
 } finally { await browser.close(); await suite.finish(); }
