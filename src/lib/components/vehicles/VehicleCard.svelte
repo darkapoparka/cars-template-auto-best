@@ -38,7 +38,7 @@
 
     <div class="dn-vehicle-card__content">
       <div class="dn-vehicle-card__category"><p>{vehicle.category}</p></div>
-      <h3 class="dn-vehicle-card__name">{vehicle.title}</h3>
+      <h3 class="dn-vehicle-card__name" title={vehicle.title}>{vehicle.title}</h3>
       {#if layout === 'listing'}
         <div class="dn-vehicle-card__mobile-meta" aria-label="Година и пробег">
           <span>{vehicle.year}</span>
@@ -284,7 +284,7 @@
     }
 
     .dn-vehicle-card--listing .dn-vehicle-card__image img {
-      object-fit: contain;
+      object-fit: cover;
     }
 
     .dn-vehicle-card--listing .dn-vehicle-card__badges {
@@ -296,8 +296,12 @@
     }
 
     .dn-vehicle-card--listing .dn-vehicle-card__content {
+      display: grid;
       min-width: 0;
-      padding: 10px 12px;
+      grid-template-rows: 24px 20px 20px 22px;
+      align-content: start;
+      gap: 6px;
+      padding: 14px 12px;
     }
 
     .dn-vehicle-card--listing .dn-vehicle-card__category {
@@ -306,9 +310,9 @@
 
     .dn-vehicle-card--listing .dn-vehicle-card__mobile-meta {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       gap: 6px;
-      margin: 6px 0 0;
+      margin: 0;
       color: #626a75;
       font-size: 14px;
       line-height: 1.4;
@@ -335,15 +339,20 @@
     }
 
     .dn-vehicle-card--listing .dn-vehicle-card__name {
+      display: block;
       font-size: 18px;
       font-weight: 500;
-      line-height: 1.25;
+      line-height: 24px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      -webkit-line-clamp: 1;
+      line-clamp: 1;
     }
 
     .dn-vehicle-card--listing .dn-vehicle-card__specs {
       gap: 6px;
-      flex-wrap: wrap;
-      margin-top: 4px;
+      flex-wrap: nowrap;
+      margin-top: 0;
     }
 
     .dn-vehicle-card--listing .dn-vehicle-card__spec {
@@ -364,7 +373,7 @@
     }
 
     .dn-vehicle-card--listing .dn-vehicle-card__amount {
-      margin-top: 8px;
+      margin-top: 0;
       padding-top: 0;
       color: #11151c;
       font-size: 20px;

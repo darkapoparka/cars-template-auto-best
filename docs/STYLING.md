@@ -91,7 +91,7 @@ Inventory filter chips (including removable active filters), results filters/sor
 
 ## Responsive composition
 
-Mobile inventory metadata uses 14px text. Fuel/transmission badges omit decorative icons on phones to leave room for full labels; desktop badges retain them. Cards keep a 132px minimum height and grow for wrapped titles. Mobile inventory photos use `object-fit: contain` to preserve the complete source photograph, accepting neutral framing where its aspect ratio differs. The keyboard-only focus border is drawn above the photograph and badges so the complete card remains visibly selected; normal tapping does not display this border.
+Mobile inventory cards use one 18px/500 title row with an ellipsis; the full name remains in the link's accessible label, the title attribute and the detail page. The right-hand column uses 14px vertical / 12px horizontal padding, four rows (24/20/20/22px), and 6px gaps, giving the current cards a consistent 132px height. Metadata uses 14px text in compact 20px badges. Fuel/transmission badges omit decorative icons on phones; desktop badges retain them. Mobile photos fill their entire image column with `object-fit: cover`, with no letterboxing. Keep the 8px gap between inventory cards. The keyboard-only focus border is drawn above the photograph and badges so the complete card remains visibly selected; normal tapping does not display this border.
 
 Keep `scrollbar-gutter: stable` on the root element. Classic desktop scrollbars otherwise change the available page and fixed-navigation width when moving between long pages (Home) and short pages (Sell/Import). Overlay scrollbars on touch devices retain their normal behavior.
 
