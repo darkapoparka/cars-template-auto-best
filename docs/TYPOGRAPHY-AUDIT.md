@@ -4,6 +4,8 @@ Scope: all live text in the reusable master, including shared navigation/footer,
 
 ## Findings and resolution
 
+Owner refinement after the initial audit: entry segments now use 16px/500 pill options with white selection on pale gray, so the 18px/400 bordered input is more prominent. Primary actions remain 18px/500. Both workflow call links are now one shared text-link placement outside the card. The table below records the initial audit; [Styling](STYLING.md) is the current contract. `smoke:typography` asserts the revised input/tab hierarchy and external call-link placement.
+
 The source audit found 1,096 typography declarations in 46 files; 865 supplied local literal values rather than shared tokens/inheritance. The bundled family was already Onest throughout the sampled live text. The inconsistency came from local scales, weights and competing component/route rules, rather than multiple downloaded font families.
 
 | Finding | Baseline rendered evidence | Resolution |

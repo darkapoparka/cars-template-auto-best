@@ -180,26 +180,22 @@
 
     {#if importMode === 'listing'}
       <label class="dn-sr-only" for="enquiry-listing-link">Линк към обява за внос</label>
-      <div class="dn-enquiry-import-field">
+      <div class="dn-enquiry-import-field dn-entry-field">
         <Icon name="globe" size={20} strokeWidth={1.8} />
-        <input id="enquiry-listing-link" bind:this={linkInput} value={link} oninput={(event) => { linkDraft = event.currentTarget.value; linkError = ''; }} type="url" inputmode="url" maxlength={2048} placeholder="Поставете линк към обява" autocomplete="off" autocapitalize="none" spellcheck={false} aria-invalid={linkError ? true : undefined} aria-describedby={linkError ? 'enquiry-link-error' : undefined} />
+        <input class="dn-entry-field__input" id="enquiry-listing-link" bind:this={linkInput} value={link} oninput={(event) => { linkDraft = event.currentTarget.value; linkError = ''; }} type="url" inputmode="url" maxlength={2048} placeholder="Линк към обява" autocomplete="off" autocapitalize="none" spellcheck={false} aria-invalid={linkError ? true : undefined} aria-describedby={linkError ? 'enquiry-link-error' : undefined} />
       </div>
       {#if linkError}<p class="dn-enquiry-error" id="enquiry-link-error" role="alert">{linkError}</p>{/if}
     {:else}
-      <div class="dn-enquiry-import-info">
+      <div class="dn-enquiry-import-info dn-entry-field dn-entry-field--multiline">
         <label class="dn-sr-only" for="enquiry-import-info">Опишете автомобила, който търсите</label>
-        <textarea id="enquiry-import-info" bind:this={infoInput} bind:value={importBrief} oninput={() => infoError = ''} aria-invalid={infoError ? true : undefined} aria-describedby={infoError ? 'enquiry-info-error' : undefined} maxlength={500} rows="2" placeholder="Напр. BMW X5, дизел, 2020+, xDrive…"></textarea>
+        <textarea class="dn-entry-field__input" id="enquiry-import-info" bind:this={infoInput} bind:value={importBrief} oninput={() => infoError = ''} aria-invalid={infoError ? true : undefined} aria-describedby={infoError ? 'enquiry-info-error' : undefined} maxlength={500} rows="2" placeholder="Напр. BMW X5, дизел, 2020+, xDrive…"></textarea>
         <div class="dn-enquiry-import-info__footer">
-          <label><span>Бюджет до, €</span><input bind:value={budget} inputmode="numeric" pattern={'[0-9]{1,8}'} maxlength={8} placeholder="40000" /></label>
+          <label><span>Бюджет до, €</span><input class="dn-entry-field__input" bind:value={budget} inputmode="numeric" pattern={'[0-9]{1,8}'} maxlength={8} placeholder="40000" /></label>
         </div>
       </div>
       {#if infoError}<p class="dn-enquiry-error" id="enquiry-info-error" role="alert">{infoError}</p>{/if}
     {/if}
     <button type="button" class="dn-enquiry-primary dn-enquiry-import-go" onclick={(event) => open(event, importMode === 'criteria')} aria-label={importMode === 'criteria' ? 'Заяви внос по описание' : 'Заяви внос по обява'} aria-haspopup="dialog">Заяви внос <Icon name="arrow-right" size={20} /></button>
-    <a class="dn-enquiry-import-call" href={brand.phoneHref} aria-label={`Обади се на ${brand.phone}`}>
-      <Icon name="phone" size={20} />
-      <span>Обади се</span>
-    </a>
   {/if}
 </div>
 
@@ -286,22 +282,14 @@
   .dn-enquiry-entry > p { margin: 10px 0 0; color: #5d626b; font-size: var(--dn-text-body); }
   .dn-enquiry-contact { display: flex; width: fit-content; min-height: 44px; align-items: center; justify-content: center; margin: 8px auto 0; padding: 8px 18px; border-radius: var(--dn-radius-button); background: #f2f3f5; color: #24272c; font-size: var(--dn-control-size); font-weight: var(--dn-control-weight); }
   .dn-enquiry-import-segments { margin-bottom: 12px; }
-  .dn-enquiry-import-field { display: flex; min-height: 54px; align-items: center; gap: 10px; padding: 4px 4px 4px 16px; border-radius: var(--dn-radius-button); background: var(--dn-home-panel); color: var(--dn-muted); }
-  .dn-enquiry-import-field input { width: 100%; min-width: 0; min-height: 46px; padding: 0; border: 0; outline: 0; background: transparent; color: var(--dn-ink); font: inherit; font-size: var(--dn-control-size); }
-  .dn-enquiry-import-field input::placeholder { color: var(--dn-muted); opacity: 1; }
-  .dn-enquiry-import-field:focus-within { outline: 3px solid var(--dn-focus); outline-offset: 2px; }
+  .dn-enquiry-import-field { display: flex; align-items: center; gap: 10px; padding: 4px 4px 4px 16px; }
   .dn-enquiry-import-go { margin-top: var(--dn-space-3); }
   .dn-enquiry-import-go:hover, .dn-enquiry-import-go:focus-visible { background: var(--dn-red-hover); }
-  .dn-enquiry-import-info { overflow: hidden; border-radius: 18px; background: var(--dn-home-panel); }
-  .dn-enquiry-import-info > textarea { display: block; width: 100%; min-height: 72px; margin: 0; padding: 14px 16px 8px; box-sizing: border-box; border: 0; outline: 0; resize: none; background: transparent; color: var(--dn-ink); font: inherit; font-size: var(--dn-control-size); line-height: var(--dn-leading-control); }
-  .dn-enquiry-import-info > textarea::placeholder { color: var(--dn-muted); opacity: 1; }
-  .dn-enquiry-import-info:focus-within { outline: 3px solid var(--dn-focus); outline-offset: 2px; }
+  .dn-enquiry-import-info { overflow: hidden; }
+  .dn-enquiry-import-info > textarea { display: block; width: 100%; min-height: 72px; margin: 0; padding: 14px 16px 8px; box-sizing: border-box; border: 0; outline: 0; resize: none; background: transparent; color: var(--dn-ink); }
   .dn-enquiry-import-info__footer { display: flex; align-items: end; gap: 10px; padding: 8px 4px 4px 16px; }
   .dn-enquiry-import-info__footer label { min-width: 0; flex: 1; color: #737a84; font-size: var(--dn-text-meta); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-heading); }
   .dn-enquiry-import-info__footer label > span { display: block; margin-bottom: 2px; }
-  .dn-enquiry-import-info__footer input { width: 100%; min-height: 28px; padding: 0; border: 0; outline: 0; background: transparent; color: var(--dn-ink); font: inherit; font-size: var(--dn-control-size); font-weight: var(--dn-weight-regular); }
-  .dn-enquiry-import-call { display: flex; width: fit-content; min-height: 44px; align-items: center; justify-content: center; gap: var(--dn-space-2); margin: var(--dn-space-3) auto 0; padding: var(--dn-space-2) var(--dn-space-5); border-radius: var(--dn-radius-button); background: var(--dn-ink); color: var(--dn-white); font-size: var(--dn-control-size); font-weight: var(--dn-control-weight); line-height: var(--dn-cta-leading); text-decoration: none; }
-  .dn-enquiry-import-call:is(:hover,:focus-visible) { background: var(--dn-ink-hover); }
   .dn-enquiry-text-button { display: inline-flex; min-height: 44px; align-items: center; gap: 8px; padding: 8px 0; border: 0; background: transparent; color: #202329; font-size: var(--dn-control-size); font-weight: var(--dn-control-weight); text-align: left; text-decoration: underline; text-underline-offset: 4px; }
   :global(body:has(.dn-enquiry[open])) { position: fixed; top: var(--dn-enquiry-scroll, 0); width: 100%; overflow: hidden; }
   .dn-enquiry { width: min(620px, calc(100% - 32px)); max-width: none; max-height: calc(100dvh - 48px); margin: auto; padding: 0; border: 0; border-radius: 20px; background: #fff; color: #202329; overflow: hidden; }
@@ -363,8 +351,7 @@
   .dn-enquiry-error, .dn-enquiry-entry > .dn-enquiry-error { color: #a40000; font-size: var(--dn-text-meta); line-height: var(--dn-leading-body); }
   .dn-enquiry-feedback { padding: 12px; border-radius: 10px; background: #f2f3f5; font-size: var(--dn-text-meta); line-height: var(--dn-leading-body); }
   @media (max-width: 767px) {
-    .dn-enquiry-import-field { min-height: 44px; gap: 8px; padding: 0 0 0 14px; }
-    .dn-enquiry-import-field input { min-height: 44px; }
+    .dn-enquiry-import-field { gap: 8px; padding: 0 0 0 14px; }
     .dn-enquiry { inset: auto 0 0; width: 100%; height: calc(100dvh - max(24px,env(safe-area-inset-top))); max-height: 900px; margin: 0; border-radius: 24px 24px 0 0; }
     .dn-enquiry-panel { height: 100%; max-height: 100%; }
     .dn-enquiry-header { padding: 20px 16px 16px; }

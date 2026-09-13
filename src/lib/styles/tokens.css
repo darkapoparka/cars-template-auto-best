@@ -69,7 +69,14 @@
   --dn-control-weight: var(--dn-weight-medium);
   --dn-control-font: var(--dn-control-weight) var(--dn-control-size) / var(--dn-leading-control) var(--dn-font);
   --dn-body-font: var(--dn-weight-regular) var(--dn-text-body) / var(--dn-leading-body) var(--dn-font);
-  --dn-tab-font: var(--dn-weight-medium) var(--dn-text-lead) / var(--dn-leading-control) var(--dn-font);
+  --dn-tab-font: var(--dn-weight-medium) var(--dn-text-body) / var(--dn-leading-control) var(--dn-font);
+  --dn-entry-font: var(--dn-weight-regular) var(--dn-text-lead) / var(--dn-leading-control) var(--dn-font);
+  --dn-entry-height: 52px;
+  --dn-entry-line: #bbc2cc;
+  --dn-control-hit-height: 44px;
+  --dn-segment-height: var(--dn-control-hit-height);
+  --dn-segment-surface: var(--dn-home-panel);
+  --dn-segment-selected: var(--dn-white);
   --dn-cta-size: var(--dn-text-lead);
   --dn-cta-weight: var(--dn-weight-medium);
   --dn-cta-leading: var(--dn-leading-control);

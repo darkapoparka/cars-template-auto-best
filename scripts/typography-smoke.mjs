@@ -28,10 +28,16 @@ try {
         await page.evaluate(() => document.fonts.ready);
         if (width < 768) {
           const buy = page.getByRole('tab',{name:'Купи',exact:true});
-          assert.equal((await typeOf(buy)).size,18);
+          assert.equal((await typeOf(buy)).size,16);
           assert.equal((await typeOf(buy)).weight,500);
+          const entry = await typeOf(page.locator('.dn-quick-search__trigger'));
+          assert(entry.size > (await typeOf(buy)).size && entry.size === 18 && entry.weight === 400 && entry.height >= 52);
+          assert.equal(await buy.evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(255, 255, 255)');
           await buy.focus(); await page.keyboard.press('ArrowRight');
           assert.equal(await page.getByRole('tab',{name:'Внос',exact:true}).getAttribute('aria-selected'),'true');
+          const homeImport=await typeOf(page.locator('.dn-search__import-field input'));
+          assert.equal(homeImport.size,18);
+          await readable(page,`${width}-home-import`);
           await page.keyboard.press('ArrowLeft');
           assert.equal(await buy.getAttribute('aria-selected'),'true');
         }
@@ -49,9 +55,14 @@ try {
         }
         await page.goto(`${base}/contact?topic=trade-in`,{waitUntil:'networkidle'});
         const start = page.locator('.dn-tradein-start');
-        const primary = await typeOf(start), call = await typeOf(page.locator('.dn-tradein-call'));
+        const primary = await typeOf(start), call = await typeOf(page.locator('.dn-workflow-call'));
         assert(primary.size > call.size && primary.size === 18 && primary.weight === 500);
         assert(primary.height >= 48);
+        assert.equal(await page.locator('.dn-contact-intent__main .dn-workflow-call').count(),0);
+        assert.equal(await page.locator('.dn-workflow-call').evaluate(e=>getComputedStyle(e).backgroundColor),'rgba(0, 0, 0, 0)');
+        const cardBounds=await page.locator('.dn-contact-intent__main').boundingBox();
+        const callBounds=await page.locator('.dn-workflow-call').boundingBox();
+        assert(callBounds.y >= cardBounds.y + cardBounds.height, 'Call must sit below the entry card');
         await readable(page,`${width}-sell`);
         await start.click();
         const sell = page.locator('.dn-tradein-dialog');
@@ -72,6 +83,12 @@ try {
         await page.goto(`${base}/contact?topic=import`,{waitUntil:'networkidle'});
         const importStart=page.getByRole('button',{name:/^Заяви внос/});
         assert.equal((await typeOf(importStart)).size,18);
+        assert.equal(await page.locator('.dn-contact-intent__main .dn-workflow-call').count(),0);
+        assert.equal(await page.locator('.dn-workflow-call').count(),1);
+        const importField=await typeOf(page.locator('#enquiry-listing-link'));
+        const importMode=await typeOf(page.getByRole('button',{name:'Линк',exact:true}));
+        assert(importField.size > importMode.size && importField.size === 18 && importField.weight === 400);
+        assert((await typeOf(page.locator('.dn-enquiry-import-field'))).height >= 52);
         await importStart.click();
         assert.equal(await page.locator('#enquiry-link-error').isVisible(),true);
         await page.locator('#enquiry-listing-link').fill('https://example.com/car');
@@ -86,6 +103,7 @@ try {
         await page.keyboard.press('Escape');
         assert.equal(await importStart.evaluate(e=>e===document.activeElement),true);
         await page.getByRole('button',{name:'Инфо',exact:true}).click();
+        assert.equal((await typeOf(page.locator('#enquiry-import-info'))).size,18);
         await page.locator('#enquiry-import-info').fill('BMW X5, дизел, 2020, автоматик');
         await readable(page,`${width}-import-criteria`);
         await importStart.click();

@@ -175,7 +175,7 @@
 </script>
 
 <button
-  class="dn-quick-search__trigger"
+  class="dn-quick-search__trigger dn-entry-field"
   type="button"
   {@attach attachTrigger}
   aria-haspopup="dialog"
@@ -341,18 +341,11 @@
   .dn-quick-search__trigger {
     display: grid;
     width: 100%;
-    min-height: 48px;
     grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
     gap: 11px;
     margin: 0 0 12px;
     padding: 0 16px;
-    border: 1px solid #dfe2e6;
-    border-radius: var(--dn-radius-button);
-    background: #f8f9fa;
-    color: #686d75;
-    font: inherit;
-    font-size: var(--dn-text-body);
     text-align: left;
     cursor: pointer;
     transition: border-color 160ms ease-out, background-color 160ms ease-out;
@@ -360,22 +353,14 @@
 
   @media (min-width: 992px) {
     .dn-quick-search__trigger {
-      min-height: var(--dn-discovery-search-height);
       margin-bottom: var(--dn-discovery-gap);
       padding-inline: 18px;
-      border-radius: 14px;
-      background: #f5f6f7;
     }
   }
 
   .dn-quick-search__trigger:hover {
     border-color: #b8bec7;
     background: #f3f4f6;
-  }
-
-  .dn-quick-search__trigger:focus-visible {
-    outline: 3px solid rgba(196, 1, 1, 0.2);
-    outline-offset: 2px;
   }
 
   .dn-quick-search__hint {

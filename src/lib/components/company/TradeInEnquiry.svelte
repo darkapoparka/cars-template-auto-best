@@ -147,10 +147,6 @@
     Заяви оценка
     <Icon name="arrow-right" size={19} />
   </button>
-  <a class="dn-tradein-call" href={brand.phoneHref} aria-label={`Обади се на ${brand.phone}`}>
-    <Icon name="phone" size={20} />
-    <span>Обади се</span>
-  </a>
 </div>
 
 <dialog class="dn-tradein-dialog" bind:this={dialog} aria-labelledby="tradein-title" onclose={restore} onclick={(event) => { if (event.target === event.currentTarget) dialog.close(); }}>
@@ -239,8 +235,6 @@
   .dn-tradein-entry-segments { margin-top: 18px; }
   .dn-tradein-start { display: flex; width: 100%; min-height: 54px; align-items: center; justify-content: center; gap: 10px; margin-top: 14px; padding: 12px 18px; border: 0; border-radius: var(--dn-radius-button); background: var(--dn-red); color: #fff; font-size: var(--dn-cta-size); font-weight: var(--dn-cta-weight); line-height: var(--dn-leading-control); }
   .dn-tradein-start:is(:hover,:focus-visible), .dn-tradein-primary:is(:hover,:focus-visible) { background: var(--dn-red-hover); }
-  .dn-tradein-call { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; gap: var(--dn-space-2); justify-self: center; margin-top: var(--dn-space-3); padding: var(--dn-space-2) var(--dn-space-5); border-radius: var(--dn-radius-button); background: var(--dn-ink); color: var(--dn-white); font-size: var(--dn-control-size); font-weight: var(--dn-control-weight); line-height: var(--dn-cta-leading); text-decoration: none; }
-  .dn-tradein-call:is(:hover,:focus-visible) { background: var(--dn-ink-hover); }
   :global(body:has(.dn-tradein-dialog[open])) { position: fixed; top: var(--dn-tradein-scroll,0); width: 100%; overflow: hidden; }
   .dn-tradein-dialog { width: min(640px,calc(100% - 32px)); max-width: none; max-height: calc(100dvh - 40px); margin: auto; padding: 0; border: 0; border-radius: 22px; background: #fff; color: #202329; overflow: hidden; }
   .dn-tradein-dialog::backdrop { background: rgba(7,9,12,.68); backdrop-filter: blur(2px); }

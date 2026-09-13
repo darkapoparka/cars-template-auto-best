@@ -69,16 +69,17 @@
       <div id="home-import-search" class={['dn-search__import', { 'dn-search__import--active': mode === 'import' }]} role="tabpanel" aria-labelledby="home-import-tab">
         <form class="dn-search__import-form" method="GET" action={resolve('/contact#contact-intent')} novalidate onsubmit={validateImport}>
           <input type="hidden" name="topic" value="import" />
-          <label class="dn-search__import-field">
+          <label class="dn-search__import-field dn-entry-field">
             <Icon name="globe" size={20} strokeWidth={1.8} />
             <span class="dn-sr-only">Линк към обява за внос</span>
             <input
+              class="dn-entry-field__input"
               bind:this={importInput}
               bind:value={importUrl}
               type="url"
               inputmode="url"
               name="vehicle_url"
-              placeholder="Поставете линк към обява"
+              placeholder="Линк към обява"
               maxlength={2048}
               required
               autocomplete="off"
@@ -92,7 +93,7 @@
           {#if importError}
             <p id="home-import-error" class="dn-search__import-error" role="alert">{importError}</p>
           {/if}
-          <button class="dn-search__mobile-all" type="submit">Продължи към контакт <Icon name="arrow-right" size={17} strokeWidth={2} /></button>
+          <button class="dn-search__mobile-all" type="submit">Заяви внос <Icon name="arrow-right" size={17} strokeWidth={2} /></button>
         </form>
       </div>
       <div class="dn-search__desktop-form">
@@ -198,11 +199,7 @@
     }
 
     .dn-search :global(.dn-quick-search__trigger) {
-      min-height: 52px;
       margin: 0;
-      border: 0;
-      background: var(--dn-home-panel);
-      color: var(--dn-muted);
     }
 
     .dn-search__desktop-form,
@@ -219,35 +216,9 @@
 
     .dn-search__import-field {
       display: flex;
-      min-height: 52px;
       align-items: center;
       gap: 10px;
       padding: 0 16px;
-      border-radius: var(--dn-radius-button);
-      background: var(--dn-home-panel);
-      color: var(--dn-muted);
-    }
-
-    .dn-search__import-field input {
-      width: 100%;
-      min-width: 0;
-      min-height: 52px;
-      padding: 0;
-      border: 0;
-      outline: none;
-      background: transparent;
-      color: var(--dn-ink);
-      font-size: var(--dn-control-size);
-    }
-
-    .dn-search__import-field input::placeholder {
-      color: var(--dn-muted);
-      opacity: 1;
-    }
-
-    .dn-search__import-field:focus-within {
-      outline: 3px solid var(--dn-focus);
-      outline-offset: 2px;
     }
 
     .dn-search__import-error {

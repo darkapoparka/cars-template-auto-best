@@ -58,7 +58,7 @@ The root layout imports `@fontsource-variable/onest`. `--dn-font` is `Onest Vari
 | `--dn-text-badge` | `0.875rem` | Compact badges |
 | `--dn-text-meta` | `0.875rem` | Supporting metadata |
 | `--dn-text-body` | `1rem` | Body copy, inputs and ordinary controls |
-| `--dn-text-lead` | `1.125rem` | Introductory copy, primary actions and entry tabs |
+| `--dn-text-lead` | `1.125rem` | Introductory copy, primary actions and prominent entry fields |
 | `--dn-text-card` | `1.25rem` | Card headings |
 | `--dn-text-subheading` | `1.5rem` | Subheadings |
 | `--dn-text-heading` | `1.875rem` | Headings |
@@ -69,7 +69,9 @@ The root layout imports `@fontsource-variable/onest`. `--dn-font` is `Onest Vari
 
 All live-text typography values belong to `tokens.css`. Components and route sheets select semantic roles; they must not introduce numeric font sizes, font weights, line heights, tracking, or local font shorthands. `check:typography`, included in `validate`, enforces this boundary. Fluid section, hero and display roles also live in tokens. Responsive layouts may select a smaller heading role, but must not shrink ordinary controls below the control role to make them fit.
 
-Use regular 400 for prose, medium 500 for navigation/actions and semibold 600 for headings and emphasis. Primary actions use `--dn-cta-font` (18px/500 at the default root size); ordinary controls use `--dn-control-font` (16px/500). Both use 1.3 line-height. Call actions are secondary 16px controls. `--dn-tab-font` supplies 18px/500 entry tabs. The shared `.dn-segmented-control` / `.dn-segmented-option` style owns Buy/Import, Sale/Trade-in and Link/Info controls, including selection and keyboard focus; components retain their existing tab/group behavior.
+Use regular 400 for prose, medium 500 for navigation/actions and semibold 600 for headings and emphasis. Primary actions use `--dn-cta-font` (18px/500 at the default root size); ordinary controls use `--dn-control-font` (16px/500). Both use 1.3 line-height. `--dn-tab-font` supplies quieter 16px/500 entry tabs. The shared `.dn-segmented-control` / `.dn-segmented-option` style owns Buy/Import, Sale/Trade-in and Link/Info controls: pill geometry, pale surface, white selected option and keyboard focus. Components retain their existing tab/group behavior.
+
+The entry field is the strongest editable element. `.dn-entry-field` and `.dn-entry-field__input` own its shared border, surface, focus and `--dn-entry-font` (18px/400), with a 52px minimum frame height. The multiline modifier uses the control radius. Home search and both import entry modes consume this same style; do not add smaller local font or border overrides. `ContactIntent` renders one secondary phone-icon text link below the Sell/Import card, outside `.dn-contact-intent__main`, using the ordinary control type and minimum hit height. Enquiry components do not duplicate that entry call action.
 
 Body copy is 16px with 1.5 leading; long editorial prose uses 1.65. Labels, supporting metadata, helper text and the mobile dock use the 14px meta role. Nonessential video duration text may use the 12px caption role. Mobile section headings use 24px and service titles use 18px. Make controls and cards reflow around the type instead of adding smaller local overrides. Include `textarea` in native font inheritance.
 
@@ -113,7 +115,7 @@ Additional 359/374/380px and 1199px rules handle particular text, grid and contr
 
 ## Homepage patterns
 
-**Hero and search.** The hero and its vehicle artwork remain separate from the search panel. Buy/Import tabs share the rounded rectangular segmented control with Sell/Import: a light enclosing panel and dark selected tab. Primary actions are red. Desktop discovery is its own presentation. The older charcoal-search token names do not mean the current entire search panel should be recolored charcoal.
+**Hero and search.** The hero and its vehicle artwork remain separate from the search panel. Buy/Import tabs share the quieter pill-shaped segmented control with Sell/Import. The white, bordered entry field uses larger regular text; primary actions remain red. Desktop discovery is its own presentation. The older charcoal-search token names do not mean the current entire search panel should be recolored charcoal.
 
 **Mobile services.** The current preview has four illustrated cards in a 2-by-2 grid below search. Text sits above a centered lower image region. Inventory, sell, import and leasing each retain their own color and existing generated artwork. This is distinct from the wider desktop campaign pair.
 

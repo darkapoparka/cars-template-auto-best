@@ -73,6 +73,13 @@
     {/if}
   </div>
 
+  {#if topic.id === 'trade-in' || topic.id === 'import'}
+    <a class="dn-workflow-call" href={brand.phoneHref} aria-label={`Обади се на ${brand.phone}`}>
+      <Icon name="phone" size={20} />
+      <span>Обади се</span>
+    </a>
+  {/if}
+
   {#if topic.id === 'trade-in'}
     <TradeInInfoDrawer />
   {:else if topic.id === 'import'}
@@ -161,6 +168,9 @@
 </div>
 
 <style>
+  .dn-workflow-call { display: inline-flex; grid-column: 1 / -1; justify-self: center; align-items: center; justify-content: center; gap: var(--dn-space-2); min-height: var(--dn-control-hit-height); padding: var(--dn-space-2) var(--dn-space-4); margin-top: var(--dn-space-3); color: var(--dn-muted); font: var(--dn-control-font); text-decoration: underline; text-underline-offset: var(--dn-space-1); }
+  .dn-workflow-call:hover { color: var(--dn-ink); }
+  .dn-contact-intent--workflow { row-gap: 0; }
   .dn-contact-description--mobile { display: none; }
   .dn-contact-desktop-copy, .dn-contact-visit { display: none; }
   .dn-contact-intent--tradein { grid-template-columns: 1fr; width: min(920px, 100%); }
