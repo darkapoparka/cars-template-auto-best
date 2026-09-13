@@ -274,11 +274,11 @@
     .dn-vehicle-card--listing .dn-vehicle-card__link {
       display: grid;
       min-height: 132px;
-      grid-template-columns: minmax(126px, 40%) minmax(0, 1fr);
+      grid-template-columns: 45% minmax(0, 1fr);
     }
 
     .dn-vehicle-card--listing .dn-vehicle-card__visual {
-      height: 100%;
+      height: 132px;
       min-height: 132px;
       aspect-ratio: auto;
     }
@@ -384,7 +384,7 @@
 
   @media (max-width: 359px) {
     .dn-vehicle-card--listing .dn-vehicle-card__link {
-      grid-template-columns: 108px minmax(0, 1fr);
+      grid-template-columns: 40% minmax(0, 1fr);
     }
     .dn-vehicle-card--listing .dn-vehicle-card__specs { gap: 4px; }
     .dn-vehicle-card--listing .dn-vehicle-card__spec { gap: 3px; padding-inline: 3px; }
