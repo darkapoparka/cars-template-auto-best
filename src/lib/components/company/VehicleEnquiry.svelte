@@ -181,7 +181,6 @@
     {#if importMode === 'listing'}
       <label class="dn-sr-only" for="enquiry-listing-link">Линк към обява за внос</label>
       <div class="dn-enquiry-import-field dn-entry-field">
-        <Icon name="globe" size={20} strokeWidth={1.8} />
         <input class="dn-entry-field__input" id="enquiry-listing-link" bind:this={linkInput} value={link} oninput={(event) => { linkDraft = event.currentTarget.value; linkError = ''; }} type="url" inputmode="url" maxlength={2048} placeholder="Линк към обява" autocomplete="off" autocapitalize="none" spellcheck={false} aria-invalid={linkError ? true : undefined} aria-describedby={linkError ? 'enquiry-link-error' : undefined} />
       </div>
       {#if linkError}<p class="dn-enquiry-error" id="enquiry-link-error" role="alert">{linkError}</p>{/if}
@@ -281,9 +280,9 @@
   .dn-enquiry-primary:disabled { opacity: .6; cursor: wait; }
   .dn-enquiry-entry > p { margin: 10px 0 0; color: #5d626b; font-size: var(--dn-text-body); }
   .dn-enquiry-contact { display: flex; width: fit-content; min-height: 44px; align-items: center; justify-content: center; margin: 8px auto 0; padding: 8px 18px; border-radius: var(--dn-radius-button); background: #f2f3f5; color: #24272c; font-size: var(--dn-control-size); font-weight: var(--dn-control-weight); }
-  .dn-enquiry-import-segments { margin-bottom: 12px; }
-  .dn-enquiry-import-field { display: flex; align-items: center; gap: 10px; padding: 4px 4px 4px 16px; }
-  .dn-enquiry-import-go { min-height: var(--dn-entry-action-height); margin-top: var(--dn-space-3); padding-block: var(--dn-space-2); }
+  .dn-enquiry-import-segments { width: var(--dn-entry-segment-width); margin: 0 auto var(--dn-space-3); }
+  .dn-enquiry-import-field { display: flex; align-items: center; padding-inline: var(--dn-space-4); }
+  .dn-enquiry-import-go { width: var(--dn-entry-action-width); min-height: var(--dn-entry-action-height); margin: var(--dn-space-3) auto 0; padding-block: var(--dn-space-2); }
   .dn-enquiry-import-go:hover, .dn-enquiry-import-go:focus-visible { background: var(--dn-red-hover); }
   .dn-enquiry-import-info { overflow: hidden; }
   .dn-enquiry-import-info > textarea { display: block; width: 100%; min-height: 72px; margin: 0; padding: 14px 16px 8px; box-sizing: border-box; border: 0; outline: 0; resize: none; background: transparent; color: var(--dn-ink); }
@@ -351,7 +350,6 @@
   .dn-enquiry-error, .dn-enquiry-entry > .dn-enquiry-error { color: #a40000; font-size: var(--dn-text-meta); line-height: var(--dn-leading-body); }
   .dn-enquiry-feedback { padding: 12px; border-radius: 10px; background: #f2f3f5; font-size: var(--dn-text-meta); line-height: var(--dn-leading-body); }
   @media (max-width: 767px) {
-    .dn-enquiry-import-field { gap: 8px; padding: 0 0 0 14px; }
     .dn-enquiry { inset: auto 0 0; width: 100%; height: calc(100dvh - max(24px,env(safe-area-inset-top))); max-height: 900px; margin: 0; border-radius: 24px 24px 0 0; }
     .dn-enquiry-panel { height: 100%; max-height: 100%; }
     .dn-enquiry-header { padding: 20px 16px 16px; }

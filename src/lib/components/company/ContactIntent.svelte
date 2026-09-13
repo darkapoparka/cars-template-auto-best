@@ -24,6 +24,7 @@
   <div class="dn-contact-intent__main">
     {#if topic.id === 'trade-in' || topic.id === 'import'}
       <h1 class="dn-contact-workflow-title">{topic.id === 'trade-in' ? 'Продай или бартер' : topic.title}</h1>
+      {#if topic.id === 'import'}<p class="dn-contact-workflow-hint">Линк към обява или описание</p>{/if}
     {/if}
     <div class="dn-contact-intent__heading">
       <h2><span class:dn-contact-mobile-copy={topic.id === 'general'}>Свържете се с екипа</span>{#if topic.id === 'general'}<span class="dn-contact-desktop-copy">Обадете се на екипа</span>{/if}</h2>
@@ -168,6 +169,8 @@
 </div>
 
 <style>
+  .dn-contact-workflow-hint { display: none; margin: var(--dn-space-2) 0 0; color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); text-align: center; }
+  @media (max-width: 767px) { .dn-contact-workflow-hint { display: block; } }
   .dn-workflow-call { display: inline-flex; grid-column: 1 / -1; justify-self: center; align-items: center; justify-content: center; gap: var(--dn-space-2); min-height: var(--dn-entry-action-height); padding: var(--dn-space-2) var(--dn-space-6); margin-top: var(--dn-space-3); border: 1px solid var(--dn-line); border-radius: var(--dn-radius-button); background: var(--dn-white); color: var(--dn-ink); font: var(--dn-control-font); text-decoration: none; }
   .dn-workflow-call:hover { background: var(--dn-home-panel); }
   .dn-workflow-call:focus-visible { outline: 3px solid var(--dn-focus); outline-offset: 2px; }

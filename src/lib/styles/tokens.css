@@ -78,6 +78,8 @@
   --dn-control-hit-height: 44px;
   --dn-segment-height: 40px;
   --dn-entry-action-height: 44px;
+  --dn-entry-segment-width: min(240px, calc(100% - 24px));
+  --dn-entry-action-width: min(220px, 100%);
   --dn-segment-surface: var(--dn-home-panel);
   --dn-segment-selected: var(--dn-white);
   --dn-cta-size: var(--dn-text-lead);

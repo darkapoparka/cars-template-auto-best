@@ -11,6 +11,14 @@ const browser = await launchBrowser();
 async function typeOf(locator) {
   return locator.evaluate(e => { const s = getComputedStyle(e); return { size: parseFloat(s.fontSize), weight: Number(s.fontWeight), height: e.getBoundingClientRect().height }; });
 }
+async function entryHierarchy(field, segments, action) {
+  const input = await field.boundingBox();
+  for(const control of [segments, action]) {
+    const box = await control.boundingBox();
+    assert(box.width < input.width && box.height < input.height, 'Entry controls must be narrower and shorter than the input');
+    assert(Math.abs((box.x + box.width / 2) - (input.x + input.width / 2)) < 1, 'Entry controls must stay centered with the input');
+  }
+}
 async function readable(page, name) {
   assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${name}: page overflow`);
   const clipped = await page.locator('button, input, select, textarea, dialog[open]').evaluateAll(nodes => nodes.filter(e => e.checkVisibility() && e.clientWidth > 0 && e.scrollWidth > e.clientWidth + 2 && getComputedStyle(e).textOverflow !== 'ellipsis').map(e => ({ text: e.textContent.trim().slice(0,60), class: e.className })));
@@ -60,6 +68,7 @@ try {
         assert.equal(primary.height,44);
         assert((await typeOf(page.locator('.dn-tradein-reference'))).height > primary.height);
         assert.equal((await typeOf(page.locator('.dn-tradein-entry-segments'))).height,44);
+        await entryHierarchy(page.locator('.dn-tradein-reference'),page.locator('.dn-tradein-entry-segments'),start);
         assert.equal(await page.locator('.dn-contact-intent__main .dn-workflow-call').count(),0);
         assert.equal(await page.locator('.dn-workflow-call').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(255, 255, 255)');
         assert.equal(await page.locator('.dn-workflow-call').evaluate(e=>getComputedStyle(e).textDecorationLine),'none');
@@ -124,6 +133,13 @@ try {
         assert.equal((await typeOf(importStart)).size,18);
         assert.equal((await typeOf(importStart)).height,44);
         assert.equal((await typeOf(page.locator('.dn-enquiry-import-segments'))).height,44);
+        await entryHierarchy(page.locator('.dn-enquiry-import-field'),page.locator('.dn-enquiry-import-segments'),importStart);
+        assert.equal(await page.locator('.dn-enquiry-import-field svg').count(),0);
+        if(width<768) {
+          const hint=page.locator('.dn-contact-workflow-hint');
+          assert.equal(await hint.innerText(),'Линк към обява или описание');
+          assert(await hint.evaluate(e=>Math.abs(e.getBoundingClientRect().height-parseFloat(getComputedStyle(e).lineHeight))<1));
+        }
         assert.equal(await page.locator('.dn-contact-intent__main .dn-workflow-call').count(),0);
         assert.equal(await page.locator('.dn-workflow-call').count(),1);
         const importField=await typeOf(page.locator('#enquiry-listing-link'));

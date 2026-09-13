@@ -260,11 +260,11 @@
   button { cursor: pointer; font: inherit; }
   .dn-tradein-enquiry { display: grid; gap: 0; }
   .dn-tradein-enquiry > h1 { max-width: 620px; margin: 0; color: #202329; font-size: var(--dn-text-fluid-section); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-section); letter-spacing: var(--dn-tracking-heading); }
-  .dn-tradein-entry-segments { margin-top: 18px; }
+  .dn-tradein-entry-segments { width: var(--dn-entry-segment-width); margin: 18px auto 0; }
   .dn-tradein-reference { display: flex; align-items: center; margin-top: var(--dn-space-3); padding-inline: var(--dn-space-4); }
   .dn-tradein-reference-hint { margin: var(--dn-space-2) 0 0; color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
   .dn-tradein-review-reference { overflow-wrap: anywhere; }
-  .dn-tradein-start { display: flex; width: 100%; min-height: var(--dn-entry-action-height); align-items: center; justify-content: center; gap: 10px; margin-top: 14px; padding: var(--dn-space-2) var(--dn-space-5); border: 0; border-radius: var(--dn-radius-button); background: var(--dn-red); color: #fff; font-size: var(--dn-cta-size); font-weight: var(--dn-cta-weight); line-height: var(--dn-leading-control); }
+  .dn-tradein-start { display: flex; width: var(--dn-entry-action-width); margin-inline: auto; min-height: var(--dn-entry-action-height); align-items: center; justify-content: center; gap: 10px; margin-top: 14px; padding: var(--dn-space-2) var(--dn-space-5); border: 0; border-radius: var(--dn-radius-button); background: var(--dn-red); color: #fff; font-size: var(--dn-cta-size); font-weight: var(--dn-cta-weight); line-height: var(--dn-leading-control); }
   .dn-tradein-start:is(:hover,:focus-visible), .dn-tradein-primary:is(:hover,:focus-visible) { background: var(--dn-red-hover); }
   :global(body:has(.dn-tradein-dialog[open])) { position: fixed; top: var(--dn-tradein-scroll,0); width: 100%; overflow: hidden; }
   .dn-tradein-dialog { width: min(640px,calc(100% - 32px)); max-width: none; max-height: calc(100dvh - 40px); margin: auto; padding: 0; border: 0; border-radius: 22px; background: #fff; color: #202329; overflow: hidden; }
