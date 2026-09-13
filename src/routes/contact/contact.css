@@ -1243,7 +1243,7 @@
   .dn-contact-section--workflow .dn-contact-intent--workflow :is(.dn-enquiry-entry--import, .dn-tradein-entry-segments) {
     margin-top: var(--dn-space-4);
   }
-  .dn-contact-section--workflow .dn-contact-intent--workflow :is(.dn-enquiry-import-field, .dn-enquiry-import-info, .dn-tradein-start) { margin-top: var(--dn-space-3); }
+  .dn-contact-section--workflow .dn-contact-intent--workflow :is(.dn-enquiry-import-field, .dn-tradein-start) { margin-top: var(--dn-space-3); }
   .dn-contact-section--workflow {
     padding-bottom: 68px;
   }

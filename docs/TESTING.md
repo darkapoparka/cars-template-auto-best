@@ -61,7 +61,7 @@ For the built preview, use that preview URL instead. `scripts/browser.mjs` contr
 | `scripts/enquiry-smoke.mjs` | Enquiry entry, steps, review, local photos and sharing/copy behavior |
 | `scripts/mobile-filter-smoke.mjs` | Mobile filter draft, nested choices, application and empty results |
 | `scripts/desktop-discovery-smoke.mjs` | Desktop discovery and sticky-control behavior |
-| `scripts/typography-smoke.mjs` | Input/segment/CTA hierarchy, keyboard tab switching, sell/import validation and review, optional listing/VIN entry and edits, manual fallback, copied reference text, Escape/focus return, control reflow and screenshots |
+| `scripts/typography-smoke.mjs` | Entry/segment/CTA hierarchy, keyboard tab switching, link/VIN/description editor save and discard, stable card height, sell/import validation and review, reference edits and clearing, manual fallback, copied text, Escape/focus return, control reflow and screenshots |
 
 Additional mobile/accessibility/resilience and visual-comparison tools exist in the newer local working source but are not package scripts in this standalone baseline. Do not assume a fresh clone includes them.
 

@@ -5,6 +5,7 @@
   import Icon from '$components/ui/Icon.svelte';
   import { brand } from '$config/brand';
   import { resolveImportUrl } from '$data/company';
+  import EnquiryEntryField from './EnquiryEntryField.svelte';
 
   let { kind, importUrl = null }: { kind: 'trade-in' | 'import'; importUrl?: string | null } = $props();
   const selling = $derived(kind === 'trade-in');
@@ -12,16 +13,13 @@
   let dialog: HTMLDialogElement;
   let form: HTMLFormElement;
   let heading: HTMLHeadingElement;
-  let linkInput = $state<HTMLInputElement>();
-  let infoInput = $state<HTMLTextAreaElement>();
+  let entryEditor = $state<{ edit: (trigger?: HTMLElement) => Promise<void> }>();
   let returnFocus: HTMLElement | undefined;
   let scrollY = 0;
   let step = $state(0);
   let opened = false;
   let linkDraft = $state<string | null>(null);
   let link = $derived(linkDraft ?? importUrl ?? '');
-  let linkError = $state('');
-  let infoError = $state('');
   let importMode = $state<'listing' | 'criteria'>('listing');
   let importBrief = $state('');
   let selectedLink = $state('');
@@ -63,16 +61,13 @@
 
   async function open(event: MouseEvent, withoutLink = false) {
     if (!selling && withoutLink && !importBrief.trim()) {
-      infoError = 'Опишете накратко какъв автомобил търсите.';
-      infoInput?.focus();
+      await entryEditor?.edit(event.currentTarget as HTMLElement);
       return;
     }
     if (!selling && !withoutLink && !resolveImportUrl(link)) {
-      linkError = link.trim() ? 'Въведете валиден линк с https:// или http://.' : 'Поставете линк към обява.';
-      linkInput?.focus();
+      await entryEditor?.edit(event.currentTarget as HTMLElement);
       return;
     }
-    infoError = '';
     const nextLink = selling || withoutLink ? '' : resolveImportUrl(link) || '';
     if (nextLink !== selectedLink) step = 0;
     selectedLink = nextLink;
@@ -174,26 +169,13 @@
     <a class="dn-enquiry-contact" href={resolve('/contact')}>Свържете се с нас</a>
   {:else}
     <div class="dn-enquiry-import-segments dn-segmented-control" role="group" aria-label="Начин за заявка">
-      <button class="dn-segmented-option" type="button" class:active={importMode === 'listing'} aria-pressed={importMode === 'listing'} onclick={() => { importMode = 'listing'; linkError = ''; infoError = ''; }}>Линк</button>
-      <button class="dn-segmented-option" type="button" class:active={importMode === 'criteria'} aria-pressed={importMode === 'criteria'} onclick={() => { importMode = 'criteria'; linkError = ''; infoError = ''; }}>Инфо</button>
+      <button class="dn-segmented-option" type="button" class:active={importMode === 'listing'} aria-pressed={importMode === 'listing'} onclick={() => importMode = 'listing'}>Линк</button>
+      <button class="dn-segmented-option" type="button" class:active={importMode === 'criteria'} aria-pressed={importMode === 'criteria'} onclick={() => importMode = 'criteria'}>Инфо</button>
     </div>
 
-    {#if importMode === 'listing'}
-      <label class="dn-sr-only" for="enquiry-listing-link">Линк към обява за внос</label>
-      <div class="dn-enquiry-import-field dn-entry-field">
-        <input class="dn-entry-field__input" id="enquiry-listing-link" bind:this={linkInput} value={link} oninput={(event) => { linkDraft = event.currentTarget.value; linkError = ''; }} type="url" inputmode="url" maxlength={2048} placeholder="Линк към обява" autocomplete="off" autocapitalize="none" spellcheck={false} aria-invalid={linkError ? true : undefined} aria-describedby={linkError ? 'enquiry-link-error' : undefined} />
-      </div>
-      {#if linkError}<p class="dn-enquiry-error" id="enquiry-link-error" role="alert">{linkError}</p>{/if}
-    {:else}
-      <div class="dn-enquiry-import-info dn-entry-field dn-entry-field--multiline">
-        <label class="dn-sr-only" for="enquiry-import-info">Опишете автомобила, който търсите</label>
-        <textarea class="dn-entry-field__input" id="enquiry-import-info" bind:this={infoInput} bind:value={importBrief} oninput={() => infoError = ''} aria-invalid={infoError ? true : undefined} aria-describedby={infoError ? 'enquiry-info-error' : undefined} maxlength={500} rows="2" placeholder="Напр. BMW X5, дизел, 2020+, xDrive…"></textarea>
-        <div class="dn-enquiry-import-info__footer">
-          <label><span>Бюджет до, €</span><input class="dn-entry-field__input" bind:value={budget} inputmode="numeric" pattern={'[0-9]{1,8}'} maxlength={8} placeholder="40000" /></label>
-        </div>
-      </div>
-      {#if infoError}<p class="dn-enquiry-error" id="enquiry-info-error" role="alert">{infoError}</p>{/if}
-    {/if}
+    <div class="dn-enquiry-import-field">
+      <EnquiryEntryField id="enquiry-entry" kind={importMode === 'listing' ? 'listing' : 'criteria'} value={importMode === 'listing' ? link : importBrief} {budget} bind:this={entryEditor} onapply={(value, nextBudget) => { if (importMode === 'listing') linkDraft = value; else { importBrief = value; budget = nextBudget; } }} />
+    </div>
     <button type="button" class="dn-enquiry-primary dn-enquiry-import-go" onclick={(event) => open(event, importMode === 'criteria')} aria-label={importMode === 'criteria' ? 'Заяви внос по описание' : 'Заяви внос по обява'} aria-haspopup="dialog">Заяви внос <Icon name="arrow-right" size={20} /></button>
   {/if}
 </div>
@@ -278,17 +260,10 @@
   .dn-enquiry-primary { display: flex; width: 100%; min-height: 52px; align-items: center; justify-content: center; gap: 12px; padding: 12px 20px; border: 0; border-radius: var(--dn-radius-button); background: var(--dn-red); color: #fff; font-size: var(--dn-cta-size); font-weight: var(--dn-cta-weight); line-height: var(--dn-leading-control); }
   .dn-enquiry-primary:hover { background: var(--dn-red-hover); }
   .dn-enquiry-primary:disabled { opacity: .6; cursor: wait; }
-  .dn-enquiry-entry > p { margin: 10px 0 0; color: #5d626b; font-size: var(--dn-text-body); }
   .dn-enquiry-contact { display: flex; width: fit-content; min-height: 44px; align-items: center; justify-content: center; margin: 8px auto 0; padding: 8px 18px; border-radius: var(--dn-radius-button); background: #f2f3f5; color: #24272c; font-size: var(--dn-control-size); font-weight: var(--dn-control-weight); }
   .dn-enquiry-import-segments { width: var(--dn-entry-segment-width); margin: 0 auto var(--dn-space-3); }
-  .dn-enquiry-import-field { display: flex; align-items: center; padding-inline: var(--dn-space-4); }
   .dn-enquiry-import-go { width: var(--dn-entry-action-width); min-height: var(--dn-entry-action-height); margin: var(--dn-space-3) auto 0; padding-block: var(--dn-space-2); }
   .dn-enquiry-import-go:hover, .dn-enquiry-import-go:focus-visible { background: var(--dn-red-hover); }
-  .dn-enquiry-import-info { overflow: hidden; }
-  .dn-enquiry-import-info > textarea { display: block; width: 100%; min-height: 72px; margin: 0; padding: 14px 16px 8px; box-sizing: border-box; border: 0; outline: 0; resize: none; background: transparent; color: var(--dn-ink); }
-  .dn-enquiry-import-info__footer { display: flex; align-items: end; gap: 10px; padding: 8px 4px 4px 16px; }
-  .dn-enquiry-import-info__footer label { min-width: 0; flex: 1; color: #737a84; font-size: var(--dn-text-meta); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-heading); }
-  .dn-enquiry-import-info__footer label > span { display: block; margin-bottom: 2px; }
   .dn-enquiry-text-button { display: inline-flex; min-height: 44px; align-items: center; gap: 8px; padding: 8px 0; border: 0; background: transparent; color: #202329; font-size: var(--dn-control-size); font-weight: var(--dn-control-weight); text-align: left; text-decoration: underline; text-underline-offset: 4px; }
   :global(body:has(.dn-enquiry[open])) { position: fixed; top: var(--dn-enquiry-scroll, 0); width: 100%; overflow: hidden; }
   .dn-enquiry { width: min(620px, calc(100% - 32px)); max-width: none; max-height: calc(100dvh - 48px); margin: auto; padding: 0; border: 0; border-radius: 20px; background: #fff; color: #202329; overflow: hidden; }
@@ -347,7 +322,7 @@
   .dn-enquiry-success strong { font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
   .dn-enquiry-success p { margin: 4px 0 0; color: #d3d7dc; font-size: var(--dn-text-body); line-height: var(--dn-leading-meta); }
   .dn-enquiry-copy { min-height: 44px; margin-top: 14px; padding: 10px 16px; border: 1px solid #d9dde2; border-radius: 12px; background: #fff; font-size: var(--dn-control-size); font-weight: var(--dn-control-weight); }
-  .dn-enquiry-error, .dn-enquiry-entry > .dn-enquiry-error { color: #a40000; font-size: var(--dn-text-meta); line-height: var(--dn-leading-body); }
+  .dn-enquiry-error { color: #a40000; font-size: var(--dn-text-meta); line-height: var(--dn-leading-body); }
   .dn-enquiry-feedback { padding: 12px; border-radius: 10px; background: #f2f3f5; font-size: var(--dn-text-meta); line-height: var(--dn-leading-body); }
   @media (max-width: 767px) {
     .dn-enquiry { inset: auto 0 0; width: 100%; height: calc(100dvh - max(24px,env(safe-area-inset-top))); max-height: 900px; margin: 0; border-radius: 24px 24px 0 0; }

@@ -3,6 +3,7 @@
   import Icon from '$components/ui/Icon.svelte';
   import { brand } from '$config/brand';
   import { parseVehicleReference } from '$data/vehicle-reference';
+  import EnquiryEntryField from './EnquiryEntryField.svelte';
 
   let dialog: HTMLDialogElement;
   let form: HTMLFormElement;
@@ -14,7 +15,7 @@
   let purpose = $state('Продажба');
   let reference = $state('');
   let referenceError = $state('');
-  let referenceInput = $state<HTMLInputElement>();
+  let referenceEditor = $state<{ edit: (trigger?: HTMLElement) => Promise<void> }>();
   let openedReference = '';
   const vehicleReference = $derived(parseVehicleReference(reference));
   let make = $state('');
@@ -47,8 +48,7 @@
 
   async function open(event: MouseEvent) {
     if (reference.trim() && !vehicleReference) {
-      referenceError = 'Добави валиден линк към обява или VIN от 17 знака.';
-      referenceInput?.focus();
+      await referenceEditor?.edit(event.currentTarget as HTMLElement);
       return;
     }
     referenceError = '';
@@ -163,11 +163,9 @@
     {/each}
   </div>
 
-  <label class="dn-sr-only" for="tradein-reference">Линк към обява или VIN</label>
-  <div class="dn-tradein-reference dn-entry-field">
-    <input id="tradein-reference" class="dn-entry-field__input" bind:this={referenceInput} bind:value={reference} oninput={() => referenceError = ''} maxlength={2048} placeholder="Линк или VIN" autocomplete="off" autocapitalize="none" spellcheck={false} aria-invalid={referenceError ? true : undefined} aria-describedby={referenceError ? 'tradein-reference-error' : 'tradein-reference-hint'} />
+  <div class="dn-tradein-reference">
+    <EnquiryEntryField id="tradein-reference" kind="reference" value={reference} bind:this={referenceEditor} onapply={(value) => { reference = value; referenceError = ''; }} />
   </div>
-  {#if referenceError}<p class="dn-tradein-error" id="tradein-reference-error" role="alert">{referenceError}</p>{/if}
 
   <button class="dn-tradein-start" type="button" onclick={open} aria-haspopup="dialog">
     Заяви оценка
@@ -261,7 +259,7 @@
   .dn-tradein-enquiry { display: grid; gap: 0; }
   .dn-tradein-enquiry > h1 { max-width: 620px; margin: 0; color: #202329; font-size: var(--dn-text-fluid-section); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-section); letter-spacing: var(--dn-tracking-heading); }
   .dn-tradein-entry-segments { width: var(--dn-entry-segment-width); margin: 18px auto 0; }
-  .dn-tradein-reference { display: flex; align-items: center; margin-top: var(--dn-space-3); padding-inline: var(--dn-space-4); }
+  .dn-tradein-reference { margin-top: var(--dn-space-3); }
   .dn-tradein-reference-hint { margin: var(--dn-space-2) 0 0; color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
   .dn-tradein-review-reference { overflow-wrap: anywhere; }
   .dn-tradein-start { display: flex; width: var(--dn-entry-action-width); margin-inline: auto; min-height: var(--dn-entry-action-height); align-items: center; justify-content: center; gap: 10px; margin-top: 14px; padding: var(--dn-space-2) var(--dn-space-5); border: 0; border-radius: var(--dn-radius-button); background: var(--dn-red); color: #fff; font-size: var(--dn-cta-size); font-weight: var(--dn-cta-weight); line-height: var(--dn-leading-control); }
