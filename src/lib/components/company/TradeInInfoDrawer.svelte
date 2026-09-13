@@ -103,17 +103,17 @@
         <h3 id="tradein-prepare-title">Какво да подготвиш</h3>
         <ol class="dn-tradein-info-list">
           <li><span aria-hidden="true">1.</span><p><strong>Данни за автомобила</strong><span>Марка, модел, година и пробег.</span></p></li>
-          <li><span aria-hidden="true">2.</span><p><strong>Снимки и състояние</strong><span>Екстериор, интериор и видими забележки.</span></p></li>
-          <li><span aria-hidden="true">3.</span><p><strong>Цена, ако имаш ориентир</strong><span>Полето е по желание и не е автоматична оценка.</span></p></li>
+          <li><span aria-hidden="true">2.</span><p><strong>Снимки и състояние</strong><span>Отвън, отвътре и забележки.</span></p></li>
+          <li><span aria-hidden="true">3.</span><p><strong>Желана цена</strong><span>По желание — това не е оценка.</span></p></li>
         </ol>
       </section>
 
       <section class="dn-tradein-info-group dn-tradein-info-process" aria-labelledby="tradein-next-title">
         <h3 id="tradein-next-title">Как продължаваме</h3>
         <ol class="dn-tradein-info-steps">
-          <li><span aria-hidden="true">1.</span><p><strong>Попълваш автомобила</strong><span>Преглеждаш данните, преди да ги споделиш.</span></p></li>
-          <li><span aria-hidden="true">2.</span><p><strong>Споделяш или се обаждаш</strong><span>Ти избираш начина за контакт с екипа.</span></p></li>
-          <li><span aria-hidden="true">3.</span><p><strong>Обсъждаме автомобила</strong><span>Уточняваме състоянието и следващата стъпка.</span></p></li>
+          <li><span aria-hidden="true">1.</span><p><strong>Попълваш и преглеждаш данните.</strong></p></li>
+          <li><span aria-hidden="true">2.</span><p><strong>Споделяш ги или се обаждаш.</strong></p></li>
+          <li><span aria-hidden="true">3.</span><p><strong>Обсъждаме автомобила и условията.</strong></p></li>
         </ol>
       </section>
 
@@ -236,10 +236,9 @@
   .dn-tradein-info-steps p { display: grid; gap: var(--dn-space-half); margin: 0; }
   .dn-tradein-info-list strong,
   .dn-tradein-info-steps strong { color: var(--dn-ink); font-size: var(--dn-text-body); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-card); }
-  .dn-tradein-info-list p > span,
-  .dn-tradein-info-steps p > span { color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
+  .dn-tradein-info-list p > span { color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
   .dn-tradein-info-steps { display: grid; gap: var(--dn-space-4); margin: 0; padding: 0; background: transparent; list-style: none; }
-  .dn-tradein-info-steps li { display: grid; grid-template-columns: max-content minmax(0,1fr); align-items: start; gap: var(--dn-space-2); min-height: 50px; padding: 0; background: transparent; }
+  .dn-tradein-info-steps li { display: grid; grid-template-columns: max-content minmax(0,1fr); align-items: start; gap: var(--dn-space-2); min-height: 0; padding: 0; background: transparent; }
   .dn-tradein-info-list li > span, .dn-tradein-info-steps li > span { font-variant-numeric: tabular-nums; color: var(--dn-ink); font-size: var(--dn-text-body); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-card); }
   .dn-tradein-info-prepare { padding: var(--dn-space-4); border-radius: var(--dn-radius); background: var(--dn-mobile-canvas); color: var(--dn-ink); gap: var(--dn-space-3); }
   .dn-tradein-info-prepare h3 { color: var(--dn-ink); }
@@ -301,7 +300,6 @@
 
   .dn-tradein-info-process { padding: var(--dn-space-4); border-radius: var(--dn-radius); background: var(--dn-ink); }
   .dn-tradein-info-process :is(h3, strong) { color: var(--dn-white); }
-  .dn-tradein-info-process p > span { color: var(--dn-muted-on-ink); }
   .dn-tradein-info-process li > span { color: var(--dn-white); }
 
   @media (prefers-reduced-motion: reduce) {
