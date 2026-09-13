@@ -8,6 +8,17 @@
   --dn-line: #e7e8eb;
   --dn-surface: #f6f7f9;
   --dn-white: #ffffff;
+  --dn-muted-on-ink: #cdd2d8;
+  --dn-line-on-ink: #414650;
+  --dn-space-half: 2px;
+  --dn-space-1: 4px;
+  --dn-space-2: 8px;
+  --dn-space-3: 12px;
+  --dn-space-4: 16px;
+  --dn-space-5: 20px;
+  --dn-space-6: 24px;
+  --dn-weight-semibold: 600;
+  --dn-weight-bold: 700;
   --dn-mobile-canvas: #f4f5f7;
   --dn-mobile-surface: #fff;
   --dn-mobile-nav-height: 56px;
