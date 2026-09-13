@@ -1259,13 +1259,14 @@
     min-height: 48px;
     font-size: var(--dn-text-body);
   }
+  .dn-contact-section--workflow .dn-contact-intent--workflow .dn-tradein-start { font-weight: var(--dn-cta-weight); }
   .dn-contact-section--workflow .dn-contact-intent--workflow :is(.dn-enquiry-import-call, .dn-tradein-call) {
     min-height: 44px;
     margin-top: var(--dn-space-3);
     padding: var(--dn-space-2) var(--dn-space-5);
-    font-size: var(--dn-text-body);
-    font-weight: var(--dn-weight-semibold);
-    line-height: var(--dn-leading-body);
+    font-size: var(--dn-text-lead);
+    font-weight: var(--dn-weight-medium);
+    line-height: var(--dn-cta-leading);
   }
   .dn-contact-section--workflow {
     padding-bottom: 68px;

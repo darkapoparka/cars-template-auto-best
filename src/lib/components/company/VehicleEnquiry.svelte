@@ -198,7 +198,7 @@
       {#if infoError}<p class="dn-enquiry-error" id="enquiry-info-error" role="alert">{infoError}</p>{/if}
     {/if}
     <a class="dn-enquiry-import-call" href={brand.phoneHref} aria-label={`Обади се на ${brand.phone}`}>
-      <Icon name="phone" size={17} />
+      <Icon name="phone" size={20} />
       <span>Обади се</span>
     </a>
   {/if}
@@ -305,7 +305,7 @@
   .dn-enquiry-import-info__footer label > span { display: block; margin-bottom: 2px; }
   .dn-enquiry-import-info__footer input { width: 100%; min-height: 28px; padding: 0; border: 0; outline: 0; background: transparent; color: var(--dn-ink); font: inherit; font-size: 15px; font-weight: 600; }
   .dn-enquiry-import-info__footer .dn-enquiry-import-go { margin-left: auto; }
-  .dn-enquiry-import-call { display: flex; width: fit-content; min-height: 44px; align-items: center; justify-content: center; gap: 7px; margin: 10px auto 0; padding: 8px 16px; border-radius: var(--dn-radius-button); background: var(--dn-ink); color: var(--dn-white); font-size: 13px; font-weight: 650; text-decoration: none; }
+  .dn-enquiry-import-call { display: flex; width: fit-content; min-height: 44px; align-items: center; justify-content: center; gap: var(--dn-space-2); margin: var(--dn-space-3) auto 0; padding: var(--dn-space-2) var(--dn-space-5); border-radius: var(--dn-radius-button); background: var(--dn-ink); color: var(--dn-white); font-size: var(--dn-text-lead); font-weight: var(--dn-weight-medium); line-height: var(--dn-cta-leading); text-decoration: none; }
   .dn-enquiry-import-call:is(:hover,:focus-visible) { background: var(--dn-ink-hover); }
   .dn-enquiry-text-button { display: inline-flex; min-height: 44px; align-items: center; gap: 8px; padding: 8px 0; border: 0; background: transparent; color: #202329; font-size: 14px; font-weight: 600; text-align: left; text-decoration: underline; text-underline-offset: 4px; }
   :global(body:has(.dn-enquiry[open])) { position: fixed; top: var(--dn-enquiry-scroll, 0); width: 100%; overflow: hidden; }

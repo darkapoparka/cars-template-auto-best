@@ -148,7 +148,7 @@
     <Icon name="arrow-right" size={19} />
   </button>
   <a class="dn-tradein-call" href={brand.phoneHref} aria-label={`Обади се на ${brand.phone}`}>
-    <Icon name="phone" size={17} />
+    <Icon name="phone" size={20} />
     <span>Обади се</span>
   </a>
 </div>
@@ -242,7 +242,7 @@
   .dn-tradein-entry-segments button:focus-visible { outline: 2px solid #202329; outline-offset: 2px; }
   .dn-tradein-start { display: flex; width: 100%; min-height: 54px; align-items: center; justify-content: center; gap: 10px; margin-top: 14px; padding: 12px 18px; border: 0; border-radius: var(--dn-radius-button); background: var(--dn-red); color: #fff; font-size: 16px; font-weight: 700; line-height: 1.35; }
   .dn-tradein-start:is(:hover,:focus-visible), .dn-tradein-primary:is(:hover,:focus-visible) { background: var(--dn-red-hover); }
-  .dn-tradein-call { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; gap: 7px; justify-self: center; margin-top: 10px; padding: 8px 16px; border-radius: var(--dn-radius-button); background: var(--dn-ink); color: var(--dn-white); font-size: 13px; font-weight: 650; text-decoration: none; }
+  .dn-tradein-call { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; gap: var(--dn-space-2); justify-self: center; margin-top: var(--dn-space-3); padding: var(--dn-space-2) var(--dn-space-5); border-radius: var(--dn-radius-button); background: var(--dn-ink); color: var(--dn-white); font-size: var(--dn-text-lead); font-weight: var(--dn-weight-medium); line-height: var(--dn-cta-leading); text-decoration: none; }
   .dn-tradein-call:is(:hover,:focus-visible) { background: var(--dn-ink-hover); }
   :global(body:has(.dn-tradein-dialog[open])) { position: fixed; top: var(--dn-tradein-scroll,0); width: 100%; overflow: hidden; }
   .dn-tradein-dialog { width: min(640px,calc(100% - 32px)); max-width: none; max-height: calc(100dvh - 40px); margin: auto; padding: 0; border: 0; border-radius: 22px; background: #fff; color: #202329; overflow: hidden; }

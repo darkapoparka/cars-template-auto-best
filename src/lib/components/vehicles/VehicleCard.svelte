@@ -9,19 +9,21 @@
     returnTo?: string;
     showPrice?: boolean;
     priority?: boolean;
-    layout?: 'default' | 'listing';
+    layout?: 'default' | 'listing' | 'showcase';
   }
 
   let { vehicle, returnTo, showPrice = false, priority = false, layout = 'default' }: Props = $props();
 </script>
 
-<article id={`vehicle-${vehicle.id}`} class:dn-vehicle-card--listing={layout === 'listing'} class="dn-vehicle-card">
+<article id={`vehicle-${vehicle.id}`} class:dn-vehicle-card--listing={layout === 'listing'} class:dn-vehicle-card--showcase={layout === 'showcase'} class="dn-vehicle-card">
   <a class="dn-vehicle-card__link" href={withListReturn(resolve('/listing-detail-v1/[id]', { id: String(vehicle.id) }), returnTo)} aria-label={`Вижте ${vehicle.title}`}>
     <div class="dn-vehicle-card__visual">
+      {#if layout !== 'showcase'}
       <div class="dn-vehicle-card__badges">
         <span class="dn-vehicle-card__badge dn-vehicle-card__badge--mileage">{vehicle.mileage}</span>
         <span class="dn-vehicle-card__badge dn-vehicle-card__badge--year">{vehicle.year}</span>
       </div>
+      {/if}
 
       <div class="dn-vehicle-card__image">
       <img
@@ -37,8 +39,11 @@
     </div>
 
     <div class="dn-vehicle-card__content">
-      <div class="dn-vehicle-card__category"><p>{vehicle.category}</p></div>
+      {#if layout !== 'showcase'}<div class="dn-vehicle-card__category"><p>{vehicle.category}</p></div>{/if}
       <h3 class="dn-vehicle-card__name" title={vehicle.title}>{vehicle.title}</h3>
+      {#if layout === 'showcase'}
+        <p class="dn-vehicle-card__summary">{vehicle.year} · {vehicle.fuel}</p>
+      {/if}
       {#if layout === 'listing'}
         <div class="dn-vehicle-card__mobile-meta" aria-label="Година и пробег">
           <span>{vehicle.year}</span>
@@ -46,6 +51,7 @@
         </div>
       {/if}
 
+      {#if layout !== 'showcase'}
       <div class="dn-vehicle-card__specs" aria-label="Основни характеристики">
         <span class="dn-vehicle-card__spec">
           <Icon name="fuel" size={15} strokeWidth={1.7} />
@@ -56,6 +62,7 @@
           {vehicle.transmission}
         </span>
       </div>
+      {/if}
 
       {#if showPrice}
         <div class="dn-vehicle-card__amount">{formatVehiclePrice(vehicle.priceEur)}</div>
@@ -65,6 +72,22 @@
 </article>
 
 <style>
+  .dn-vehicle-card--showcase .dn-vehicle-card__visual { aspect-ratio: 16 / 9; }
+  .dn-vehicle-card--showcase .dn-vehicle-card__content { padding: var(--dn-space-2) var(--dn-space-3); }
+  .dn-vehicle-card--showcase .dn-vehicle-card__name {
+    display: block;
+    font-size: var(--dn-text-lead);
+    font-weight: var(--dn-weight-medium);
+    line-height: var(--dn-leading-card);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .dn-vehicle-card__summary {
+    margin: var(--dn-space-half) 0 0;
+    color: var(--dn-muted);
+    font-size: var(--dn-text-meta);
+    line-height: var(--dn-leading-meta);
+  }
   .dn-vehicle-card__mobile-meta { display: none; }
   .dn-vehicle-card {
     display: flex;
