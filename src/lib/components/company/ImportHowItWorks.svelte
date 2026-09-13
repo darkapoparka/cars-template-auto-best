@@ -145,8 +145,8 @@
     padding: 9px 16px;
     border: 0;
     border-radius: var(--dn-radius-button);
-    background: #171a1f;
-    color: #fff;
+    background: #fff;
+    color: var(--dn-ink);
     font: inherit;
     font-size: 13px;
     font-weight: 700;
@@ -167,10 +167,10 @@
     border: 0;
     border-radius: 24px;
     background: transparent;
-    color: #fff;
+    color: var(--dn-ink);
     overflow: visible;
   }
-  .dn-import-info-dialog::backdrop { background: rgba(8,10,14,.88); backdrop-filter: blur(3px); }
+  .dn-import-info-dialog::backdrop { background: rgba(8,10,14,.52); backdrop-filter: blur(3px); }
   .dn-import-info-sheet {
     display: flex;
     max-height: min(640px, 74dvh);
@@ -178,7 +178,7 @@
     overflow: hidden;
     border: 0;
     border-radius: 24px;
-    background: #171a1f;
+    background: #fff;
     box-shadow: none;
     transition: transform 180ms cubic-bezier(.2,.8,.2,1);
   }
@@ -190,7 +190,7 @@
     place-items: center;
     padding: 7px 0 2px;
     border: 0;
-    background: #171a1f;
+    background: #fff;
     cursor: grab;
     touch-action: none;
   }
@@ -201,9 +201,9 @@
     justify-content: space-between;
     gap: 14px;
     padding: 4px 20px 14px;
-    background: #171a1f;
+    background: #fff;
   }
-  .dn-import-info-sheet__header h2 { margin: 0; color: #fff; font-size: 23px; font-weight: 600; line-height: 1.15; letter-spacing: -.025em; }
+  .dn-import-info-sheet__header h2 { margin: 0; color: var(--dn-ink); font-size: 23px; font-weight: 600; line-height: 1.15; letter-spacing: -.025em; }
   .dn-import-info-sheet__header h2:focus { outline: none; }
   .dn-import-info-sheet__close {
     display: grid;
@@ -213,8 +213,8 @@
     place-items: center;
     border: 0;
     border-radius: 50%;
-    background: #2a2e35;
-    color: #fff;
+    background: #f1f2f4;
+    color: var(--dn-ink);
     cursor: pointer;
   }
   .dn-import-info-sheet__body {
@@ -223,12 +223,12 @@
     gap: 18px;
     padding: 0 16px 20px;
     overflow-y: auto;
-    background: #171a1f;
-    color: #fff;
+    background: #fff;
+    color: var(--dn-ink);
     overscroll-behavior: contain;
   }
   .dn-import-info-group { display: grid; gap: 10px; }
-  .dn-import-info-group h3 { margin: 0; color: #fff; font-size: 16px; font-weight: 600; line-height: 1.4; text-align: left; }
+  .dn-import-info-group h3 { margin: 0; color: var(--dn-ink); font-size: 16px; font-weight: 600; line-height: 1.4; text-align: left; }
   .dn-import-info-list { display: grid; gap: 12px; margin: 0; padding: 0; background: transparent; }
   .dn-import-info-list > div {
     display: grid;
@@ -240,28 +240,28 @@
     border-radius: 0;
     background: transparent;
   }
-  .dn-import-info-list > div > :global(svg) { width: 20px; height: 20px; margin: 2px 0 0; align-self: start; color: #cdd2d8; }
+  .dn-import-info-list > div > :global(svg) { width: 20px; height: 20px; margin: 2px 0 0; align-self: start; color: #626873; }
   .dn-import-info-list p,
   .dn-import-info-steps p { display: grid; gap: 2px; margin: 0; }
   .dn-import-info-list strong,
-  .dn-import-info-steps strong { color: #fff; font-size: 15px; font-weight: 600; line-height: 1.4; }
+  .dn-import-info-steps strong { color: var(--dn-ink); font-size: 15px; font-weight: 600; line-height: 1.4; }
   .dn-import-info-list p > span,
-  .dn-import-info-steps p > span { color: #b9c0ca; font-size: 14px; line-height: 1.45; }
+  .dn-import-info-steps p > span { color: #626873; font-size: 14px; line-height: 1.45; }
   .dn-import-info-steps { display: grid; gap: 12px; margin: 0; padding: 0; background: transparent; list-style: none; }
-  .dn-import-info-steps li { display: grid; grid-template-columns: 28px minmax(0,1fr); align-items: start; gap: 12px; min-height: 50px; padding: 0 0 12px; border-bottom: 1px solid #343941; background: transparent; }  .dn-import-info-steps li > span {
+  .dn-import-info-steps li { display: grid; grid-template-columns: 28px minmax(0,1fr); align-items: start; gap: 12px; min-height: 50px; padding: 0 0 12px; border-bottom: 1px solid #e7e9ed; background: transparent; }  .dn-import-info-steps li > span {
     display: grid;
     width: 28px;
     height: 28px;
     place-items: center;
     border-radius: 50%;
-    background: var(--dn-red);
-    color: #fff;
+    background: #f1f2f4;
+    color: var(--dn-ink);
     font-size: 13px;
     font-weight: 750;
   }
-  .dn-import-info-contact { display: grid; gap: 5px; padding: 16px 0 0; border-top: 1px solid #363c45; text-align: center; }
-  .dn-import-info-contact > strong { color: #fff; font-size: 18px; line-height: 1.3; }
-  .dn-import-info-contact > span { color: #b9c0ca; font-size: 14px; line-height: 1.5; }
+  .dn-import-info-contact { display: grid; gap: 5px; padding: 16px 0 0; border-top: 1px solid #e7e9ed; text-align: center; }
+  .dn-import-info-contact > strong { color: var(--dn-ink); font-size: 18px; line-height: 1.3; }
+  .dn-import-info-contact > span { color: #626873; font-size: 14px; line-height: 1.5; }
   .dn-import-info-contact__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 9px; }
   .dn-import-info-contact__actions a {
     display: inline-flex;
@@ -275,10 +275,12 @@
     font-weight: 700;
     text-decoration: none;
   }
-  .dn-import-info-contact__actions a:first-child { background: #fff; color: #171a1f; }
-  .dn-import-info-contact__actions a:last-child { border: 1px solid #4a5059; background: transparent; color: #fff; }
+  .dn-import-info-contact__actions a:first-child { background: var(--dn-red); color: #fff; }
+  .dn-import-info-contact__actions a:first-child:hover { background: var(--dn-red-hover); }
+  .dn-import-info-contact__actions a:last-child:hover { background: #f1f2f4; }
+  .dn-import-info-contact__actions a:last-child { border: 1px solid #dfe2e7; background: transparent; color: var(--dn-ink); }
 
-  .dn-import-info-prepare { padding: 16px; border-radius: 16px; background: #fff; color: var(--dn-ink); gap: 14px; }
+  .dn-import-info-prepare { padding: 16px; border-radius: 16px; background: #f4f5f7; color: var(--dn-ink); gap: 14px; }
   .dn-import-info-prepare h3 { color: var(--dn-ink); }
   .dn-import-info-prepare strong { color: var(--dn-ink); }
   .dn-import-info-prepare p > span { color: #626873; }
@@ -301,6 +303,8 @@
       min-height: 52px;
       padding: 14px 14px 7px;
       border-radius: 16px 16px 0 0;
+      border: 1px solid #e0e3e7;
+      border-bottom: 0;
       box-shadow: none;
     }
     .dn-import-info-drawer__handle {
