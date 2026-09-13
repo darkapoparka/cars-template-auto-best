@@ -1,6 +1,7 @@
 <script lang="ts">
   import { tick } from 'svelte';
   import Icon from '$components/ui/Icon.svelte';
+  import { brand } from '$config/brand';
 
   let dialog: HTMLDialogElement;
   let trigger: HTMLButtonElement;
@@ -98,8 +99,8 @@
     </header>
 
     <div class="dn-tradein-info-sheet__body">
-      <section class="dn-tradein-info-group" aria-labelledby="tradein-prepare-title">
-        <h3 id="tradein-prepare-title">Подготви</h3>
+      <section class="dn-tradein-info-group dn-tradein-info-prepare" aria-labelledby="tradein-prepare-title">
+        <h3 id="tradein-prepare-title">Какво да подготвиш</h3>
         <div class="dn-tradein-info-list">
           <div><Icon name="car" size={19} /><p><strong>Данни за автомобила</strong><span>Марка, модел, година и пробег.</span></p></div>
           <div><Icon name="message" size={19} /><p><strong>Снимки и състояние</strong><span>Екстериор, интериор и видими забележки.</span></p></div>
@@ -108,14 +109,18 @@
       </section>
 
       <section class="dn-tradein-info-group" aria-labelledby="tradein-next-title">
-        <h3 id="tradein-next-title">След това</h3>
+        <h3 id="tradein-next-title">Как продължаваме</h3>
         <ol class="dn-tradein-info-steps">
           <li><span>1</span><p><strong>Попълваш автомобила</strong><span>Преглеждаш данните, преди да ги споделиш.</span></p></li>
           <li><span>2</span><p><strong>Споделяш или се обаждаш</strong><span>Ти избираш начина за контакт с екипа.</span></p></li>
-          <li><span>3</span><p><strong>Обсъждате конкретния автомобил</strong><span>Следващата стъпка зависи от състоянието и сделката.</span></p></li>
+          <li><span>3</span><p><strong>Обсъждаме автомобила</strong><span>Уточняваме състоянието и следващата стъпка.</span></p></li>
         </ol>
       </section>
 
+      <footer class="dn-tradein-info-actions">
+        <button type="button" onclick={closeDrawer}>Към автомобила <Icon name="arrow-right" size={18} /></button>
+        <a href={brand.phoneHref}><Icon name="phone" size={18} />Обади се</a>
+      </footer>
     </div>
   </div>
 </dialog>
@@ -190,7 +195,7 @@
     background: #171a1f;
     color: #fff;
   }
-  .dn-tradein-info-sheet__header h2 { margin: 0; color: #fff; font-size: 23px; font-weight: 700; line-height: 1.15; letter-spacing: -.025em; }
+  .dn-tradein-info-sheet__header h2 { margin: 0; color: #fff; font-size: 23px; font-weight: 600; line-height: 1.15; letter-spacing: -.025em; }
   .dn-tradein-info-sheet__header h2:focus { outline: none; }
   .dn-tradein-info-sheet__close {
     display: grid;
@@ -224,7 +229,7 @@
     gap: 10px;
     min-height: 50px;
     padding: 0;
-    border-radius: 12px;
+    border-radius: 0;
     background: transparent;
   }
   .dn-tradein-info-list > div > :global(svg) { width: 20px; height: 20px; margin: 2px 0 0; align-self: start; color: #cdd2d8; }
@@ -235,18 +240,30 @@
   .dn-tradein-info-list p > span,
   .dn-tradein-info-steps p > span { color: #b9c0ca; font-size: 14px; line-height: 1.45; }
   .dn-tradein-info-steps { display: grid; gap: 12px; margin: 0; padding: 0; background: transparent; list-style: none; }
-  .dn-tradein-info-steps li { display: grid; grid-template-columns: 24px minmax(0,1fr); align-items: start; gap: 10px; min-height: 50px; padding: 0; border-radius: 12px; background: transparent; }
+  .dn-tradein-info-steps li { display: grid; grid-template-columns: 28px minmax(0,1fr); align-items: start; gap: 12px; min-height: 50px; padding: 0 0 12px; border-bottom: 1px solid #343941; background: transparent; }
   .dn-tradein-info-steps li > span {
     display: grid;
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     place-items: center;
     border-radius: 50%;
-    background: #fff;
-    color: #171a1f;
-    font-size: 11px;
+    background: var(--dn-red);
+    color: #fff;
+    font-size: 13px;
     font-weight: 750;
   }
+  .dn-tradein-info-prepare { padding: 16px; border-radius: 16px; background: #fff; color: var(--dn-ink); gap: 14px; }
+  .dn-tradein-info-prepare h3 { color: var(--dn-ink); }
+  .dn-tradein-info-prepare strong { color: var(--dn-ink); }
+  .dn-tradein-info-prepare p > span { color: #626873; }
+  .dn-tradein-info-prepare .dn-tradein-info-list > div > :global(svg) { color: var(--dn-red); }
+  .dn-tradein-info-prepare .dn-tradein-info-list > div + div { border-top: 1px solid #e7e9ed; padding-top: 10px; }
+  .dn-tradein-info-steps li:last-child { border-bottom: 0; padding-bottom: 0; }
+  .dn-tradein-info-sheet__header, .dn-tradein-info-sheet__grabber { flex-shrink: 0; }
+  .dn-tradein-info-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-top: 16px; border-top: 1px solid #343941; }
+  .dn-tradein-info-actions :is(button, a) { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 12px; border: 1px solid #4a5059; border-radius: var(--dn-radius-button); background: transparent; color: #fff; font: inherit; font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; }
+  .dn-tradein-info-actions button { background: #fff; color: var(--dn-ink); border-color: transparent; }
+
   @media (max-width: 767px) {
     .dn-tradein-info-drawer {
       position: fixed;
