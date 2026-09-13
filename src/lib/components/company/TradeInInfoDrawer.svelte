@@ -13,7 +13,7 @@
     dragOffset = 0;
     dialog.showModal();
     await tick();
-    heading.focus();
+    heading.focus({ preventScroll: true });
   }
 
   function closeDrawer() {
@@ -23,7 +23,7 @@
   function handleClose() {
     dragOffset = 0;
     dragging = false;
-    trigger?.isConnected && trigger.focus();
+    trigger?.isConnected && trigger.focus({ preventScroll: true });
   }
   function startPeekDrag(event: PointerEvent) {
     dragStart = event.clientY;
@@ -110,7 +110,7 @@
       <section class="dn-tradein-info-group" aria-labelledby="tradein-next-title">
         <h3 id="tradein-next-title">След това</h3>
         <ol class="dn-tradein-info-steps">
-          <li><span>1</span><p><strong>Попълваш автомобила</strong><span>Данните остават на устройството, докато не решиш да ги споделиш.</span></p></li>
+          <li><span>1</span><p><strong>Попълваш автомобила</strong><span>Преглеждаш данните, преди да ги споделиш.</span></p></li>
           <li><span>2</span><p><strong>Споделяш или се обаждаш</strong><span>Ти избираш начина за контакт с екипа.</span></p></li>
           <li><span>3</span><p><strong>Обсъждате конкретния автомобил</strong><span>Следващата стъпка зависи от състоянието и сделката.</span></p></li>
         </ol>
@@ -194,9 +194,9 @@
   .dn-tradein-info-sheet__header h2:focus { outline: none; }
   .dn-tradein-info-sheet__close {
     display: grid;
-    width: 42px;
-    height: 42px;
-    flex: 0 0 42px;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
     place-items: center;
     border: 0;
     border-radius: 50%;
@@ -215,27 +215,27 @@
     overscroll-behavior: contain;
   }
   .dn-tradein-info-group { display: grid; gap: 10px; }
-  .dn-tradein-info-group h3 { margin: 0; color: #cdd2d8; font-size: 14px; font-weight: 700; line-height: 1.25; letter-spacing: .01em; text-align: center; }
-  .dn-tradein-info-list { display: grid; gap: 2px; margin: 0; padding: 6px; border-radius: 18px; background: #20242a; }
+  .dn-tradein-info-group h3 { margin: 0; color: #fff; font-size: 16px; font-weight: 600; line-height: 1.4; text-align: left; }
+  .dn-tradein-info-list { display: grid; gap: 12px; margin: 0; padding: 0; background: transparent; }
   .dn-tradein-info-list > div {
     display: grid;
-    grid-template-columns: 36px minmax(0,1fr);
+    grid-template-columns: 24px minmax(0,1fr);
     align-items: center;
     gap: 10px;
     min-height: 50px;
-    padding: 8px 10px;
+    padding: 0;
     border-radius: 12px;
     background: transparent;
   }
-  .dn-tradein-info-list > div > :global(svg) { box-sizing: content-box; width: 18px; height: 18px; margin: 0; padding: 7px; border-radius: 10px; background: #2a2f36; color: #d6dbe1; }
+  .dn-tradein-info-list > div > :global(svg) { width: 20px; height: 20px; margin: 2px 0 0; align-self: start; color: #cdd2d8; }
   .dn-tradein-info-list p,
   .dn-tradein-info-steps p { display: grid; gap: 2px; margin: 0; }
   .dn-tradein-info-list strong,
-  .dn-tradein-info-steps strong { color: #fff; font-size: 13px; font-weight: 700; line-height: 1.35; }
+  .dn-tradein-info-steps strong { color: #fff; font-size: 15px; font-weight: 600; line-height: 1.4; }
   .dn-tradein-info-list p > span,
-  .dn-tradein-info-steps p > span { color: #aeb5bf; font-size: 12px; line-height: 1.45; }
-  .dn-tradein-info-steps { display: grid; gap: 2px; margin: 0; padding: 6px; border-radius: 18px; background: #20242a; list-style: none; }
-  .dn-tradein-info-steps li { display: grid; grid-template-columns: 28px minmax(0,1fr); align-items: center; gap: 10px; min-height: 50px; padding: 8px 10px; border-radius: 12px; background: transparent; }
+  .dn-tradein-info-steps p > span { color: #b9c0ca; font-size: 14px; line-height: 1.45; }
+  .dn-tradein-info-steps { display: grid; gap: 12px; margin: 0; padding: 0; background: transparent; list-style: none; }
+  .dn-tradein-info-steps li { display: grid; grid-template-columns: 24px minmax(0,1fr); align-items: start; gap: 10px; min-height: 50px; padding: 0; border-radius: 12px; background: transparent; }
   .dn-tradein-info-steps li > span {
     display: grid;
     width: 24px;

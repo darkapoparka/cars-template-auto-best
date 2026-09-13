@@ -15,7 +15,7 @@
     dragOffset = 0;
     dialog.showModal();
     await tick();
-    heading.focus();
+    heading.focus({ preventScroll: true });
   }
 
   function closeDrawer() {
@@ -25,7 +25,7 @@
   function handleClose() {
     dragOffset = 0;
     dragging = false;
-    trigger?.isConnected && trigger.focus();
+    trigger?.isConnected && trigger.focus({ preventScroll: true });
   }
 
   function startPeekDrag(event: PointerEvent) {
@@ -115,7 +115,7 @@
       <section class="dn-import-info-group" aria-labelledby="import-next-title">
         <h3 id="import-next-title">След това</h3>
         <ol class="dn-import-info-steps">
-          <li><span>1</span><p><strong>Изпращаш обявата или критериите</strong><span>Данните остават на устройството, докато не решиш да ги споделиш.</span></p></li>
+          <li><span>1</span><p><strong>Подготвяш запитването</strong><span>Преглеждаш данните, преди да ги споделиш.</span></p></li>
           <li><span>2</span><p><strong>Уточнявате автомобила и бюджета</strong><span>Екипът обсъжда с теб конкретната заявка и предпочитанията.</span></p></li>
           <li><span>3</span><p><strong>Потвърждавате следващата стъпка</strong><span>Продължавате според избрания автомобил и конкретната сделка.</span></p></li>
         </ol>
@@ -207,9 +207,9 @@
   .dn-import-info-sheet__header h2:focus { outline: none; }
   .dn-import-info-sheet__close {
     display: grid;
-    width: 42px;
-    height: 42px;
-    flex: 0 0 42px;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
     place-items: center;
     border: 0;
     border-radius: 50%;
@@ -228,27 +228,27 @@
     overscroll-behavior: contain;
   }
   .dn-import-info-group { display: grid; gap: 10px; }
-  .dn-import-info-group h3 { margin: 0; color: #cdd2d8; font-size: 14px; font-weight: 700; line-height: 1.25; letter-spacing: .01em; text-align: center; }
-  .dn-import-info-list { display: grid; gap: 2px; margin: 0; padding: 6px; border-radius: 18px; background: #20242a; }
+  .dn-import-info-group h3 { margin: 0; color: #fff; font-size: 16px; font-weight: 600; line-height: 1.4; text-align: left; }
+  .dn-import-info-list { display: grid; gap: 12px; margin: 0; padding: 0; background: transparent; }
   .dn-import-info-list > div {
     display: grid;
-    grid-template-columns: 36px minmax(0,1fr);
+    grid-template-columns: 24px minmax(0,1fr);
     align-items: center;
     gap: 10px;
     min-height: 50px;
-    padding: 8px 10px;
+    padding: 0;
     border-radius: 12px;
     background: transparent;
   }
-  .dn-import-info-list > div > :global(svg) { box-sizing: content-box; width: 18px; height: 18px; margin: 0; padding: 7px; border-radius: 10px; background: #2a2f36; color: #d6dbe1; }
+  .dn-import-info-list > div > :global(svg) { width: 20px; height: 20px; margin: 2px 0 0; align-self: start; color: #cdd2d8; }
   .dn-import-info-list p,
   .dn-import-info-steps p { display: grid; gap: 2px; margin: 0; }
   .dn-import-info-list strong,
-  .dn-import-info-steps strong { color: #fff; font-size: 13px; font-weight: 700; line-height: 1.35; }
+  .dn-import-info-steps strong { color: #fff; font-size: 15px; font-weight: 600; line-height: 1.4; }
   .dn-import-info-list p > span,
-  .dn-import-info-steps p > span { color: #aeb5bf; font-size: 12px; line-height: 1.45; }
-  .dn-import-info-steps { display: grid; gap: 2px; margin: 0; padding: 6px; border-radius: 18px; background: #20242a; list-style: none; }
-  .dn-import-info-steps li { display: grid; grid-template-columns: 28px minmax(0,1fr); align-items: center; gap: 10px; min-height: 50px; padding: 8px 10px; border-radius: 12px; background: transparent; }  .dn-import-info-steps li > span {
+  .dn-import-info-steps p > span { color: #b9c0ca; font-size: 14px; line-height: 1.45; }
+  .dn-import-info-steps { display: grid; gap: 12px; margin: 0; padding: 0; background: transparent; list-style: none; }
+  .dn-import-info-steps li { display: grid; grid-template-columns: 24px minmax(0,1fr); align-items: start; gap: 10px; min-height: 50px; padding: 0; border-radius: 12px; background: transparent; }  .dn-import-info-steps li > span {
     display: grid;
     width: 24px;
     height: 24px;
@@ -259,9 +259,9 @@
     font-size: 11px;
     font-weight: 750;
   }
-  .dn-import-info-contact { display: grid; gap: 5px; padding: 14px; border-radius: 18px; background: #20242a; text-align: center; }
+  .dn-import-info-contact { display: grid; gap: 5px; padding: 16px 0 0; border-top: 1px solid #363c45; text-align: center; }
   .dn-import-info-contact > strong { color: #fff; font-size: 18px; line-height: 1.3; }
-  .dn-import-info-contact > span { color: #aeb5bf; font-size: 12px; line-height: 1.5; }
+  .dn-import-info-contact > span { color: #b9c0ca; font-size: 14px; line-height: 1.5; }
   .dn-import-info-contact__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 9px; }
   .dn-import-info-contact__actions a {
     display: inline-flex;
