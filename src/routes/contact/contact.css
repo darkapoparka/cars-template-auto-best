@@ -1029,12 +1029,12 @@
   }
 }
 
-/* Continue the mobile workflow hero color through the page to the fixed navigation. */
+/* Neutral canvas beneath the red mobile workflow hero and white entry card. */
 @media (max-width: 767px) {
   body:has(.dn-contact-hero--workflow),
   .dn-app-shell:has(.dn-contact-hero--workflow),
   .dn-app-shell .dn-contact-section--workflow {
-    background: var(--dn-workflow-canvas);
+    background: var(--dn-mobile-canvas);
   }
 }
 

@@ -31,7 +31,6 @@
   @media (max-width: 767px) {
     .dn-workflow-showcase { margin-top: var(--dn-space-5); }
     header { padding-inline: var(--dn-space-1); margin-bottom: var(--dn-space-3); }
-    h2, p { color: var(--dn-white); }
     ul {
       display: flex;
       overflow-x: auto;
