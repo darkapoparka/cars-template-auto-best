@@ -26,6 +26,11 @@
   a:hover { text-decoration: underline; text-underline-offset: var(--dn-space-1); }
   a:focus-visible { outline: 3px solid var(--dn-focus); outline-offset: 2px; border-radius: var(--dn-radius-sm); }
   img { position: absolute; z-index: 0; inset: 0 0 0 auto; width: 36%; height: 100%; object-fit: cover; object-position: center 20%; mask-image: linear-gradient(to right, transparent, black 28%); }
+  @media (max-width: 767px) {
+    .dn-workflow-support__copy { padding-block: var(--dn-space-3); }
+    p { display: none; }
+    img { object-position: center 8%; }
+  }
   @media (min-width: 768px) {
     .dn-workflow-support__copy { padding: var(--dn-space-6); }
     h2 { font-size: var(--dn-text-subheading); }

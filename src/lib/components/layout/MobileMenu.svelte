@@ -65,7 +65,10 @@
   .dn-mobile-menu__brand img { display: block; width: 160px; height: 44px; object-fit: contain; }
   .dn-mobile-menu__close { position: absolute; right: 0; display: grid; width: var(--dn-control-hit-height); height: var(--dn-control-hit-height); place-items: center; border: 0; border-radius: var(--dn-pill); background: var(--dn-home-panel); color: var(--dn-ink); cursor: pointer; }
   .dn-mobile-menu__contact { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--dn-space-3); margin-top: var(--dn-space-5); }
-  .dn-mobile-menu__contact a { display: flex; align-items: center; justify-content: center; gap: var(--dn-space-2); min-height: var(--dn-entry-action-height); padding: var(--dn-space-2); border: 1px solid var(--dn-line); border-radius: var(--dn-pill); color: var(--dn-ink); font: var(--dn-control-font); }
+  .dn-mobile-menu__contact a { display: flex; align-items: center; justify-content: center; gap: var(--dn-space-2); min-height: var(--dn-entry-action-height); padding: var(--dn-space-2); border: 1px solid transparent; border-radius: var(--dn-pill); background: var(--dn-red); color: var(--dn-white); font: var(--dn-control-font); }
+  .dn-mobile-menu__contact a:hover { background: var(--dn-red-hover); }
+  .dn-mobile-menu__contact .dn-mobile-menu__call { background: var(--dn-ink); }
+  .dn-mobile-menu__contact .dn-mobile-menu__call:hover { background: var(--dn-ink-hover); }
   nav { display: grid; gap: var(--dn-space-2); margin-top: var(--dn-space-5); }
   nav a { display: flex; align-items: center; gap: var(--dn-space-3); min-height: var(--dn-entry-height); padding: var(--dn-space-3) var(--dn-space-4); border-radius: var(--dn-radius-control); background: var(--dn-home-panel); color: var(--dn-ink); font: var(--dn-control-font); }
   nav a span { flex: 1; }
