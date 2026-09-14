@@ -158,7 +158,16 @@ try {
         assert.equal(await sell.locator('[name="make"]').evaluate(e=>e===document.activeElement),true);
         await page.keyboard.press('Escape');
         await page.locator('.dn-tradein-info-drawer__peek').click();
-        await readable(page,`${width}-sell-help`); await page.keyboard.press('Escape');
+        const sellHelp=page.locator('.dn-tradein-info-dialog');
+        const sellHelpReturn=sellHelp.getByRole('button',{name:'Към заявката',exact:true});
+        assert.equal((await typeOf(sellHelpReturn)).height,44);
+        const sellHelpReturnBox=await sellHelpReturn.boundingBox();
+        assert(sellHelpReturnBox && sellHelpReturnBox.width <= 201, 'Sell help return action stays compact');
+        assert.equal(await sellHelp.getByRole('link').count(),0);
+        if(width<768) assert((await sellHelp.boundingBox()).y >= 83, 'Sell help remains a bottom sheet');
+        await readable(page,`${width}-sell-help`);
+        await sellHelpReturn.click();
+        assert.equal(await page.locator('.dn-tradein-info-drawer__peek').evaluate(e=>e===document.activeElement),true);
 
         await page.goto(`${base}/contact?topic=import`,{waitUntil:'networkidle'});
         const importStart=page.getByRole('button',{name:/^Заяви внос/});
@@ -226,6 +235,17 @@ try {
         await page.getByRole('button',{name:'Линк',exact:true}).click();
         assert.equal(await importEntry.innerText(),'https://example.com/car');
         await readable(page,`${width}-import`);
+        await page.locator('.dn-import-info-drawer__peek').click();
+        const importHelp=page.locator('.dn-import-info-dialog');
+        const importHelpReturn=importHelp.getByRole('button',{name:'Към заявката',exact:true});
+        assert.equal((await typeOf(importHelpReturn)).height,44);
+        const importHelpReturnBox=await importHelpReturn.boundingBox();
+        assert(importHelpReturnBox && importHelpReturnBox.width <= 201, 'Import help return action stays compact');
+        assert.equal(await importHelp.getByRole('link').count(),0);
+        if(width<768) assert((await importHelp.boundingBox()).y >= 83, 'Import help remains a bottom sheet');
+        await readable(page,`${width}-import-help`);
+        await importHelpReturn.click();
+        assert.equal(await page.locator('.dn-import-info-drawer__peek').evaluate(e=>e===document.activeElement),true);
         assert.deepEqual(errors,[]);
       } finally { await page.close(); }
     });
@@ -248,9 +268,15 @@ try {
           assert(Math.abs(actionBox.width - 220) < 1 && Math.abs(actionBox.height - 44) < 1, `${topic}: compact CTA geometry`);
           assert.equal(await page.locator('.dn-workflow-support').isVisible(), false, `${topic}: mobile support banner stays out of the primary flow`);
           await drawer.click();
-          assert((await dialog.boundingBox()).y >= 63, `${topic}: sheet keeps visible top breathing room`);
+          const dialogBox=await dialog.boundingBox();
+          assert(dialogBox && dialogBox.y >= 83, `${topic}: sheet keeps visible top breathing room`);
           assert.equal(await page.locator('.dn-mobile-bottom-nav').evaluate(e => getComputedStyle(e).visibility), 'hidden');
-          await page.keyboard.press('Escape');
+          const returnAction=dialog.getByRole('button',{name:'Към заявката',exact:true});
+          const returnBox=await returnAction.boundingBox();
+          assert(returnBox && returnBox.height === 44 && returnBox.width <= 201, `${topic}: sheet return action stays compact`);
+          assert.equal(await dialog.getByRole('link').count(),0, `${topic}: sheet does not repeat header contact actions`);
+          await returnAction.click();
+          assert.equal(await drawer.evaluate(e=>e===document.activeElement),true);
         }
       } finally { await page.close(); }
     });
