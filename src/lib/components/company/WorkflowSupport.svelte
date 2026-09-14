@@ -27,23 +27,7 @@
   a:focus-visible { outline: 3px solid var(--dn-focus); outline-offset: 2px; border-radius: var(--dn-radius-sm); }
   img { position: absolute; z-index: 0; inset: 0 0 0 auto; width: 36%; height: 100%; object-fit: cover; object-position: center 20%; mask-image: linear-gradient(to right, transparent, black 28%); }
   @media (max-width: 767px) {
-    .dn-workflow-support__copy { padding-block: var(--dn-space-3); }
-    p { display: none; }
-    img { object-position: center 8%; }
-  }
-  @media (max-width: 767px) and (max-height: 760px) {
-    .dn-workflow-support { min-height: 64px; margin-top: var(--dn-space-2); }
-    .dn-workflow-support__copy {
-      display: flex;
-      width: 72%;
-      min-height: 64px;
-      align-items: center;
-      gap: var(--dn-space-3);
-      padding: var(--dn-space-2) 0 var(--dn-space-2) var(--dn-space-4);
-    }
-    h2 { display: none; }
-    a { min-height: var(--dn-control-hit-height); font-size: var(--dn-text-body); font-weight: var(--dn-weight-semibold); white-space: nowrap; }
-    img { width: 34%; object-position: center 8%; }
+    .dn-workflow-support { display: none; }
   }
   @media (min-width: 768px) {
     .dn-workflow-support__copy { padding: var(--dn-space-6); }

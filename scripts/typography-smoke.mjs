@@ -63,19 +63,25 @@ try {
         }
         await page.goto(`${base}/contact?topic=trade-in`,{waitUntil:'networkidle'});
         const start = page.locator('.dn-tradein-start');
-        const primary = await typeOf(start), call = await typeOf(page.locator('.dn-workflow-support__call'));
-        assert(primary.size > call.size && primary.size === 18 && primary.weight === 500);
+        const primary = await typeOf(start);
+        assert(primary.size === 18 && primary.weight === 500);
         assert.equal(primary.height,44);
         assert((await typeOf(page.locator('.dn-tradein-reference'))).height > primary.height);
         assert.equal((await typeOf(page.locator('.dn-tradein-entry-segments'))).height,44);
         await entryHierarchy(page.locator('.dn-tradein-reference'),page.locator('.dn-tradein-entry-segments'),start);
         assert.equal(await page.locator('.dn-contact-intent__main .dn-workflow-support__call').count(),0);
         assert.equal(await page.locator('.dn-workflow-showcase').count(),0);
-        assert.match(await page.locator('.dn-workflow-support__call').getAttribute('href'),/^tel:/);
-        assert.equal(await page.locator('.dn-workflow-support__call').evaluate(e=>getComputedStyle(e).textDecorationLine),'none');
-        const cardBounds=await page.locator('.dn-contact-intent__main').boundingBox();
-        const callBounds=await page.locator('.dn-workflow-support__call').boundingBox();
-        assert(callBounds.y >= cardBounds.y + cardBounds.height, 'Call must sit below the entry card');
+        if (width < 768) {
+          assert.equal(await page.locator('.dn-workflow-support').isVisible(), false, 'Mobile keeps the support banner out of the primary flow');
+        } else {
+          const call = await typeOf(page.locator('.dn-workflow-support__call'));
+          assert(primary.size > call.size);
+          assert.match(await page.locator('.dn-workflow-support__call').getAttribute('href'),/^tel:/);
+          assert.equal(await page.locator('.dn-workflow-support__call').evaluate(e=>getComputedStyle(e).textDecorationLine),'none');
+          const cardBounds=await page.locator('.dn-contact-intent__main').boundingBox();
+          const callBounds=await page.locator('.dn-workflow-support__call').boundingBox();
+          assert(callBounds.y >= cardBounds.y + cardBounds.height, 'Call must sit below the entry card');
+        }
         await readable(page,`${width}-sell`);
         await start.click();
         const sell = page.locator('.dn-tradein-dialog');
@@ -225,7 +231,7 @@ try {
     });
   }
 
-  for (const height of [667,712]) {
+  for (const height of [667,712,844]) {
     await suite.check(`mobile workflow dock 385x${height}`, async () => {
       const page = await browser.newPage({ viewport: { width: 385, height }, reducedMotion: 'reduce' });
       try {
@@ -234,16 +240,13 @@ try {
           const drawer = page.locator(topic === 'import' ? '.dn-import-info-drawer__peek' : '.dn-tradein-info-drawer__peek');
           const dialog = page.locator(topic === 'import' ? '.dn-import-info-dialog' : '.dn-tradein-info-dialog');
           const action = page.getByRole('button', { name: topic === 'import' ? /^Заяви внос/ : /^Заяви оценка/ });
-          const [drawerBox, navBox, supportBox, actionBox] = await Promise.all([
-            drawer.boundingBox(), page.locator('.dn-mobile-bottom-nav').boundingBox(),
-            page.locator('.dn-workflow-support').boundingBox(), action.boundingBox()
+          const [drawerBox, navBox, actionBox] = await Promise.all([
+            drawer.boundingBox(), page.locator('.dn-mobile-bottom-nav').boundingBox(), action.boundingBox()
           ]);
-          assert(drawerBox && navBox && supportBox && actionBox);
+          assert(drawerBox && navBox && actionBox);
           assert(drawerBox.y + drawerBox.height <= navBox.y + 1, `${topic}: drawer must stay above bottom nav`);
-          assert(supportBox.y + supportBox.height <= drawerBox.y - 8, `${topic}: support banner must clear drawer`);
           assert(Math.abs(actionBox.width - 220) < 1 && Math.abs(actionBox.height - 44) < 1, `${topic}: compact CTA geometry`);
-          assert.equal((await page.locator('.dn-workflow-support__call').innerText()).trim(), 'Говори с екипа');
-          assert.equal(await page.locator('.dn-workflow-support h2').isVisible(), false, `${topic}: short viewport uses one clear support CTA`);
+          assert.equal(await page.locator('.dn-workflow-support').isVisible(), false, `${topic}: mobile support banner stays out of the primary flow`);
           await drawer.click();
           assert((await dialog.boundingBox()).y >= 63, `${topic}: sheet keeps visible top breathing room`);
           assert.equal(await page.locator('.dn-mobile-bottom-nav').evaluate(e => getComputedStyle(e).visibility), 'hidden');
