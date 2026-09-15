@@ -66,7 +66,7 @@ try {
         const primary = await typeOf(start);
         assert(primary.size === 18 && primary.weight === 500);
         assert.equal(primary.height,44);
-        assert.equal((await typeOf(page.locator('.dn-tradein-reference'))).height, width < 768 ? 44 : 52);
+        assert.equal((await typeOf(page.locator('.dn-tradein-reference'))).height, width < 768 ? 44 : 48);
         assert.equal((await typeOf(page.locator('.dn-tradein-entry-segments'))).height,44);
         await entryHierarchy(page.locator('.dn-tradein-reference'),page.locator('.dn-tradein-entry-segments'),start);
         assert.equal(await page.locator('.dn-contact-intent__main .dn-workflow-support__call').count(),0);
@@ -85,6 +85,8 @@ try {
         await readable(page,`${width}-sell`);
         await start.click();
         const sell = page.locator('.dn-tradein-dialog');
+        assert.equal((await typeOf(sell.locator('.dn-tradein-fields input').first())).height,48);
+        assert.equal((await typeOf(sell.locator('.dn-tradein-primary'))).height,48);
         await sell.locator('.dn-tradein-primary').click();
         assert.equal(await sell.locator('[name="make"]').evaluate(e=>e===document.activeElement),true);
         for(const [field,value] of Object.entries({make:'Audi',model:'A6 Avant',year:'2020',mileage:'85000'})) await sell.locator(`[name="${field}"]`).fill(value);
@@ -109,6 +111,7 @@ try {
           assert.equal(await reference.evaluate(e=>e===document.activeElement),true);
         }
         await reference.click();
+        assert.equal((await typeOf(editor.locator('[name="entry-value"]'))).height,48);
         await editor.locator('[name="entry-value"]').fill('mobile.bg/obiava-123456789');
         await readable(page,`${width}-sell-reference-editor`);
         await editor.getByRole('button',{name:'Запази',exact:true}).click();
@@ -187,9 +190,10 @@ try {
         const importField=await typeOf(importEntry);
         const importMode=await typeOf(page.getByRole('button',{name:'Линк',exact:true}));
         assert(importField.size > importMode.size && importField.size === 18 && importField.weight === 400);
-        assert.equal((await typeOf(page.locator('.dn-enquiry-import-field'))).height, width < 768 ? 44 : 52);
+        assert.equal((await typeOf(page.locator('.dn-enquiry-import-field'))).height, width < 768 ? 44 : 48);
         await importStart.click();
         assert(await editor.isVisible());
+        assert.equal((await typeOf(editor.locator('[name="entry-value"]'))).height,48);
         await editor.locator('[name="entry-value"]').fill('javascript:alert(1)');
         await editor.getByRole('button',{name:'Запази',exact:true}).click();
         assert(await editor.getByRole('alert').isVisible());
@@ -200,6 +204,8 @@ try {
         await importStart.click();
         const enquiry=page.locator('.dn-enquiry');
         assert.equal(await enquiry.getAttribute('open'),'');
+        assert.equal((await typeOf(enquiry.locator('.dn-enquiry-fields input').first())).height,48);
+        assert.equal((await typeOf(enquiry.locator('.dn-enquiry-footer .dn-enquiry-primary'))).height,48);
         await readable(page,`${width}-import-fields`);
         await enquiry.locator('.dn-enquiry-footer .dn-enquiry-primary').click();
         await readable(page,`${width}-import-contact`);

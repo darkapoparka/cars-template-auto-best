@@ -25,7 +25,7 @@ The `dn-` class prefix is inherited naming, not a runtime dependency on the orig
 
 `tokens.css` is the single source of truth for reusable visual values. It follows the same reference-and-alias model used by Style Dictionary and the DTCG format, while staying as CSS because this template currently has one delivery platform and does not need a token build dependency.
 
-- **Foundation tokens** own raw colors, spacing, font sizes, weights and the 40/44/52px control-height scale.
+- **Foundation tokens** own raw colors, spacing, font sizes, weights and the 40/44/48px control-height scale.
 - **Semantic aliases** name reusable roles such as canvas, raised surface, hover surface, strong ink and emphasized lines.
 - **Component tokens** describe stable relationships for Home, navigation, entry workflows and other shared patterns. They reference foundation or semantic tokens instead of copying values.
 
@@ -86,9 +86,9 @@ The root layout imports `@fontsource-variable/onest`. `--dn-font` is `Onest Vari
 
 All live-text typography values belong to `tokens.css`. Components and route sheets select semantic roles; they must not introduce numeric font sizes, font weights, line heights, tracking, or local font shorthands. `check:typography`, included in `validate`, enforces this boundary. Fluid section, hero and display roles also live in tokens. Responsive layouts may select a smaller heading role, but must not shrink ordinary controls below the control role to make them fit.
 
-Use regular 400 for prose, the interpolated UI weight 450 where dense black interface text needs less visual harshness, medium 500 for navigation/actions and semibold 600 for headings and emphasis. Primary actions use `--dn-cta-font` (18px/500 at the default root size); ordinary controls use `--dn-control-font` (16px/500). Both use 1.3 line-height. `--dn-tab-font` supplies quieter 16px/500 entry tabs. The shared `.dn-segmented-control` / `.dn-segmented-option` style owns Buy/Import, Sale/Trade-in and Link/Info controls: 44px total height, pill geometry, pale surface, white selected option and keyboard focus. The 40px options and 2px outer inset form the 44px shell. On mobile, collapsed Home/Sell/Import entry triggers and their red entry CTAs also use a 44px shell; full editor inputs remain 52px. Components retain their existing tab/group behavior.
+Use regular 400 for prose, the interpolated UI weight 450 where dense black interface text needs less visual harshness, medium 500 for navigation/actions and semibold 600 for headings and emphasis. Primary actions use `--dn-cta-font` (18px/500 at the default root size); ordinary controls use `--dn-control-font` (16px/500). Both use 1.3 line-height. `--dn-tab-font` supplies quieter 16px/500 entry tabs. The shared `.dn-segmented-control` / `.dn-segmented-option` style owns Buy/Import, Sale/Trade-in and Link/Info controls: 44px total height, pill geometry, pale surface, white selected option and keyboard focus. The 40px options and 2px outer inset form the 44px shell. On mobile, collapsed Home/Sell/Import entry triggers and their red entry CTAs also use a 44px shell; full editor inputs use a compact 48px frame. Components retain their existing tab/group behavior.
 
-The entry field is the strongest editable element. `.dn-entry-field` and `.dn-entry-field__input` own its shared border, surface, focus and `--dn-entry-font` (18px/400). Full editor inputs and desktop entry triggers retain the 52px frame; mobile collapsed Home/Sell/Import triggers use a 44px frame while keeping the same type and focus treatment. The multiline modifier uses the control radius. Home search and both import entry modes consume this same style; do not add smaller local font or border overrides. `ContactIntent` renders one secondary white phone button below the Sell/Import card, outside `.dn-contact-intent__main`, using the ordinary control type, pill radius and 44px action height. Enquiry components do not duplicate that entry call action.
+The entry field is the strongest editable element. `.dn-entry-field` and `.dn-entry-field__input` own its shared border, surface, focus and `--dn-entry-font` (18px/400). Full editor inputs and desktop entry triggers use the 48px editor frame; mobile collapsed Home/Sell/Import triggers use a 44px frame while keeping the same type and focus treatment. The multiline modifier uses the control radius. Home search and both import entry modes consume this same style; do not add smaller local font or border overrides. `ContactIntent` renders one secondary white phone button below the Sell/Import card, outside `.dn-contact-intent__main`, using the ordinary control type, pill radius and 44px action height. Enquiry components do not duplicate that entry call action.
 
 Sell/Import entry fields fill their card width. `EnquiryEntryField.svelte` renders an input-shaped button with a single-line saved value and opens a native dialog to edit a listing link, VIN, or description and budget. The editor is a bottom sheet on mobile and a centered dialog on desktop. Save applies the draft; Cancel, Escape and backdrop dismissal discard it and restore focus. Switching Link/Info preserves each value and the card height. The red CTA continues the existing enquiry flow; an empty Import entry opens its editor first.
 
@@ -109,7 +109,7 @@ Sell/Trade-in accepts an optional listing URL or 17-character VIN before opening
 | `--dn-radius-button` | `--dn-pill`, 999px |
 | `--dn-control-height-compact` | 40px |
 | `--dn-control-height-default` | 44px |
-| `--dn-control-height-editor` | 52px |
+| `--dn-control-height-editor` | 48px |
 | `--dn-content` | 1360px |
 | `--dn-menu-content` | 1320px |
 | `--dn-home-section-space` | 32px |
@@ -120,7 +120,7 @@ Sell/Trade-in accepts an optional listing URL or 17-character VIN before opening
 
 The shared spacing scale runs from 2px through 32px and supplies repeated relationships such as banner padding, overlap and control insets. It is not a mandate to tokenize every coordinate: artwork placement, local 14px card corners and one-off responsive geometry remain with their component owner.
 
-The control family is rounded: pill actions, rounded input surfaces and compact circular icon buttons. Entry tabs and entry-card primary actions use a 44px hit height with explicit text labels. Primary actions inside the full multi-step enquiry dialogs remain 50–52px. The import link/criteria field is separate from its primary action, so a small icon does not have to communicate the entire request action. Other controls retain their owning geometry and expand when text wraps.
+The control family is rounded: pill actions, rounded input surfaces and compact circular icon buttons. Entry tabs and entry-card primary actions use a 44px hit height with explicit text labels. Primary actions and single-line inputs inside the full multi-step enquiry dialogs use the shared 48px editor height. The import link/criteria field is separate from its primary action, so a small icon does not have to communicate the entire request action. Other controls retain their owning geometry and expand when text wraps.
 
 Inventory filter chips (including removable active filters), results filters/sorting, the header phone link and mobile footer contact links have a minimum 44px hit height. Keep vehicle-card dimensions and their 8px mobile inventory / 10px carousel gaps independent from control sizing. Metadata badges are labels inside the card link, not separate touch targets. Tablet service cards extend the action link over the card; verify the actual hit area before resizing its text. Vehicle-card keyboard focus uses the opaque `--dn-focus` color and an inset outline so the card's clipped corners do not hide it.
 

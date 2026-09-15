@@ -33,6 +33,15 @@ for (const token of tokenDeclarations) {
   globalTokens.set(token.name, token.value);
 }
 
+const expectedControlScale = new Map([
+  ['--dn-control-height-compact', '40px'],
+  ['--dn-control-height-default', '44px'],
+  ['--dn-control-height-editor', '48px']
+]);
+for (const [name, value] of expectedControlScale) {
+  if (globalTokens.get(name) !== value) errors.push(`${tokenPath}: ${name} must remain ${value}.`);
+}
+
 const expectedAliases = new Map([
   ['--dn-entry-height', 'var(--dn-control-height-editor)'],
   ['--dn-control-hit-height', 'var(--dn-control-height-default)'],
