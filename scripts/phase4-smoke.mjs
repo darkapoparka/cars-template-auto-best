@@ -56,11 +56,20 @@ try {
       const picker = page.locator('#dn-dialog-choice');
       await trigger.click();
       await dialog.waitFor({ state: 'visible' });
-      await mobileField(page, 'Марка').click();
+      const makeField = mobileField(page, 'Марка');
+      await makeField.click();
+      await picker.getByRole('radio', { name: 'Audi', exact: true }).check();
+      await page.keyboard.press('Escape');
+      await picker.waitFor({ state: 'hidden' });
+      assert.match(await makeField.innerText(), /Всички марки/, 'Nested Cancel must preserve the parent draft');
+      assert.equal(new URL(page.url()).searchParams.has('make'), false, 'Nested Cancel must not update the URL');
+      assert.equal(await makeField.evaluate(element => element === document.activeElement), true, 'Nested Cancel must restore focus');
+
+      await makeField.click();
       await picker.getByRole('radio', { name: 'Audi', exact: true }).check();
       await picker.getByRole('button', { name: 'Приложи', exact: true }).click();
       assert.equal(new URL(page.url()).searchParams.has('make'), false, 'Nested Apply must not update the URL');
-      assert.match(await mobileField(page, 'Марка').innerText(), /Audi/);
+      assert.match(await makeField.innerText(), /Audi/);
 
       await mobileField(page, 'Модел').click();
       await picker.getByRole('radio', { name: 'RS Q8', exact: true }).check();
@@ -214,7 +223,11 @@ try {
         const shell = page.locator('.dn-app-shell');
         assert.equal(await shell.getAttribute('data-route'), 'home');
         assert.equal(await shell.getAttribute('data-mobile-bottom'), 'footer');
-        assert.equal(await page.locator('.dn-mobile-bottom-nav').isVisible(), width <= 991);
+        assert.equal(
+          await page.locator('.dn-mobile-bottom-nav').isVisible(),
+          width <= 991,
+          `Mobile bottom-nav visibility mismatch at ${width}x${height}`
+        );
         await assertCleanDom(page);
         await page.goto(`${base}/listing-grid?make=Audi&sort=price-asc`, { waitUntil: 'networkidle' });
         assert.equal(await shell.getAttribute('data-route'), 'listing');
@@ -224,7 +237,11 @@ try {
         await page.goto(`${base}/listing-detail-v1/1`, { waitUntil: 'networkidle' });
         assert.equal(await shell.getAttribute('data-route'), 'vehicle-detail');
         assert.equal(await shell.getAttribute('data-mobile-bottom'), 'detail');
-        assert.equal(await page.locator('.dn-mobile-detail-bar').isVisible(), width <= 991);
+        assert.equal(
+          await page.locator('.dn-mobile-detail-bar').isVisible(),
+          width <= 991,
+          `Mobile detail-bar visibility mismatch at ${width}x${height}`
+        );
         await assertCleanDom(page);
         results.push({ width, height, passed: true });
       } finally { await page.close(); }

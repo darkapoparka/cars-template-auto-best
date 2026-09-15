@@ -1,6 +1,6 @@
 # Auto Best architecture audit and refactor plan
 
-Date: 14 September 2026. Status: original audit complete; the Phase 3 CSS ownership, selector, typography and dealer-theme slice was implemented and qualified on 15 September 2026. Other plan phases retain their original status.
+Date: 14 September 2026. Status: original audit complete; the Phase 3 CSS ownership slice and the R4/Phase 4 discovery-and-shell ownership slice were implemented and qualified on 15 September 2026. Other plan phases retain their original status.
 
 Audited source: [`b54d366fa5a07c3bcced12ec6d8ece705c921e09`](https://github.com/darkapoparka/cars-template-auto-best/tree/b54d366fa5a07c3bcced12ec6d8ece705c921e09), on `main` in `darkapoparka/cars-template-auto-best`. The checkout was clean and matched `origin/main` after fetching. References and measurements below describe that source commit; later implementation must record its own evidence.
 
@@ -20,6 +20,42 @@ Completed boundaries:
 Qualification completed with `npm run validate`, `npm run smoke` and `npm run smoke:typography`. Svelte checking reported 0 errors and 0 warnings; the warning-free production build passed. A 48-state final capture covered Home, inventory, vehicle detail, Import, Sell/Barter, About, Contact and Blog at 375, 390, 430, 768, 1366 and 1440 px. The critical ownership comparison found zero computed-style differences for header, discovery, filters, results grid and vehicle-card geometry at 375, 1024 and 1440 px.
 
 This record closes only the Phase 3 slice. It does not silently mark unrelated R0-R7 work complete.
+
+## Phase 4 implementation record — 15 September 2026
+
+The safety inspection began with local `main` and `origin/main` both at `acb53c86e13a21ad8260250b946ac52506f23158`; the prompt's expected `f2fa776ba3cf19b7fc08499bb4c24f15561f91b4` was confirmed as an ancestor rather than assumed current. The working tree already contained substantial Phase 4 work plus unrelated brand-audit scratch files. That work was backed up and audited in place; no reset, checkout, force update or unrelated deletion was used. Before the first Phase 4 commit, the concurrent brand correction `8e08d79fd737fd8c825597348b86272138887e38` advanced `main`, and the Phase 4 commits were made on top of it. The later brand-only commit `c973641` is outside this phase.
+
+The application implementation span is:
+
+- `7350c2de0da49f9e82c58dade75c142e86545191` — consolidate discovery draft ownership.
+- `bacbb41a3ff257b724d2fd0a034dca41e067f183` — centralize shell presentation ownership and add the focused Phase 4 browser suite.
+
+### Implemented ownership
+
+- `src/lib/data/listing-draft.ts` is the small typed, pure owner for filter/draft conversion, numeric normalization, empty-field cleanup, option retention and labels, range summaries, applied-chip labels, facet-entry preservation, and deterministic make/model transitions. It has no browser API, Svelte state or singleton session state.
+- Applied listing state remains URL-owned through `listing.ts`. Home/desktop pending values remain in their form owner. Full-dialog and nested-picker drafts remain local to their dialog owner. Cancel never serializes a draft; nested Apply only updates the parent draft; outer Apply updates the URL.
+- `QuickFilterSheet.svelte` now has an explicit discriminated contract for its two real modes: URL/application-owned and parent-draft-owned. The markup, dialog semantics, focus return and visual sheet are unchanged.
+- `SearchBox.svelte`, `VehicleQuickSearch.svelte`, `VehicleDiscoveryForm.svelte`, `VehicleSearchDialog.svelte` and `ListingFilters.svelte` share the pure operations without being merged into a configurable mega-component. Compact Home search, desktop discovery and full inventory search remain separate presentations.
+- `src/lib/data/shell.ts` is the pure route-presentation owner for route/topic classification, workflow/layout state, footer/mobile-bottom mode, navigation active/current state and the selected detail vehicle. The root layout derives that typed state once from `page.url` and `page.status`.
+- `SiteShell.svelte` owns the footer element observation through a Svelte attachment and passes explicit state to `Header.svelte` and `Footer.svelte`. `Header.svelte` and `MobileMenu.svelte` no longer rediscover route meaning or look up the selected inventory record.
+- `Header.svelte` was deliberately kept as the owner of its coupled desktop mega-menu, mobile-dialog and route-specific action lifecycle. The already separate `MobileMenu.svelte` remains the genuine mobile presentation boundary. A further line-count-only split was rejected because it would divide shared focus return, Escape, resize, route-transition and scroll-lock behavior without creating an independent state owner.
+- No global store, state framework, Tailwind layer, override stylesheet, backend or new UI/icon system was introduced. No public route, query key, Bulgarian copy, fixture content, generated media or visual token was renamed or redesigned.
+
+### Qualification and visual evidence
+
+The exact implementation commit `bacbb41a3ff257b724d2fd0a034dca41e067f183` was checked in a clean detached worktree, separate from concurrent brand work. `npm run validate` passed all architecture, CSS-policy, token, typography, asset and expanded domain checks, `svelte-check` reported 0 errors and 0 warnings, and the production build completed with the Vercel adapter. `npx svelte-kit sync`, warning-failing `svelte-check`, `git diff --check`, `npm run smoke` and `npm run smoke:typography` are recorded in the final Phase 4 qualification below.
+
+A production-preview comparison used exact parent `8e08d79` and exact Phase 4 implementation `bacbb41`. It captured Home, Inventory, Vehicle detail, Import, Sell/Barter, About, Contact and Blog at 390×844 and 1440×900, plus Home/Inventory/Detail at 767/768 and 991/992. All **28 of 28** matched screenshots were pixel-identical; all **28 of 28** geometry records matched; there were zero size mismatches and zero page/console errors. Additional browser coverage includes 320×677, 430×932, 844×390 landscape, 1024×900 and 1920×1080. Controlled Home/About checks also verified footer-visible mobile-dock state and restoration after returning to the top.
+
+Final qualification resumed after a fresh fetch with local `main` and `origin/main` both at `c97364135ac8e86343ba9535e8b87a9e672f0add` and divergence `0 0`. The three existing Phase 4 documentation edits and concurrent brand-asset work were preserved in place. While qualification was underway, the scoped brand-only commit `fddb3f3314e3e3fb852830cef31f2090c7d82057` advanced both local and remote `main` without conflict; its five brand/provenance paths were inspected and left outside the Phase 4 patch. The application implementation still ends at `bacbb41a3ff257b724d2fd0a034dca41e067f183`, while `fddb3f3` is the exact final qualification base. The only additional Phase 4 source change is focused regression coverage in `scripts/phase4-smoke.mjs` for nested-picker Cancel ownership and viewport-specific assertion diagnostics.
+
+A fresh isolated snapshot was created from `fddb3f3`, then overlaid with only the four task-owned documentation/test files. It used its own installed dependencies, build output and production-preview process so concurrent work in the live checkout could not replace `.svelte-kit/output`. In that snapshot, `npx svelte-kit sync`, `npx svelte-check --tsconfig ./tsconfig.json --fail-on-warnings`, `npm run validate`, `npm run smoke` and `npm run smoke:typography` all passed; the final task diff also passed `git diff --check`. Svelte diagnostics reported **0 errors and 0 warnings**; the Vercel adapter build completed; the full smoke chain passed route, journey, enquiry, mobile-filter, desktop-discovery and Phase 4 suites; typography/enquiry checks passed at 320, 390, 768 and 1440 plus 385×667/712/844 dock heights.
+
+The focused suite now explicitly proves that nested picker Cancel leaves the parent draft and URL unchanged and restores focus to the picker trigger, before separately proving nested Apply, deterministic make/model reset and outer-dialog Cancel/Apply. The remaining Phase 4 cases cover pending desktop values, sort/chip preservation, filtered detail return, menu/contact active state, direct and client navigation, footer/mobile-dock/detail-bar transitions, duplicate IDs, horizontal overflow and keyboard ownership.
+
+A final production candidate capture repeated all 28 representative route/breakpoint states with zero HTTP, console, page, broken-image, duplicate-ID, leaked-dialog or horizontal-overflow failures. The exact parent-to-implementation comparison remains 28/28 pixel-identical and 28/28 geometry-identical. One attempted preview in the active checkout was invalidated when a concurrent build replaced its shared `.svelte-kit/output` and removed a referenced CSS asset; the isolated production build and complete rerun passed, confirming this was build-output interference rather than an application regression.
+
+Limits: browser automation used the installed Chromium channel on Windows; it does not establish physical iOS keyboard/share-sheet behavior. The sticky Popover API path was exercised in the supported browser used by the repository suite. This record closes only R4/Phase 4 and does not claim R5-R7 or unrelated R0-R3 findings complete.
 
 ## 1. Recommendation and scope
 

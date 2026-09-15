@@ -1,6 +1,6 @@
 # Typography and CSS ownership tasks
 
-Date: 15 September 2026. Status: **Phase 3 complete**.
+Date: 15 September 2026. Status: **Phase 3 complete; Phase 4 visual preservation verified**.
 
 This file was created during Phase 3 because no `TYPOGRAPHY-TASKS.md` existed in the checkout or repository history. It records the implemented ownership, selector, typography and dealer-theme cleanup. The visual design and successful Phase 1/2 mobile work were preserved.
 
@@ -60,3 +60,9 @@ This file was created during Phase 3 because no `TYPOGRAPHY-TASKS.md` existed in
 ## Visual routes reviewed
 
 Home, `/listing-grid`, `/listing-detail-v1/1`, Import, Sell/Barter, About, Contact and Blog were captured and inspected at 375, 390, 430, 768, 1366 and 1440 px. The browser suites additionally exercised 320, 385, 700 landscape, 844 landscape, 992, 1024 and 1920 px. Mobile navigation, drawers/dialogs, filter sheets, finance, desktop discovery and return navigation remained functional.
+
+## Phase 4 preservation note
+
+Phase 4 changed state and presentation ownership only. It added no typography values, visual tokens, selector overrides or redesign work. The exact production-preview comparison between parent `8e08d79` and implementation `bacbb41` produced 28/28 pixel-identical screenshots and 28/28 identical geometry records across the eight representative routes at 390 and 1440 plus the changed shell/discovery boundaries at 767/768 and 991/992. `npm run validate` continued to report 1,074 typography declarations using shared tokens or inheritance, with no unsupported weights or typography `!important` rules.
+
+The final Phase 4 browser and typography-smoke results are recorded in `docs/ARCHITECTURE-REFACTOR-PLAN.md`. This note does not reopen or restyle the completed Phase 3 typography/CSS ownership work.
