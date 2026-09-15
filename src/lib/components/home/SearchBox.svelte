@@ -195,9 +195,11 @@
 
     .dn-search {
       --dn-entry-height: var(--dn-control-height-default);
+      --dn-home-search-stack-gap: 7px;
+      --dn-home-mobile-cta-width: 164px;
 
       display: grid;
-      gap: 7px;
+      gap: var(--dn-home-search-stack-gap);
       padding: 8px 10px;
       border: 1px solid var(--dn-line);
       border-radius: 20px;
@@ -217,7 +219,10 @@
     .dn-search__import-form {
       display: grid;
       min-width: 0;
-      gap: 10px;
+    }
+
+    .dn-search__import-form {
+      gap: var(--dn-home-search-stack-gap);
     }
 
     .dn-search__import-field {
@@ -268,6 +273,7 @@
     .dn-search__mobile-all {
       display: flex;
       width: fit-content;
+      min-width: var(--dn-home-mobile-cta-width);
       max-width: 100%;
       min-height: var(--dn-entry-action-height);
       justify-self: center;
@@ -275,12 +281,12 @@
       justify-content: center;
       gap: 7px;
       margin-top: 0;
-      padding: 0 var(--dn-space-6);
+      padding: 0 var(--dn-space-5);
       border: 0;
       border-radius: var(--dn-radius-button);
       background: var(--dn-red);
       color: var(--dn-white);
-      font-size: var(--dn-cta-size);
+      font-size: var(--dn-text-control-prominent);
       font-weight: var(--dn-cta-weight);
       line-height: var(--dn-cta-leading);
       cursor: pointer;

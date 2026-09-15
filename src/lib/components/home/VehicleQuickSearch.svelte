@@ -468,6 +468,7 @@
 
     .dn-quick-search__label-mobile {
       display: inline;
+      color: var(--dn-muted);
     }
 
     .dn-quick-search__mobile-filter {
