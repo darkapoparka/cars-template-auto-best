@@ -6,7 +6,7 @@
   } = $props();
 </script>
 
-<a class="dn-browse-all" class:compact href={resolve(href)}>
+<a class="dn-browse-all" class:compact class:dn-browse-all--with-image={Boolean(image)} href={resolve(href)}>
   {#if image}<img src={image} alt="" width="180" height="90" loading="lazy" />
   {:else}<span class="mark"><Icon name="arrow-right" size={compact ? 24 : 28} /></span>{/if}
   <strong>{label}</strong>
@@ -24,8 +24,8 @@
     .action { display: flex; min-height: 44px; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; padding: 8px 18px; border-radius: var(--dn-pill); background: var(--dn-red); color: #fff; font-size: var(--dn-text-meta); font-weight: var(--dn-weight-semibold); }
     .compact { min-height: 108px; gap: 8px; padding: 10px 6px; border: 0; }
     .compact strong { font-size: var(--dn-text-meta); }
-    .compact:has(img) { align-items: flex-start; padding: 8px 12px 12px; text-align: left; }
-    .compact:has(img) strong { font-size: var(--dn-text-body); font-weight: var(--dn-weight-semibold); }
+    .compact.dn-browse-all--with-image { align-items: flex-start; padding: 8px 12px 12px; text-align: left; }
+    .compact.dn-browse-all--with-image strong { font-size: var(--dn-text-body); font-weight: var(--dn-weight-semibold); }
     img { width: min(176px, 92%); height: 78px; object-fit: contain; }
     a:hover { background: #fafafa; }
     a:focus-visible { outline: 2px solid var(--dn-red); outline-offset: -2px; }

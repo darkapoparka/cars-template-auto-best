@@ -7,10 +7,17 @@ import ts from 'typescript';
 // Compile the real pure domain modules, with the same TypeScript compiler as the app.
 const out = path.resolve('artifacts/domain');
 await mkdir(out, { recursive: true });
-for (const name of ['inventory', 'listing', 'journeys']) {
-  const source = await readFile(`src/lib/data/${name}.ts`, 'utf8');
+const modules = [
+  ['src/lib/config/lead-site.ts', 'lead-site'],
+  ['src/lib/data/inventory.ts', 'inventory'],
+  ['src/lib/data/listing.ts', 'listing'],
+  ['src/lib/data/journeys.ts', 'journeys']
+];
+for (const [input, name] of modules) {
+  const source = await readFile(input, 'utf8');
   const code = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 } }).outputText
-    .replace(/from '\.\/(inventory|listing)'/g, "from './$1.mjs'");
+    .replace(/from '\.\/(inventory|listing)'/g, "from './$1.mjs'")
+    .replace(/from '\$config\/lead-site'/g, "from './lead-site.mjs'");
   await writeFile(`${out}/${name}.mjs`, code);
 }
 const inventory = await import(pathToFileURL(`${out}/inventory.mjs`));

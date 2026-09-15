@@ -52,7 +52,7 @@
         {/each}
         <button class="dn-discovery-toggle" aria-expanded={expanded} aria-controls="body-types-grid" onclick={() => expanded = !expanded}>
           <span class="dn-body-all-glyph" aria-hidden="true">
-            <span></span><span></span><span></span><span></span>
+            <span class="dn-body-all-glyph__accent"></span><span></span><span></span><span></span>
           </span>
           <strong>{expanded ? 'Покажи по-малко' : 'Всички типове'}</strong>
         </button>
@@ -73,7 +73,7 @@
     }
     .dn-body-all-glyph { display: grid; width: 58px; height: 58px; align-self: center; grid-template-columns: repeat(2, 1fr); gap: 7px; margin: 0 auto; padding: 9px; border-radius: 16px; background: #f1f3f5; }
     .dn-body-all-glyph span { border-radius: 50%; background: #cdd2d8; }
-    .dn-body-all-glyph span:first-child { background: var(--dn-red); }
+    .dn-body-all-glyph__accent { background: var(--dn-red); }
     .dn-discovery-toggle strong { display: block; align-self: end; line-height: var(--dn-leading-control); font-weight: var(--dn-weight-semibold); }
     .dn-discovery-toggle:focus-visible { outline: 3px solid var(--dn-focus); outline-offset: 3px; }
   }
@@ -135,7 +135,7 @@
   }
 
   .dn-body-type:focus-visible {
-    outline: 3px solid rgba(196, 1, 1, 0.28);
+    outline: 3px solid rgb(var(--dn-theme-accent-rgb) / 28%);
     outline-offset: 2px;
   }
 

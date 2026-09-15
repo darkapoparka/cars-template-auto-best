@@ -1,19 +1,20 @@
 import { featuredVehicles } from './inventory';
 import { bodyLabel } from './listing';
 import { blogPosts } from './editorial';
+import { leadSite } from '$config/lead-site';
 
 // Visible vehicle bounds align mobile artwork; the opaque wagon uses its visible silhouette.
 const bodyArtwork = [
   { label: 'Седан', query: 'Sedan', image: '/assets/images/icon-box/car-list1.png', width: 180, height: 80, bounds: [9, 11, 171, 70] },
   { label: 'Хечбек', query: 'Hatchback', image: '/assets/images/icon-box/car-list2.png', width: 180, height: 80, bounds: [12, 8, 168, 71] },
   { label: 'Пикап', query: 'Pickup Truck', image: '/assets/images/icon-box/car-list3.png', width: 180, height: 80, bounds: [11, 13, 170, 71] },
-  { label: 'SUV', query: 'SUV', image: '/assets/images/lead/day-night-cutout-urus-v1.webp', width: 1000, height: 667, bounds: [18, 156, 983, 495] },
+  { label: 'SUV', query: 'SUV', image: leadSite.artwork.vehicleCutouts.urus, width: 1000, height: 667, bounds: [18, 156, 983, 495] },
   { label: 'Кросоувър', query: 'Crossover', image: '/assets/images/icon-box/car-list5.png', width: 206, height: 95, bounds: [0, 0, 206, 95] },
   { label: 'Миниван', query: 'Minivan', image: '/assets/images/icon-box/car-list6.png', width: 140, height: 80, bounds: [0, 0, 140, 80] },
   { label: 'Комби', query: 'Wagon', image: '/assets/images/template/body-wagon-v1.png', width: 1832, height: 858, bounds: [22, 138, 1800, 716] },
   { label: 'Кабриолет', query: 'Convertible', image: '/assets/images/icon-box/car-list8.png', width: 180, height: 80, bounds: [11, 15, 170, 63] },
-  { label: 'Купе', query: 'Coupe', image: '/assets/images/lead/day-night-cutout-porsche-v1.webp', width: 1000, height: 667, bounds: [12, 169, 987, 480] },
-  { label: 'Спортбек', query: 'Sportback', image: '/assets/images/lead/day-night-cutout-amggt-v1.webp', width: 1000, height: 667, bounds: [14, 169, 980, 473] }
+  { label: 'Купе', query: 'Coupe', image: leadSite.artwork.vehicleCutouts.porsche, width: 1000, height: 667, bounds: [12, 169, 987, 480] },
+  { label: 'Спортбек', query: 'Sportback', image: leadSite.artwork.vehicleCutouts.amggt, width: 1000, height: 667, bounds: [14, 169, 980, 473] }
 ] as const;
 
 const brandArtwork = [

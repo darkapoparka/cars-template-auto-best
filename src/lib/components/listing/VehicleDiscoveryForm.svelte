@@ -113,7 +113,12 @@
 </div>
 
 <style>
-  .dn-discovery { display: grid; gap: var(--dn-discovery-gap, 14px); }
+  .dn-discovery {
+    --dn-discovery-gap: 14px;
+    --dn-discovery-search-height: 60px;
+    display: grid;
+    gap: var(--dn-discovery-gap);
+  }
   .dn-discovery__toolbar { display: flex; align-items: center; gap: 14px; min-width: 0; }
   .dn-discovery__search { display: flex; flex: 1; align-items: center; gap: 8px; min-width: 0; height: var(--dn-discovery-search-height, 60px); padding: 5px; border: 1px solid #dfe2e6; border-radius: var(--dn-pill); background: #f5f6f7; }
   .dn-discovery__keyword { display: flex; flex: 1; align-items: center; gap: 12px; min-width: 0; height: 48px; padding: 0 12px; border: 0; border-radius: var(--dn-pill); background: transparent; color: #68717d; text-align: left; font-size: var(--dn-text-lead); font-weight: var(--dn-weight-regular); line-height: var(--dn-leading-control); cursor: pointer; }
@@ -142,5 +147,6 @@
   @media (max-width: 991px) { .dn-discovery-sticky:popover-open { display: none; } }
   @media (min-width: 768px) and (max-width: 991px) { .dn-discovery__facets { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   @media (min-width: 992px) and (max-width: 1199px) { .dn-discovery__facets { gap: 10px; } .dn-discovery__facets select { font-size: var(--dn-text-control-prominent); padding-left: 10px; } }
+  @media (min-width: 1440px) and (max-width: 1599px) { .dn-discovery .dn-discovery__facets select { padding-inline: 10px 28px; font-size: var(--dn-control-size); } }
   @media (max-width: 767px) { .dn-discovery { display: none; } }
 </style>

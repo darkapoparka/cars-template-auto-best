@@ -70,7 +70,7 @@
     justify-content: center;
     padding: 0 28px;
     border-radius: var(--dn-radius-button);
-    background: #c40101;
+    background: var(--dn-red);
     color: #fff;
     font-size: var(--dn-control-size);
     font-weight: var(--dn-control-weight);
@@ -89,7 +89,7 @@
   }
 
   .dn-inventory__all:focus-visible {
-    outline: 3px solid rgba(196, 1, 1, 0.24);
+    outline: 3px solid rgb(var(--dn-theme-accent-rgb) / 24%);
     outline-offset: 3px;
   }
 
@@ -99,11 +99,6 @@
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 30px;
     align-items: stretch;
-  }
-
-  .dn-inventory__grid :global(.dn-vehicle-card) {
-    width: 100%;
-    height: 100%;
   }
 
   @media (max-width: 1200px) {

@@ -1,8 +1,25 @@
 # Auto Best architecture audit and refactor plan
 
-Date: 14 September 2026. Status: audit complete; refactor proposed and not implemented by this document.
+Date: 14 September 2026. Status: original audit complete; the Phase 3 CSS ownership, selector, typography and dealer-theme slice was implemented and qualified on 15 September 2026. Other plan phases retain their original status.
 
 Audited source: [`b54d366fa5a07c3bcced12ec6d8ece705c921e09`](https://github.com/darkapoparka/cars-template-auto-best/tree/b54d366fa5a07c3bcced12ec6d8ece705c921e09), on `main` in `darkapoparka/cars-template-auto-best`. The checkout was clean and matched `origin/main` after fetching. References and measurements below describe that source commit; later implementation must record its own evidence.
+
+## Phase 3 implementation record - 15 September 2026
+
+Phase 3 was implemented on `main` from baseline `977d59e5dbb4fc6c1f32f304342a36d6903c155b`, after confirming that local and `origin/main` matched. While qualification was in progress, the already-tested Phase 2 mobile-search commits `6ea812e` and `158b553` advanced both local and `origin/main`; Phase 3 was finalized on top of `158b553` without dropping those refinements. The requested legacy filenames `desktop-header.css` and `mobile-final-polish.css` were not present in this revision or its tracked history, so the audit followed the live CSS owners rather than recreating those obsolete layers.
+
+Completed boundaries:
+
+- `Header.svelte` now owns top-bar, desktop/mobile header, navigation and mega-menu geometry; the separate `navigation.css` layer was retired.
+- `VehicleDiscoveryForm.svelte`, `ListingFilters.svelte`, `ListingResults.svelte` and `VehicleCard.svelte` own their respective desktop/mobile geometry. `listing.css` retains only listing-route stage and hero composition.
+- `composition.css` retains shared shell/hero relationships and no longer identifies page semantics through incidental descendants.
+- Explicit classes, typed route props, `data-route`, `data-contact-topic`, `data-journey`, `data-mobile-bottom`, `data-slot` and `data-variant` replace positional and class-substring selectors.
+- `lead-site.ts` is the typed owner of Day & Night palette values and lead artwork. `SiteShell.svelte` exposes those values through semantic CSS custom properties; generic components consume configuration rather than dealer paths or conditionals.
+- `check:css-policy` and the strengthened typography gate prevent fragile selectors, standalone-CSS `:global(...)`, unsupported `550`/`650` weights, typography `!important`, and dealer artwork/palette leakage.
+
+Qualification completed with `npm run validate`, `npm run smoke` and `npm run smoke:typography`. Svelte checking reported 0 errors and 0 warnings; the warning-free production build passed. A 48-state final capture covered Home, inventory, vehicle detail, Import, Sell/Barter, About, Contact and Blog at 375, 390, 430, 768, 1366 and 1440 px. The critical ownership comparison found zero computed-style differences for header, discovery, filters, results grid and vehicle-card geometry at 375, 1024 and 1440 px.
+
+This record closes only the Phase 3 slice. It does not silently mark unrelated R0-R7 work complete.
 
 ## 1. Recommendation and scope
 

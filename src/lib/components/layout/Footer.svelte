@@ -81,12 +81,12 @@
       <a href={resolve('/contact')} class="dn-footer__contact-link">
         <Icon name="map-pin" size={18} />
         <span>{brand.address}</span>
-        <Icon name="arrow-right" size={16} />
+        <span class="dn-footer__contact-arrow"><Icon name="arrow-right" size={16} /></span>
       </a>
       <p class="dn-footer__appointment">{brand.appointment}</p>
     </div>
   </div>
-  <div class="container dn-footer__bottom"><span>© {new Date().getFullYear()} {brand.name}</span><span>Автомобили · Внос · Лизинг</span></div>
+  <div class="container dn-footer__bottom"><span class="dn-footer__copyright">© {new Date().getFullYear()} {brand.name}</span><span class="dn-footer__descriptor">Автомобили · Внос · Лизинг</span></div>
 </footer>
 
 <style>
@@ -123,7 +123,7 @@
   .dn-footer__call { display: inline-flex; min-height: 48px; align-items: center; justify-content: center; gap: var(--dn-space-2); padding: var(--dn-space-3) var(--dn-space-6); border-radius: var(--dn-radius-button); background: var(--dn-red); color: var(--dn-white); font: var(--dn-cta-font); }
   .dn-footer .dn-footer__call:hover { background: var(--dn-red-hover); color: var(--dn-white); }
   .dn-footer__contact-link { display: grid; grid-template-columns: 18px minmax(0, 1fr) 24px; min-height: var(--dn-control-hit-height); align-items: center; gap: var(--dn-space-3); margin-top: var(--dn-space-3); padding-block: var(--dn-space-2); color: var(--dn-ink); font: var(--dn-control-font); }
-  .dn-footer__contact-link :global(svg:last-child) { justify-self: center; transform: rotate(-45deg); color: var(--dn-muted); }
+  .dn-footer__contact-arrow { display: grid; justify-self: center; place-items: center; transform: rotate(-45deg); color: var(--dn-muted); }
   .dn-footer__appointment { margin: var(--dn-space-1) 0 0; color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
   .dn-footer__bottom { display: flex; justify-content: space-between; gap: var(--dn-space-4); margin-top: 32px; padding-top: var(--dn-space-4); border-top: 1px solid var(--dn-line); color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
 
@@ -145,6 +145,6 @@
     .dn-footer__company { display: flex; flex-wrap: wrap; gap: var(--dn-space-1) var(--dn-space-6); }
     .dn-footer__company a { color: var(--dn-ink); }
     .dn-footer__bottom { margin-top: var(--dn-space-2); padding-top: var(--dn-space-3); }
-    .dn-footer__bottom > span:last-child { display: none; }
+    .dn-footer__descriptor { display: none; }
   }
 </style>

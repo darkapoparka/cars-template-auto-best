@@ -10,12 +10,13 @@ Tests cover different layers: source/type checks, domain logic, runtime media, b
 | `npm run build` | SvelteKit/Vite production build |
 | `npm run preview` | Serve built output locally |
 | `npm run check` | SvelteKit synchronization and Svelte/TypeScript diagnostics |
-| `npm run check:architecture` | Native source architecture checks |
+| <code>npm run check:architecture</code> | Native source architecture checks |
+| <code>npm run check:css-policy</code> | Reject fragile selectors, invalid standalone-CSS <code>:global(...)</code>, and dealer artwork/palette leakage |
 | `npm run check:tokens` | Validate token aliases, reference cycles, source usage and shared control-height overrides |
 | `npm run check:typography` | Reject local typography values outside the shared token owner |
 | `npm run smoke:typography` | Current Sell/Import flows, entry tabs, action hierarchy and clipped controls at 320/390/768/1440px |
 | `npm run check:assets` | Static media and source-reference checks |
-| `npm run validate` | Static/domain checks followed by type check and build |
+| `npm run validate` | Architecture, CSS policy, tokens, typography, assets and domain checks followed by Svelte/type check and build |
 | `npm run quality` | Combined validation and browser suite chain |
 | `npm run smoke` | Route/journey, enquiry and discovery browser suites |
 | `npm run check:domain` | Inventory, filter and journey/domain assertions |
@@ -25,6 +26,7 @@ The exact command definitions are in [package.json](../package.json). `quality` 
 ## Typical development checks
 
 ```sh
+npm run check:css-policy
 npm run check:tokens
 npm run check
 npm run check:domain
@@ -32,7 +34,7 @@ npm run check:assets
 npm run build
 ```
 
-`validate` combines the static/domain/build stages defined in the package. Architecture checks examine native application boundaries; token checks verify the shared reference graph and component aliases; asset checks compare public media with references; domain checks exercise actual TypeScript domain functions rather than separately reimplementing them.
+`validate` combines the static/domain/build stages defined in the package. Architecture checks examine native application boundaries; CSS policy checks enforce semantic selectors and centralized dealer theme ownership; token checks verify the shared reference graph and component aliases; asset checks compare public media with references; domain checks exercise actual TypeScript domain functions rather than separately reimplementing them.
 
 The standalone `check` script currently uses `--threshold error`; warnings are not automatically equivalent to a failed warning-free check. To inspect stricter diagnostics explicitly, run `npx svelte-check --tsconfig ./tsconfig.json --fail-on-warnings` after synchronization. Its `quality` chain is validation followed by smoke.
 

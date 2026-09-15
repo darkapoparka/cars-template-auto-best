@@ -1,3 +1,5 @@
+import { leadSite } from '$config/lead-site';
+
 export type FeatureArtwork = {
   src: string;
   width: number;
@@ -10,7 +12,7 @@ export const featureArtwork = {
   showroom: { src: '/assets/images/template/menu-showroom-v2.webp', width: 1536, height: 1024, crop: [-150, -65, 1836, 1020] },
   import: { src: '/assets/images/template/menu-import-v2.webp', width: 1536, height: 1024, crop: [0, 80, 1536, 853] },
   finance: { src: '/assets/images/template/menu-leasing-v2.webp', width: 1610, height: 977, crop: [0, 35, 1610, 894] },
-  inspection: { src: '/assets/images/lead/day-night-studio-guide-v1.webp', width: 1200, height: 800, crop: [0, 30, 1200, 667] },
+  inspection: { src: leadSite.artwork.routeHero.standard.guide, width: 1200, height: 800, crop: [0, 30, 1200, 667] },
 } as const satisfies Record<string, FeatureArtwork>;
 
 // Photo-derived menu vignettes are separate from both service art and blog-listing photos.

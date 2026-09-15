@@ -444,7 +444,7 @@
   }
 
   .dn-quick-search__close:focus-visible {
-    outline: 3px solid rgba(196, 1, 1, 0.2);
+    outline: 3px solid rgb(var(--dn-theme-accent-rgb) / 20%);
     outline-offset: -3px;
   }
 
@@ -548,7 +548,7 @@
     }
 
     .dn-quick-search__back:focus-visible {
-      outline: 3px solid rgba(196, 1, 1, 0.18);
+      outline: 3px solid rgb(var(--dn-theme-accent-rgb) / 18%);
       outline-offset: -3px;
     }
 
@@ -635,7 +635,7 @@
 
     .dn-quick-search__filter-row:focus-visible {
       border-color: var(--dn-red);
-      outline: 3px solid rgba(196, 1, 1, 0.18);
+      outline: 3px solid rgb(var(--dn-theme-accent-rgb) / 18%);
       outline-offset: -3px;
     }
 
@@ -673,7 +673,7 @@
     }
 
     .dn-quick-search__option:focus-visible {
-      outline: 3px solid rgba(196, 1, 1, 0.2);
+      outline: 3px solid rgb(var(--dn-theme-accent-rgb) / 20%);
       outline-offset: -3px;
     }
 

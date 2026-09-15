@@ -2,6 +2,7 @@
   import { asset } from '$app/paths';
   import Icon from '$components/ui/Icon.svelte';
   import { brand } from '$config/brand';
+  import { leadSite } from '$config/lead-site';
 
   let { topic }: { topic: 'trade-in' | 'import' } = $props();
 </script>
@@ -14,7 +15,7 @@
       Говори с екипа <Icon name="arrow-right" size={18} />
     </a>
   </div>
-  <img src={asset('/assets/images/lead/day-night-contact-phone-red-v1.webp')} alt="" width="900" height="1352" />
+  <img src={asset(leadSite.artwork.contactHero.support)} alt="" width="900" height="1352" />
 </aside>
 
 <style>

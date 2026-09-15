@@ -4,20 +4,29 @@ Auto Best combines an image-led automotive layout, Onest typography, rounded sur
 
 ## CSS structure
 
-[app.css](../src/app.css) imports four global sheets in this order:
+[app.css](../src/app.css) imports three global sheets in this order:
 
 | Sheet | Contents |
 | --- | --- |
-| [tokens.css](../src/lib/styles/tokens.css) | Foundation values, semantic aliases and shared component tokens |
+| [tokens.css](../src/lib/styles/tokens.css) | Generic fallbacks, foundation values, semantic aliases and shared component tokens |
 | [base.css](../src/lib/styles/base.css) | Native element defaults, controls and shared utility classes |
-| [navigation.css](../src/lib/styles/navigation.css) | Shared navigation foundations |
-| [composition.css](../src/lib/styles/composition.css) | Hero geometry, shell relationships, responsive layout and cross-component adjustments |
+| [composition.css](../src/lib/styles/composition.css) | Shared shell, hero and cross-component layout relationships |
 
-Svelte component `<style>` blocks own internal presentation. Route sheets such as `contact/contact.css`, `listing-grid/listing.css` and the detail `detail.css` files own page composition and route-specific component adaptations. Route CSS is imported from the corresponding page and is global CSS; its selectors therefore use route/component prefixes.
+Svelte component `<style>` blocks own internal presentation. The explicit Phase 3 owners are:
 
-`Footer.svelte` owns the footer and its optional service links, including their responsive styles. The footer uses the shared white surface, dark logo variant (`brand.logo`), regular navigation type and red phone CTA. Mobile keeps the contact block and company links; desktop includes both navigation columns. The shell's footer visibility/padding relationship remains in `composition.css`.
+- `Header.svelte`: top bar, desktop/mobile header, navigation and mega-menu geometry.
+- `VehicleDiscoveryForm.svelte`: discovery/search geometry and breakpoints.
+- `ListingFilters.svelte`: visible filters, mobile filter sheet and sorting controls.
+- `ListingResults.svelte`: result-grid and empty-state geometry.
+- `VehicleCard.svelte`: vehicle-card sizing and responsive variants.
 
-Svelte adds a scoping class to component selectors, which changes specificity. Moving a selector unchanged from a component to a global sheet can change the result. Explicit `:global(...)` selectors are used where an owner styles child-component output. See the [Svelte scoped styles reference](https://svelte.dev/docs/svelte/scoped-styles).
+Route sheets such as `contact/contact.css`, `listing-grid/listing.css` and the detail `detail.css` files own page-stage composition and route-specific adaptations. Standalone `.css` files are already global CSS and must use ordinary selectors; Svelte `:global(...)` belongs only inside a component style block. Do not reintroduce a giant route or desktop stylesheet to bypass component ownership.
+
+Semantic UI identity uses named classes, typed props and explicit attributes such as `data-route`, `data-contact-topic`, `data-journey`, `data-mobile-bottom`, `data-slot` and `data-variant`. Selectors must not depend on element order, generated class names or class substrings. `check:css-policy` enforces these boundaries and also keeps dealer artwork/palette values in the typed lead-site configuration.
+
+Svelte adds a scoping class to component selectors, which changes specificity. Moving a selector unchanged between a component and a global sheet can therefore change the result. Use `:global(...)` only when a component intentionally styles child-component output. See the [Svelte scoped styles reference](https://svelte.dev/docs/svelte/scoped-styles).
+
+`Footer.svelte` owns the footer and its optional service links, including their responsive styles. The shell's footer visibility and bottom-offset relationships remain shared composition concerns.
 
 The `dn-` class prefix is inherited naming, not a runtime dependency on the original dealer. Renaming it is unnecessary for a client skin.
 
@@ -31,38 +40,24 @@ The `dn-` class prefix is inherited naming, not a runtime dependency on the orig
 
 A component may override a component token for a responsive mode, but the override should reference another shared token. Campaign gradients, artwork crops, provider-specific embeds and genuinely one-off geometry can stay local. `check:tokens` verifies unique global declarations, alias references, cycles, unresolved source usage and the shared control-height contract.
 
-## Color palette
+## Color palette and dealer theme
 
-These are the shared token defaults, not a list of every local campaign color:
+`tokens.css` contains generic fallback values so components remain renderable without a mounted dealer configuration. The active Day & Night preview values live in the typed [`lead-site.ts`](../src/lib/config/lead-site.ts) configuration. `SiteShell.svelte` maps that configuration to semantic CSS custom properties; generic components consume those properties rather than embedding dealer literals or artwork paths.
 
-| Token | Value | Role |
+| Lead-site role | Active value | CSS property consumed by components |
 | --- | --- | --- |
-| `--dn-red` | `#c40101` | Primary red actions and branded sections |
-| `--dn-red-hover` | `#a90000` | Red hover state |
-| `--dn-ink` | `#14171d` | Main dark text/surfaces |
-| `--dn-ink-hover` | `#292e36` | Dark hover state |
-| `--dn-ink-deep` | `#101114` | Deep campaign and media surfaces |
-| `--dn-ink-strong` | `#171a20` | Strong interface ink and selected dark surfaces |
-| `--dn-muted` | `#626873` | Supporting text |
-| `--dn-line` | `#e7e8eb` | Subtle control/separation lines |
-| `--dn-line-emphasis` | `#8c959f` | Emphasized neutral outlines |
-| `--dn-surface` | alias of `--dn-surface-subtle` | Neutral shared surface |
-| `--dn-surface-canvas` | `#f4f5f7` | Mobile/page canvas |
-| `--dn-surface-panel` | `#f1f3f5` | Neutral content panels |
-| `--dn-surface-raised` | alias of `--dn-white` | Raised cards and controls |
-| `--dn-surface-hover` | `#e9edf1` | Neutral hover/focus surface |
-| `--dn-focus` | `#0b57d0` | Visible keyboard focus |
+| Accent | `#c40101` | `--dn-red` |
+| Accent hover | `#a90000` | `--dn-red-hover` |
+| Workflow canvas | `#a90f1c` | `--dn-workflow-canvas` |
+| Hero surface | `#171a1f` | `--dn-theme-hero-surface` |
+| Campaign surface / accent | `#18191c` / `#b80024` | `--dn-theme-campaign-surface` / `--dn-theme-campaign-accent` |
+| Blog hero | `#f0c84b` | `--dn-theme-blog-hero-surface` |
 
-The approved mobile service grid is deliberately not monochrome: inventory is blue, sell/trade-in red, import pale blue and leasing charcoal. Its working-preview component uses these local gradients:
+The mobile service grid keeps its approved four-tone family through `leadSite.theme.actionTones`: blue inventory, red Sell/Barter, pale-blue Import and charcoal Leasing. Components reference `--dn-theme-action-*` properties, so the current appearance is preserved without dealer-specific literals in generic component CSS.
 
-| Card | Gradient |
-| --- | --- |
-| Inventory | `#135da8` to `#0d3d72` |
-| Sell / trade-in | `#d00832` to `#9b001f` |
-| Import | `#e8f4ff` to `#c8e3f8` |
-| Leasing | `#23262b` to `#111317` |
+All `/assets/images/lead/` paths are owned by `lead-site.ts`, including route heroes, workflow banners, vehicle cutouts, sample inventory, videos and PDP artwork. Data and presentation modules may add dimensions, crops or semantic keys, but they must obtain the source path from configuration. `check:css-policy` rejects lead artwork paths elsewhere in `src/`.
 
-Those colors belong to that campaign family. Changing the brand red alone does not recolor baked image text, all artwork, or every local gradient.
+Shared neutral interface values such as ink, muted text, lines, raised surfaces and focus color remain generic tokens. A client theme should change the typed dealer roles and artwork mapping, not search-and-replace colors throughout component styles.
 
 ## Typography
 

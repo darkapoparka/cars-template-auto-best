@@ -2,10 +2,11 @@
   import BrowseAllCard from './BrowseAllCard.svelte';
   import { resolve } from '$app/paths';
   import { editorial } from '$data/home';
+  import { leadSite } from '$config/lead-site';
 </script>
 
 <section class="dn-editorial" aria-labelledby="editorial-title">
-  <div class="dn-editorial__banner">
+  <div class="dn-editorial__banner" style:--dn-editorial-banner={`url("${leadSite.artwork.editorialBanner}")`}>
     <div class="container">
       <div class="dn-editorial__heading dn-home-section-heading dn-home-section-heading--branded dn-home-section-heading--red dn-home-banner-frame dn-home-banner-copy">
         <h2 id="editorial-title" class="dn-home-section-title">
@@ -69,7 +70,7 @@
     margin: 0 12px;
     padding: 82px 0 0;
     border-radius: 24px;
-    background-image: url('/assets/images/lead/day-night-editorial-banner-v2.webp');
+    background-image: var(--dn-editorial-banner);
     background-position: center 64%;
     background-repeat: no-repeat;
     background-size: cover;
@@ -115,7 +116,7 @@
     justify-content: center;
     padding: 0 28px;
     border-radius: var(--dn-radius-button);
-    background: #c40101;
+    background: var(--dn-red);
     color: #fff;
     font-size: var(--dn-cta-size);
     font-weight: var(--dn-cta-weight);
@@ -164,7 +165,7 @@
   }
 
   .dn-editorial-item__link:focus-visible {
-    outline: 3px solid rgba(196, 1, 1, 0.28);
+    outline: 3px solid rgb(var(--dn-theme-accent-rgb) / 28%);
     outline-offset: -3px;
   }
 
@@ -194,7 +195,7 @@
     align-items: center;
     padding: 6px 12px;
     border-radius: var(--dn-pill);
-    background: #c40101;
+    background: var(--dn-red);
     color: #fff;
     font-size: var(--dn-text-meta);
     font-weight: var(--dn-weight-semibold);
@@ -233,7 +234,7 @@
 
   .dn-editorial-item:hover h3,
   .dn-editorial-item:focus-within h3 {
-    color: #c40101;
+    color: var(--dn-red);
   }
 
   .dn-editorial-item__summary {

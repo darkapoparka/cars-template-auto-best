@@ -15,7 +15,7 @@
   let { vehicle, returnTo, showPrice = false, priority = false, layout = 'default' }: Props = $props();
 </script>
 
-<article id={`vehicle-${vehicle.id}`} class:dn-vehicle-card--listing={layout === 'listing'} class:dn-vehicle-card--showcase={layout === 'showcase'} class="dn-vehicle-card">
+<article id={`vehicle-${vehicle.id}`} data-variant={layout} class:dn-vehicle-card--listing={layout === 'listing'} class:dn-vehicle-card--showcase={layout === 'showcase'} class="dn-vehicle-card">
   <a class="dn-vehicle-card__link" href={withListReturn(resolve('/listing-detail-v1/[id]', { id: String(vehicle.id) }), returnTo)} aria-label={`Вижте ${vehicle.title}`}>
     <div class="dn-vehicle-card__visual">
       {#if layout !== 'showcase'}
@@ -95,7 +95,9 @@
   .dn-vehicle-card__mobile-meta { display: none; }
   .dn-vehicle-card {
     display: flex;
+    width: 100%;
     min-width: 0;
+    height: 100%;
     overflow: hidden;
     flex-direction: column;
     border: 0;
@@ -167,7 +169,7 @@
   }
 
   .dn-vehicle-card__badge--year {
-    background: #c40101;
+    background: var(--dn-red);
   }
 
   .dn-vehicle-card__image {
@@ -223,7 +225,7 @@
   }
 
   .dn-vehicle-card__link:focus-visible .dn-vehicle-card__name {
-    color: #c40101;
+    color: var(--dn-red);
   }
 
   @media (hover: hover) and (pointer: fine) {
@@ -233,7 +235,7 @@
     }
 
     .dn-vehicle-card__link:hover .dn-vehicle-card__name {
-      color: #c40101;
+      color: var(--dn-red);
     }
   }
 

@@ -118,6 +118,9 @@
 <style>
   .dn-search-wrap {
     --dn-home-search-top: var(--dn-route-hero-control-top);
+    --dn-discovery-width: min(var(--dn-content), calc(100% - 48px));
+    --dn-discovery-padding: 18px;
+    --dn-discovery-radius: 16px;
 
     position: relative;
     z-index: 20;
@@ -157,6 +160,10 @@
     .dn-search-wrap { margin-top: -220px; margin-bottom: 34px; }
     .dn-search-wrap > .container { width: var(--dn-discovery-width); }
     .dn-search { padding: var(--dn-discovery-padding); border-radius: var(--dn-discovery-radius); }
+  }
+
+  @media (min-width: 1440px) {
+    .dn-search-wrap { --dn-discovery-width: min(1040px, calc(100vw - 560px)); }
   }
 
   @media (max-width: 1199px) {

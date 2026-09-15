@@ -1,9 +1,29 @@
 :root {
   /* Foundation colors and semantic surface roles. */
   --dn-focus: #0b57d0;
-  --dn-red: #c40101;
-  --dn-red-hover: #a90000;
-  --dn-workflow-canvas: #a90f1c;
+  /* Generic fallbacks; SiteShell applies the active lead-site palette. */
+  --dn-red: #b00020;
+  --dn-red-hover: #930019;
+  --dn-workflow-canvas: #991b2f;
+  --dn-theme-accent-rgb: 176 0 32;
+  --dn-theme-hero-surface: #1b1e23;
+  --dn-theme-hero-surface-deep: #15181d;
+  --dn-theme-hero-surface-mid: #202329;
+  --dn-theme-hero-accent-deep: #6b1020;
+  --dn-theme-contact-surface: #1d2025;
+  --dn-theme-contact-surface-end: #191c20;
+  --dn-theme-campaign-surface: #181b20;
+  --dn-theme-campaign-accent: #a5002a;
+  --dn-theme-blog-hero-surface: #e4bd43;
+  --dn-theme-action-blue-start: #235f99;
+  --dn-theme-action-blue-end: #183f68;
+  --dn-theme-action-red-start: #b61b3a;
+  --dn-theme-action-red-end: #82142a;
+  --dn-theme-action-ice-start: #e6f0f8;
+  --dn-theme-action-ice-end: #cadce9;
+  --dn-theme-action-ice-ink: #19232d;
+  --dn-theme-action-dark-start: #25282d;
+  --dn-theme-action-dark-end: #14161a;
   --dn-ink: #14171d;
   --dn-ink-hover: #292e36;
   --dn-ink-deep: #101114;

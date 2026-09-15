@@ -1,5 +1,6 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
+  import { leadSite } from '$config/lead-site';
 
   const actions = [
     {
@@ -8,7 +9,7 @@
       cta: 'Разгледай',
       href: '/listing-grid',
       tone: 'blue',
-      image: '/assets/images/lead/day-night-collection-banner-v2.webp',
+      image: leadSite.artwork.home.collection,
       width: 1200,
       height: 668
     },
@@ -18,7 +19,7 @@
       cta: 'Заяви оценка',
       href: '/contact?topic=trade-in',
       tone: 'red',
-      image: '/assets/images/lead/day-night-mobile-sell-v1.webp',
+      image: leadSite.artwork.home.sell,
       width: 1200,
       height: 438
     },
@@ -28,7 +29,7 @@
       cta: 'Заяви внос',
       href: '/contact?topic=import',
       tone: 'ice',
-      image: '/assets/images/lead/day-night-mobile-import-v1.webp',
+      image: leadSite.artwork.home.import,
       width: 1200,
       height: 450
     },
@@ -86,10 +87,10 @@
       isolation: isolate;
     }
 
-    .dn-mobile-core-card--blue { background: linear-gradient(145deg, #135da8 0%, #0d3d72 100%); }
-    .dn-mobile-core-card--red { background: linear-gradient(145deg, #d00832 0%, #9b001f 100%); }
-    .dn-mobile-core-card--ice { background: linear-gradient(145deg, #e8f4ff 0%, #c8e3f8 100%); color: #15202c; }
-    .dn-mobile-core-card--dark { background: linear-gradient(145deg, #23262b 0%, #111317 100%); }
+    .dn-mobile-core-card--blue { background: linear-gradient(145deg, var(--dn-theme-action-blue-start) 0%, var(--dn-theme-action-blue-end) 100%); }
+    .dn-mobile-core-card--red { background: linear-gradient(145deg, var(--dn-theme-action-red-start) 0%, var(--dn-theme-action-red-end) 100%); }
+    .dn-mobile-core-card--ice { background: linear-gradient(145deg, var(--dn-theme-action-ice-start) 0%, var(--dn-theme-action-ice-end) 100%); color: var(--dn-theme-action-ice-ink); }
+    .dn-mobile-core-card--dark { background: linear-gradient(145deg, var(--dn-theme-action-dark-start) 0%, var(--dn-theme-action-dark-end) 100%); }
 
     .dn-mobile-core-card__copy {
       position: relative;

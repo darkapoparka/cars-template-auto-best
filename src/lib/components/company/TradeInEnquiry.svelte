@@ -330,17 +330,17 @@
   .dn-tradein-primary { display: flex; min-height: var(--dn-control-height-editor); flex: 1; align-items: center; justify-content: center; gap: 9px; padding: var(--dn-space-2) var(--dn-space-4); border: 0; border-radius: var(--dn-radius-button); background: var(--dn-red); color: #fff; font-size: var(--dn-cta-size); font-weight: var(--dn-cta-weight); line-height: var(--dn-leading-control); }
   .dn-tradein-primary:disabled { opacity: .6; cursor: wait; }
 
-  :global(.dn-contact-intent:has(.dn-tradein-enquiry) .dn-contact-workflow-title),
-  :global(.dn-contact-intent:has(.dn-tradein-enquiry) .dn-contact-intent__heading),
-  :global(.dn-contact-intent:has(.dn-tradein-enquiry) .dn-contact-selected),
-  :global(.dn-contact-intent:has(.dn-tradein-enquiry) .dn-contact-intent__main > .dn-contact-button) { display: none; }
+  :global(.dn-contact-intent--tradein .dn-contact-workflow-title),
+  :global(.dn-contact-intent--tradein .dn-contact-intent__heading),
+  :global(.dn-contact-intent--tradein .dn-contact-selected),
+  :global(.dn-contact-intent--tradein .dn-contact-intent__main > .dn-contact-button) { display: none; }
 
   @media (min-width: 768px) {
-    :global(.dn-contact-intent:has(.dn-tradein-enquiry) .dn-contact-intent__main) { background: #fff; }
+    :global(.dn-contact-intent--tradein .dn-contact-intent__main) { background: #fff; }
   }
   @media (max-width: 767px) {
 
-    :global(.dn-contact-intent:has(.dn-tradein-enquiry) > .dn-contact-workflow-call) { display: none; }
+    :global(.dn-contact-intent--tradein > .dn-contact-workflow-call) { display: none; }
     .dn-tradein-enquiry > h1 { margin-inline: auto; font-size: var(--dn-text-heading); text-align: center; }
     .dn-tradein-reference-hint { text-align: center; }
     .dn-tradein-entry-segments { margin-top: 16px; }
@@ -356,7 +356,7 @@
   }
 
   @media (max-width: 374px) {
-    :global(.dn-contact-intent:has(.dn-tradein-enquiry) .dn-contact-intent__main) { padding-inline: 16px; }
+    :global(.dn-contact-intent--tradein .dn-contact-intent__main) { padding-inline: 16px; }
     .dn-tradein-enquiry > h1 { font-size: var(--dn-text-heading); }
     .dn-tradein-pair { gap: 8px; }
   }

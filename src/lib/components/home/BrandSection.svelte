@@ -35,7 +35,7 @@
         {/each}
       <button class="dn-discovery-toggle" aria-expanded={expanded} aria-controls="brands-grid" onclick={() => expanded = !expanded}>
         <span class="dn-brand-all-glyph" aria-hidden="true">
-          <span></span><span></span><span></span><span></span>
+          <span class="dn-brand-all-glyph__accent"></span><span></span><span></span><span></span>
         </span>
         <strong>{expanded ? 'Покажи по-малко' : 'Всички марки'}</strong>
       </button>
@@ -99,7 +99,7 @@
     .dn-brand-card__image img { position: absolute; width: var(--logo-image-width); max-width: none; height: auto; left: var(--logo-left); top: var(--logo-top); }
     .dn-brand-all-glyph { display: grid; width: 54px; height: 54px; align-self: center; grid-template-columns: repeat(2, 1fr); gap: 7px; margin: 0 auto; padding: 9px; border-radius: 16px; background: #f1f3f5; }
     .dn-brand-all-glyph span { border-radius: 50%; background: #cdd2d8; }
-    .dn-brand-all-glyph span:first-child { background: var(--dn-red); }
+    .dn-brand-all-glyph__accent { background: var(--dn-red); }
     .dn-brand-card--secondary { display: none; }
     .dn-brand-card strong { align-self: end; font-size: var(--dn-text-body); line-height: var(--dn-leading-heading); }
     .dn-brand-card--additional { order: 2; }
