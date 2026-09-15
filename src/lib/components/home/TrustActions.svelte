@@ -133,7 +133,7 @@
   .dn-service-card__art, .mobile-copy, .dn-trust-card__icon, .dn-trust-card__mobile-art, .dn-trust-card__ownership-art { display: none; }
   .dn-trust-actions { padding: 24px 0 32px; background: #fff; }
   .dn-trust-actions__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
-  .dn-trust-card { position: relative; display: flex; flex-direction: column; min-width: 0; min-height: 234px; padding: 28px; overflow: hidden; border-radius: 16px; background: #101114; color: #fff; }
+  .dn-trust-card { position: relative; display: flex; flex-direction: column; min-width: 0; min-height: 234px; padding: 28px; overflow: hidden; border-radius: 16px; background: var(--dn-ink-deep); color: #fff; }
   .dn-trust-card--red { background: #b80024; }
   .dn-trust-card__content { position: relative; display: flex; flex: 1; flex-direction: column; width: 52%; }
   .dn-trust-card h3 { margin: 0 0 12px; color: inherit; font-size: var(--dn-text-subheading); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-heading); }

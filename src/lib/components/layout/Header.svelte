@@ -582,7 +582,7 @@
       color: #4f5662;
       font: inherit;
       font-size: var(--dn-text-meta);
-      font-weight: var(--dn-control-weight);
+      font-weight: var(--dn-weight-regular);
       line-height: var(--dn-leading-control);
       cursor: pointer;
     }
@@ -590,6 +590,11 @@
     .dn-mobile-bottom-nav a.active,
     .dn-mobile-bottom-nav button.active {
       color: var(--dn-ink);
+      font-weight: var(--dn-weight-semibold);
+    }
+
+    .dn-mobile-bottom-nav :is(a.active, button.active) :global(.dn-icon *) {
+      stroke-width: 2;
     }
 
     .dn-mobile-bottom-nav__icon {
@@ -627,7 +632,7 @@
     .dn-mobile-detail-bar a {
       display: inline-flex;
       min-width: 0;
-      min-height: 50px;
+      min-height: 44px;
       align-items: center;
       justify-content: center;
       gap: 7px;

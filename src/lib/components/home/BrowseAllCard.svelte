@@ -17,7 +17,7 @@
 <style>
   .dn-browse-all { display: none; }
   @media (max-width: 767px) {
-    .dn-browse-all { position: relative; display: flex; min-width: 0; min-height: 260px; height: 100%; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 24px 16px; border: 1px solid #dce0e5; border-radius: 14px; background: #fff; color: #202329; text-align: center; scroll-snap-align: start; }
+    .dn-browse-all { position: relative; display: flex; min-width: 0; min-height: 260px; height: 100%; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 24px 16px; border: 1px solid #dce0e5; border-radius: 16px; background: #fff; color: #202329; text-align: center; scroll-snap-align: start; }
     .mark { display: grid; flex-shrink: 0; width: 48px; height: 48px; place-items: center; border-radius: 50%; background: #f1f2f4; color: #202329; }
     strong { font-size: var(--dn-text-card); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-heading); }
     .detail { color: #626a75; font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }

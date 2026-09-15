@@ -55,7 +55,7 @@
   .dn-inventory__heading h2 {
     width: auto;
     margin: 0;
-    color: #171a20;
+    color: var(--dn-ink-strong);
     font-size: var(--dn-text-section);
     font-weight: var(--dn-weight-semibold);
     line-height: var(--dn-leading-section);
@@ -137,7 +137,7 @@
 
   @media (max-width: 767px) {
     .dn-inventory {
-      padding: 32px 0 12px;
+      padding: 20px 0 12px;
       background: var(--dn-mobile-canvas);
     }
 

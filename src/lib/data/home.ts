@@ -40,7 +40,13 @@ export const brands = brandArtwork.map(item => ({
   ...item, count: featuredVehicles.filter(vehicle => vehicle.make === item.label).length
 }));
 
+const editorialSummaries: Record<number, string> = {
+  1: 'История, документи и техническо състояние.',
+  2: 'Търсене, транспорт и подготовка за регистрация.',
+  3: 'Срок, първоначална вноска и обща цена.'
+};
+
 export const editorial = blogPosts.slice(0, 3).map(post => ({
-  title: post.title, text: post.text, image: post.image,
+  title: post.title, text: editorialSummaries[post.id] ?? post.text, image: post.image,
   href: `/blog-detail/${post.id}`, meta: 'Полезно', category: post.category
 }));

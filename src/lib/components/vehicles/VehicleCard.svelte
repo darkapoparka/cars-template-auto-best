@@ -40,7 +40,11 @@
 
     <div class="dn-vehicle-card__content">
       {#if layout !== 'showcase'}<div class="dn-vehicle-card__category"><p>{vehicle.category}</p></div>{/if}
-      <h3 class="dn-vehicle-card__name" title={vehicle.title}>{vehicle.title}</h3>
+      {#if layout === 'listing'}
+        <h2 class="dn-vehicle-card__name" title={vehicle.title}>{vehicle.title}</h2>
+      {:else}
+        <h3 class="dn-vehicle-card__name" title={vehicle.title}>{vehicle.title}</h3>
+      {/if}
       {#if layout === 'showcase'}
         <p class="dn-vehicle-card__summary">{vehicle.year} · {vehicle.fuel}</p>
       {/if}
@@ -365,7 +369,7 @@
       display: block;
       font-size: var(--dn-text-lead);
       font-weight: var(--dn-weight-medium);
-      line-height: var(--dn-leading-body);
+      line-height: var(--dn-leading-control);
       white-space: nowrap;
       text-overflow: ellipsis;
       -webkit-line-clamp: 1;

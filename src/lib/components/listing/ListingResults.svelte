@@ -32,7 +32,7 @@
 
 <section class="dn-listing-results" aria-labelledby="listing-results-title">
   <div class="container">
-    <h2 id="listing-results-title" class="dn-sr-only">Налични автомобили</h2>
+    <h1 id="listing-results-title" class="dn-sr-only">Налични автомобили</h1>
     <div class="dn-listing-results__heading">
       <div class="dn-listing-results__tools">
         <button class="dn-listing-results__filters" type="button" aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openFilters}>

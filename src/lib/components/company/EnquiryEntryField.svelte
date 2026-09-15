@@ -136,6 +136,7 @@
   .dn-entry-editor-save:hover { background: var(--dn-red-hover); }
   .dn-entry-editor :is(button,input,textarea):focus-visible { outline: 3px solid var(--dn-focus); outline-offset: 2px; }
   @media (max-width: 767px) {
+    .dn-entry-editor-trigger { height: var(--dn-entry-action-height); min-height: var(--dn-entry-action-height); }
     .dn-entry-editor { inset: var(--dn-form-dialog-top) 0 auto; width: 100%; height: var(--dn-form-dialog-height); max-height: var(--dn-form-dialog-height); margin: 0; border-radius: 0; }
     form, .dn-entry-editor-fields { flex: 1; min-height: 0; }
     header { padding-inline: var(--dn-space-4); }

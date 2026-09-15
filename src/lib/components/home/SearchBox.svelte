@@ -194,9 +194,11 @@
     }
 
     .dn-search {
+      --dn-entry-height: var(--dn-control-height-default);
+
       display: grid;
-      gap: 9px;
-      padding: 10px;
+      gap: 7px;
+      padding: 8px 10px;
       border: 1px solid var(--dn-line);
       border-radius: 20px;
       background: var(--dn-white);
@@ -239,7 +241,7 @@
       display: flex;
       gap: 8px;
       margin: 0;
-      padding: 14px 12px 0;
+      padding: 10px 12px 0;
       overflow-x: auto;
       background: var(--dn-mobile-canvas);
       scrollbar-width: none;
@@ -251,7 +253,7 @@
 
     .dn-search__mobile-shortcuts a {
       display: inline-flex;
-      min-height: 44px;
+      min-height: var(--dn-control-height-default);
       flex: 0 0 auto;
       align-items: center;
       padding: 0 15px;
@@ -273,13 +275,14 @@
       justify-content: center;
       gap: 7px;
       margin-top: 0;
-      padding: 0 24px;
+      padding: 0 var(--dn-space-6);
       border: 0;
       border-radius: var(--dn-radius-button);
       background: var(--dn-red);
-      color: #fff;
+      color: var(--dn-white);
       font-size: var(--dn-cta-size);
       font-weight: var(--dn-cta-weight);
+      line-height: var(--dn-cta-leading);
       cursor: pointer;
     }
 

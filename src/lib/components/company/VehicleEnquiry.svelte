@@ -304,7 +304,7 @@
   .dn-enquiry-upload > span { font-size: var(--dn-text-body); font-weight: var(--dn-weight-semibold); }
   .dn-enquiry-upload small { display: block; margin-top: 4px; font-size: var(--dn-text-meta); color: #656b74; font-weight: var(--dn-weight-regular); }
   .dn-enquiry-upload input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-  .dn-enquiry-upload:focus-within { outline: 3px solid #0b57d0; outline-offset: 3px; }
+  .dn-enquiry-upload:focus-within { outline: 3px solid var(--dn-focus); outline-offset: 3px; }
   .dn-enquiry-photo-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; padding: 0; margin: 14px 0; list-style: none; }
   .dn-enquiry-photo-grid li { position: relative; min-width: 0; }
   .dn-enquiry-photo-grid img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 10px; }

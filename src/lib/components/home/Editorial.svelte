@@ -326,7 +326,7 @@
 
     .dn-editorial__heading h2 {
       margin: 0;
-      color: #171a20;
+      color: var(--dn-ink-strong);
       font-size: var(--dn-text-subheading);
       font-weight: var(--dn-weight-semibold);
       line-height: var(--dn-leading-heading);
@@ -373,7 +373,7 @@
 
     .dn-editorial-item {
       scroll-snap-align: start;
-      border-radius: 14px;
+      border-radius: 16px;
       background: var(--dn-mobile-surface);
       box-shadow: none;
     }
@@ -381,7 +381,7 @@
     .dn-editorial-item__media {
       height: auto;
       aspect-ratio: 16 / 9;
-      border-radius: 14px 14px 0 0;
+      border-radius: 16px 16px 0 0;
     }
 
     .dn-editorial-item__content {
@@ -432,7 +432,7 @@
 
     .dn-editorial__heading h2 {
       font-size: var(--dn-text-section-compact);
-      color: #171a20;
+      color: var(--dn-ink-strong);
       text-align: left;
       margin: 0;
     }

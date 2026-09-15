@@ -7,7 +7,6 @@
   import ShowroomMap from '$components/company/ShowroomMap.svelte';
   import Icon from '$components/ui/Icon.svelte';
   import VehicleFinanceCalculator from '$components/vehicles/VehicleFinanceCalculator.svelte';
-  import PdpImportBanner from '$components/vehicles/PdpImportBanner.svelte';
   import { brand } from '$config/brand';
   import { formatVehiclePrice, type Vehicle } from '$data/inventory';
   import type { PageData } from './$types';
@@ -201,12 +200,10 @@
               </button>
               <div class="dn-detail-finance-inline">
                 {#key data.vehicle.id}
-                  <VehicleFinanceCalculator priceEur={data.vehicle.priceEur} vehicleId={data.vehicle.id} />
+                  <VehicleFinanceCalculator priceEur={data.vehicle.priceEur} vehicleId={data.vehicle.id} idPrefix="finance-inline" />
                 {/key}
               </div>
             </section>
-
-            <PdpImportBanner />
 
             <section class="dn-detail-card dn-detail-dealer" aria-label="Auto Best">
               <a class="dn-detail-dealer-banner" href={resolve(vehicleContactHref(data.vehicle.id))}>
@@ -258,7 +255,7 @@
         </button>
       </header>
       {#key data.vehicle.id}
-        <VehicleFinanceCalculator priceEur={data.vehicle.priceEur} vehicleId={data.vehicle.id} />
+        <VehicleFinanceCalculator priceEur={data.vehicle.priceEur} vehicleId={data.vehicle.id} idPrefix="finance-dialog" />
       {/key}
     </div>
   </dialog>

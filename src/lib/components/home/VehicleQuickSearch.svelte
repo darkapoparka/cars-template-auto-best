@@ -240,7 +240,7 @@
           bind:value={query}
           type="search"
           name="q"
-          placeholder="Например Audi, BMW или SUV"
+          placeholder="Марка, модел или тип"
           autocomplete="off"
           aria-describedby="quick-search-status"
           onkeydown={handleKeydown}
@@ -675,7 +675,7 @@
     }
 
     .dn-quick-search__option--selected {
-      background: #171a20;
+      background: var(--dn-ink-strong);
       color: #fff;
     }
 

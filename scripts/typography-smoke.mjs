@@ -15,7 +15,7 @@ async function entryHierarchy(field, segments, action) {
   const input = await field.boundingBox();
   for(const control of [segments, action]) {
     const box = await control.boundingBox();
-    assert(box.width < input.width && box.height < input.height, 'Entry controls must be narrower and shorter than the input');
+    assert(box.width < input.width && box.height <= input.height, 'Entry controls must be narrower and no taller than the input');
     assert(Math.abs((box.x + box.width / 2) - (input.x + input.width / 2)) < 1, 'Entry controls must stay centered with the input');
   }
 }
@@ -39,7 +39,7 @@ try {
           assert.equal((await typeOf(buy)).size,16);
           assert.equal((await typeOf(buy)).weight,500);
           const entry = await typeOf(page.locator('.dn-quick-search__trigger'));
-          assert(entry.size > (await typeOf(buy)).size && entry.size === 18 && entry.weight === 400 && entry.height >= 52);
+          assert(entry.size > (await typeOf(buy)).size && entry.size === 18 && entry.weight === 400 && entry.height === 44);
           assert.equal(await buy.evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(255, 255, 255)');
           await buy.focus(); await page.keyboard.press('ArrowRight');
           assert.equal(await page.getByRole('tab',{name:'Внос',exact:true}).getAttribute('aria-selected'),'true');
@@ -66,7 +66,7 @@ try {
         const primary = await typeOf(start);
         assert(primary.size === 18 && primary.weight === 500);
         assert.equal(primary.height,44);
-        assert((await typeOf(page.locator('.dn-tradein-reference'))).height > primary.height);
+        assert.equal((await typeOf(page.locator('.dn-tradein-reference'))).height, width < 768 ? 44 : 52);
         assert.equal((await typeOf(page.locator('.dn-tradein-entry-segments'))).height,44);
         await entryHierarchy(page.locator('.dn-tradein-reference'),page.locator('.dn-tradein-entry-segments'),start);
         assert.equal(await page.locator('.dn-contact-intent__main .dn-workflow-support__call').count(),0);
@@ -187,7 +187,7 @@ try {
         const importField=await typeOf(importEntry);
         const importMode=await typeOf(page.getByRole('button',{name:'Линк',exact:true}));
         assert(importField.size > importMode.size && importField.size === 18 && importField.weight === 400);
-        assert((await typeOf(page.locator('.dn-enquiry-import-field'))).height >= 52);
+        assert.equal((await typeOf(page.locator('.dn-enquiry-import-field'))).height, width < 768 ? 44 : 52);
         await importStart.click();
         assert(await editor.isVisible());
         await editor.locator('[name="entry-value"]').fill('javascript:alert(1)');

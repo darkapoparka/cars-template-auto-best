@@ -3,6 +3,11 @@
   import { bodyTypes } from '$data/home';
 
   const mobileBodyTypes = new Set<string>(bodyTypes.filter(item => item.count > 0).slice(0, 3).map(item => item.query));
+  const mobileArtworkWidth: Record<string, number> = {
+    SUV: 94,
+    Wagon: 100,
+    Coupe: 98
+  };
   let expanded = $state(false);
 </script>
 
@@ -15,7 +20,6 @@
       </h2>
       <a class="dn-body-types__all dn-home-section-action" href={resolve('/listing-grid')}>
         <span class="dn-heading-desktop">Вижте всички автомобили</span>
-        <span class="dn-heading-mobile">Всички</span>
       </a>
     </div>
 
@@ -26,6 +30,7 @@
             <span class="dn-body-type__image">
               <span class="dn-body-type__frame"
                 style:--body-aspect={`${item.bounds[2] - item.bounds[0]} / ${item.bounds[3] - item.bounds[1]}`}
+                style:--body-optical-width={`${mobileArtworkWidth[item.query] ?? 100}%`}
                 style:--body-image-width={`${item.width / (item.bounds[2] - item.bounds[0]) * 100}%`}
                 style:--body-image-left={`${-item.bounds[0] / (item.bounds[2] - item.bounds[0]) * 100}%`}
                 style:--body-image-top={`${-item.bounds[1] / (item.bounds[3] - item.bounds[1]) * 100}%`}>
@@ -62,14 +67,14 @@
   @media (max-width: 767px) {
     .dn-body-type--additional { order: 2; }
     .dn-discovery-toggle {
-      order: 1; display: block; min-height: 126px; margin: 0; padding: 8px 12px 12px;
+      order: 1; display: grid; min-height: 126px; grid-template-rows: 78px auto; margin: 0; padding: 8px 12px 12px;
       border: 0; border-radius: 14px; background: var(--dn-mobile-surface); color: var(--dn-ink);
       font: inherit; font-size: var(--dn-control-size); text-align: center; cursor: pointer;
     }
-    .dn-body-all-glyph { display: grid; width: 58px; height: 58px; grid-template-columns: repeat(2, 1fr); gap: 7px; margin: 0 auto 8px; padding: 9px; border-radius: 16px; background: #f1f3f5; }
+    .dn-body-all-glyph { display: grid; width: 58px; height: 58px; align-self: center; grid-template-columns: repeat(2, 1fr); gap: 7px; margin: 0 auto; padding: 9px; border-radius: 16px; background: #f1f3f5; }
     .dn-body-all-glyph span { border-radius: 50%; background: #cdd2d8; }
     .dn-body-all-glyph span:first-child { background: var(--dn-red); }
-    .dn-discovery-toggle strong { display: block; line-height: var(--dn-leading-control); font-weight: var(--dn-weight-semibold); }
+    .dn-discovery-toggle strong { display: block; align-self: end; line-height: var(--dn-leading-control); font-weight: var(--dn-weight-semibold); }
     .dn-discovery-toggle:focus-visible { outline: 3px solid var(--dn-focus); outline-offset: 3px; }
   }
 
@@ -265,7 +270,7 @@
       min-height: 44px;
       align-items: center;
       flex-direction: row;
-      justify-content: space-between;
+      justify-content: flex-start;
       gap: 16px;
       margin-bottom: 8px;
       text-align: left;
@@ -286,12 +291,7 @@
     }
 
     .dn-body-types__all {
-      display: inline-flex;
-      min-height: 44px;
-      align-items: center;
-      color: var(--dn-muted);
-      font-size: var(--dn-control-size);
-      font-weight: var(--dn-control-weight);
+      display: none;
     }
 
     .dn-body-types__viewport {
@@ -329,10 +329,11 @@
     .dn-body-type__frame {
       display: block;
       position: absolute;
-      width: 100%;
+      width: var(--body-optical-width, 100%);
       aspect-ratio: var(--body-aspect);
-      left: 0;
+      left: 50%;
       bottom: 12px;
+      transform: translateX(-50%);
     }
 
     .dn-body-type__image img {

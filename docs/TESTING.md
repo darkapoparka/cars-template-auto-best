@@ -11,6 +11,7 @@ Tests cover different layers: source/type checks, domain logic, runtime media, b
 | `npm run preview` | Serve built output locally |
 | `npm run check` | SvelteKit synchronization and Svelte/TypeScript diagnostics |
 | `npm run check:architecture` | Native source architecture checks |
+| `npm run check:tokens` | Validate token aliases, reference cycles, source usage and shared control-height overrides |
 | `npm run check:typography` | Reject local typography values outside the shared token owner |
 | `npm run smoke:typography` | Current Sell/Import flows, entry tabs, action hierarchy and clipped controls at 320/390/768/1440px |
 | `npm run check:assets` | Static media and source-reference checks |
@@ -24,13 +25,14 @@ The exact command definitions are in [package.json](../package.json). `quality` 
 ## Typical development checks
 
 ```sh
+npm run check:tokens
 npm run check
 npm run check:domain
 npm run check:assets
 npm run build
 ```
 
-`validate` combines the static/domain/build stages defined in the package. Architecture checks examine native application boundaries; asset checks compare public media with references; domain checks exercise actual TypeScript domain functions rather than separately reimplementing them.
+`validate` combines the static/domain/build stages defined in the package. Architecture checks examine native application boundaries; token checks verify the shared reference graph and component aliases; asset checks compare public media with references; domain checks exercise actual TypeScript domain functions rather than separately reimplementing them.
 
 The standalone `check` script currently uses `--threshold error`; warnings are not automatically equivalent to a failed warning-free check. To inspect stricter diagnostics explicitly, run `npx svelte-check --tsconfig ./tsconfig.json --fail-on-warnings` after synchronization. Its `quality` chain is validation followed by smoke.
 
