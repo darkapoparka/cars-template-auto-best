@@ -1,6 +1,5 @@
 <script lang="ts">
   import Icon from '$components/ui/Icon.svelte';
-  import MobileNavIcon from '$components/layout/MobileNavIcon.svelte';
   import { resolve } from '$app/paths';
   import { featuredVehicles } from '$data/inventory';
   import { bodyLabel, filterListingVehicles, listingFilterOptions, listingModelsForMake } from '$data/listing';
@@ -184,11 +183,11 @@
   aria-label="Търсете марка, модел или ключова дума"
   onclick={openSearch}
 >
-  <MobileNavIcon name="search" size={20} />
+  <Icon name="search" size={18} strokeWidth={1.5} />
   <span class="dn-quick-search__label-full">Търсете марка, модел или ключова дума</span>
   <span class="dn-quick-search__label-mobile" aria-hidden="true">Марка или модел</span>
   <span class="dn-quick-search__hint" aria-hidden="true">Бързо търсене</span>
-  <span class="dn-quick-search__mobile-filter" aria-hidden="true"><MobileNavIcon name="filters" size={20} /></span>
+  <span class="dn-quick-search__mobile-filter" aria-hidden="true"><Icon name="adjustments" size={18} strokeWidth={1.4} /></span>
 </button>
 
 <dialog
@@ -471,10 +470,13 @@
       color: var(--dn-muted);
     }
 
+    .dn-quick-search__trigger :global(.dn-icon) {
+      color: var(--dn-muted);
+    }
+
     .dn-quick-search__mobile-filter {
       display: grid;
       place-items: center;
-      color: #30363f;
     }
 
     .dn-quick-search__hint {

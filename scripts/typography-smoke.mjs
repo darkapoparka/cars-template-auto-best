@@ -48,7 +48,10 @@ try {
           const buyCta = page.locator('#home-buy-search .dn-search__mobile-all');
           const buyCtaType = await typeOf(buyCta);
           const buyCtaBox = await buyCta.boundingBox();
-          assert(buyCtaType.size === 17 && buyCtaType.weight === 500 && buyCtaType.height === 44);
+          assert(buyCtaType.size === 16 && buyCtaType.weight === 500 && buyCtaType.height === 44 && buyCtaBox.width === 156);
+          assert.equal(await buyCta.evaluate(e=>parseFloat(getComputedStyle(e,'::before').height)),40);
+          assert.equal((await page.locator('.dn-quick-search__trigger > .dn-icon').first().boundingBox()).width,18);
+          assert.equal((await page.locator('.dn-quick-search__mobile-filter .dn-icon').boundingBox()).width,18);
           const buyLabelColor = await page.locator('.dn-quick-search__label-mobile').evaluate(e=>getComputedStyle(e).color);
           await buy.focus(); await page.keyboard.press('ArrowRight');
           assert.equal(await page.getByRole('tab',{name:'Внос',exact:true}).getAttribute('aria-selected'),'true');
@@ -59,7 +62,9 @@ try {
           const importCardBox = await homeCard.boundingBox();
           const importChipsBox = await homeChips.boundingBox();
           const importCtaBox = await importCta.boundingBox();
-          assert(importCtaType.size === 17 && importCtaType.weight === 500 && importCtaType.height === 44);
+          assert(importCtaType.size === 16 && importCtaType.weight === 500 && importCtaType.height === 44 && importCtaBox.width === 156);
+          assert.equal(await importCta.evaluate(e=>parseFloat(getComputedStyle(e,'::before').height)),40);
+          assert.equal((await page.locator('.dn-search__import-field > .dn-icon').boundingBox()).width,18);
           assert(Math.abs(importCardBox.height-buyCardBox.height)<.5 && Math.abs(importChipsBox.y-buyChipsBox.y)<.5, 'Home mode switch must not move the card or following content');
           assert(Math.abs(importCtaBox.width-buyCtaBox.width)<.5 && Math.abs(importCtaBox.y-buyCtaBox.y)<.5, 'Home mode CTAs must keep stable geometry');
           const importPlaceholderColor = await page.locator('.dn-search__import-field input').evaluate(e=>getComputedStyle(e,'::placeholder').color);
