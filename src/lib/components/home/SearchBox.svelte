@@ -2,12 +2,12 @@
   import { resolve } from '$app/paths';
   import Icon from '$components/ui/Icon.svelte';
   import VehicleQuickSearch from './VehicleQuickSearch.svelte';
-  import { parseListingFilters } from '$data/listing';
+  import { emptyListingDraft, listingFiltersFromDraft } from '$data/listing-draft';
   import VehicleDiscoveryForm from '$components/listing/VehicleDiscoveryForm.svelte';
   import VehicleSearchDialog from '$components/listing/VehicleSearchDialog.svelte';
   import { resolveImportUrl } from '$data/company';
 
-  let desktopFilters = $state(parseListingFilters(new URLSearchParams()));
+  let desktopFilters = $state(listingFiltersFromDraft(emptyListingDraft()));
   let mode = $state<'buy' | 'import'>('buy');
   let importUrl = $state('');
   let importError = $state('');

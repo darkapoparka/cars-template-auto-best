@@ -1,7 +1,23 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
-  import { page } from '$app/state';
-  import { activeFilterCount as countFilters, bodyLabel, listingParams, listingHiddenFields, removeListingFilter, listingFilterOptions, listingModelsForMake, parseListingFilters, type ListingFilters } from '$data/listing';
+  import {
+    activeFilterCount as countFilters,
+    bodyLabel,
+    listingParams,
+    listingHiddenFields,
+    removeListingFilter,
+    listingFilterOptions,
+    listingModelsForMake,
+    parseListingFilters,
+    type ListingFilters
+  } from '$data/listing';
+  import {
+    cleanListingFormData,
+    listingAppliedFilterLabel,
+    listingFiltersFromFormData,
+    listingModelAfterMakeChange,
+    normalizeListingMakeTransition
+  } from '$data/listing-draft';
   import Icon from '$components/ui/Icon.svelte';
   import MobileNavIcon from '$components/layout/MobileNavIcon.svelte';
   import QuickFilterSheet from './QuickFilterSheet.svelte';
@@ -15,8 +31,8 @@
   }
 
   let { filters, openFilters, filtersOpen, onDraftChange }: Props = $props();
-
   let activeFilterCount = $derived(countFilters(filters));
+  let pending = $derived(filters);
   let query = $derived(filters.q);
   let make = $derived(filters.make);
   let model = $derived(filters.model);
@@ -36,48 +52,35 @@
     { label: 'Състояние', field: 'condition' },
     { label: 'Екстри', field: 'equipment' }
   ] as const;
-  const activeChips = $derived.by(() => {
-    const labels: Record<string, string> = {
-      body: bodyLabel(filters.body),
-      condition: filters.condition === 'new' ? 'Нови' : 'Употребявани',
-      price_min: `От ${filters.priceMin?.toLocaleString('bg-BG')} €`,
-      price_max: `До ${filters.priceMax?.toLocaleString('bg-BG')} €`,
-      year_min: `От ${filters.yearMin} г.`,
-      year_max: `До ${filters.yearMax} г.`,
-      mileage_max: `До ${filters.mileageMax?.toLocaleString('bg-BG')} км`
-    };
-    return [...listingParams(filters).entries()]
+  const activeChips = $derived(
+    [...listingParams(filters).entries()]
       .filter(([key, value]) => value && key !== 'sort' && ['q', 'make', 'model', 'body', 'fuel', 'transmission', 'version', 'condition', 'price_min', 'price_max', 'year_min', 'year_max', 'mileage_max', 'equipment'].includes(key))
       .map(([key, value]) => {
         const params = removeListingFilter(filters, key, value);
         const search = params.toString();
         const href: '/listing-grid' | `/listing-grid?${string}` = search ? `/listing-grid?${search}` : '/listing-grid';
-        return { key: `${key}-${value}`, label: labels[key] ?? value, href };
-      });
-  });
+        return { key: `${key}-${value}`, label: listingAppliedFilterLabel(filters, key, value), href };
+      })
+  );
 
   const primaryHiddenFields = (current: ListingFilters) => listingHiddenFields(current, ['q', 'make', 'model', 'body', 'fuel', 'sort']);
-
   function updateDraft(event: Event) {
-    const form = event.currentTarget as HTMLFormElement;
-    const params = new URLSearchParams();
-    for (const [key, value] of new FormData(form)) if (typeof value === 'string') params.append(key, value);
-    onDraftChange(parseListingFilters(params));
+    pending = normalizeListingMakeTransition(pending, listingFiltersFromFormData(new FormData(event.currentTarget as HTMLFormElement)));
+    onDraftChange(pending);
   }
-
-  const cleanFormData = (event: FormDataEvent) => {
-    for (const key of new Set(event.formData.keys())) {
-      const values = event.formData.getAll(key);
-      if (values.every((value) => typeof value === 'string' && !value.trim())) event.formData.delete(key);
-    }
-  };
+  function changeMake(event: Event) {
+    const nextMake = (event.currentTarget as HTMLSelectElement).value;
+    model = listingModelAfterMakeChange(make, nextMake, model);
+    make = nextMake;
+  }
+  const cleanFormData = (event: FormDataEvent) => cleanListingFormData(event.formData);
 </script>
 
 <section class="dn-listing-filter-wrap" data-slot="listing-filters" aria-label="Филтри за автомобили">
   <div class="container">
     <div class="dn-listing-filter">
       <div class="dn-listing-desktop-discovery"><VehicleDiscoveryForm {filters} {openFilters} {filtersOpen} {onDraftChange} showFilterAction={false} keywordPlaceholder="Търси в налични" /></div>
-      <QuickFilterSheet id="dn-listing-sort-sheet">
+      <QuickFilterSheet mode="url" id="dn-listing-sort-sheet">
       {#snippet children(openSort, sortOpen)}
       <form class="dn-listing-mobile-form" method="GET" action={resolve('/listing-grid')} onformdata={cleanFormData} oninput={updateDraft} onchange={updateDraft}>
         <div class="dn-listing-filter__primary">
@@ -126,7 +129,7 @@
         <div class="dn-listing-filter__facets" aria-label="Основни филтри">
         <label>
           <span class="dn-listing-filter__label">Марка</span>
-          <select name="make" aria-label="Марка" bind:value={make} onchange={() => { model = ''; }}>
+          <select name="make" aria-label="Марка" value={make} onchange={changeMake}>
             {#each listingFilterOptions.makes as option (option)}
               <option value={option}>{option || 'Всички'}</option>
             {/each}
@@ -165,7 +168,7 @@
       </QuickFilterSheet>
 
       <div class="dn-listing-filter__quick-row">
-      <QuickFilterSheet>
+      <QuickFilterSheet mode="url">
       {#snippet children(openQuick, quickOpen)}
       <nav class={['dn-listing-filter__quick', { 'dn-listing-filter__quick--active': activeChips.length > 0 }]} aria-label="Бързи филтри">
         {#each activeChips as chip (chip.key)}

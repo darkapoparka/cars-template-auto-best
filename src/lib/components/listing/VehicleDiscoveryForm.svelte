@@ -2,7 +2,22 @@
   import { resolve } from '$app/paths';
   import Icon from '$components/ui/Icon.svelte';
   import type { Attachment } from 'svelte/attachments';
-  import { activeFilterCount, listingHiddenFields, bodyLabel, listingFilterOptions, listingModelsForMake, parseListingFilters, type ListingFilters } from '$data/listing';
+  import {
+    activeFilterCount,
+    bodyLabel,
+    listingFilterOptions,
+    listingHiddenFields,
+    listingModelsForMake,
+    type ListingFilters
+  } from '$data/listing';
+  import {
+    cleanListingFormData,
+    formatListingNumber,
+    listingFiltersFromFormData,
+    listingModelAfterMakeChange,
+    listingOptionsWithCurrent,
+    normalizeListingMakeTransition
+  } from '$data/listing-draft';
 
   let { filters, openFilters, filtersOpen, onDraftChange, showFilterAction = true, enableSticky = true, keywordPlaceholder = 'Марка, модел или ключова дума' }: {
     showFilterAction?: boolean;
@@ -14,15 +29,13 @@
     onDraftChange: (filters: ListingFilters) => void;
   } = $props();
   let make = $derived(filters.make);
+  let model = $derived(filters.model);
   let pending = $derived(filters);
   let pinned = $state(false);
   let stickyBar = $state<HTMLDivElement>();
   const attachSticky: Attachment<HTMLDivElement> = node => { stickyBar = node; return () => { stickyBar = undefined; }; };
   const observePanel: Attachment<HTMLFormElement> = node => {
-    if (!enableSticky) {
-      pinned = false;
-      return;
-    }
+    if (!enableSticky) { pinned = false; return; }
     const desktop = window.matchMedia('(min-width: 992px)');
     const update = () => {
       if (filtersOpen) return;
@@ -39,38 +52,24 @@
     if (pinned) stickyBar.showPopover();
     else stickyBar.hidePopover();
   });
-  let model = $derived(filters.model);
   let models = $derived(listingModelsForMake(make));
   let activeCount = $derived(activeFilterCount(pending));
   let summary = $derived([pending.q, pending.make, pending.model].filter(Boolean).join(' · ') || keywordPlaceholder);
-  const number = (value: string) => Number(value).toLocaleString('bg-BG');
-  const withCurrent = (options: readonly string[], current: number | null) => {
-    const value = current?.toString();
-    return value && !options.includes(value) ? [...options, value] : options;
-  };
-  let prices = $derived(withCurrent(listingFilterOptions.prices, filters.priceMax));
-  let years = $derived(withCurrent(listingFilterOptions.years, filters.yearMin));
-  let mileages = $derived(withCurrent(listingFilterOptions.mileages, filters.mileageMax));
-  let hiddenFields = $derived([
-    ['q', filters.q], ['fuel', filters.fuel], ['transmission', filters.transmission],
-    ['version', filters.version], ['condition', filters.condition],
-    ['price_min', filters.priceMin?.toString() ?? ''], ['year_max', filters.yearMax?.toString() ?? ''],
-    ['sort', filters.sort === 'default' ? '' : filters.sort]
-  ].filter(([, value]) => value));
+  let prices = $derived(listingOptionsWithCurrent(listingFilterOptions.prices, filters.priceMax?.toString() ?? ''));
+  let years = $derived(listingOptionsWithCurrent(listingFilterOptions.years, filters.yearMin?.toString() ?? ''));
+  let mileages = $derived(listingOptionsWithCurrent(listingFilterOptions.mileages, filters.mileageMax?.toString() ?? ''));
+  let hiddenFields = $derived(listingHiddenFields(filters, ['make', 'model', 'body', 'price_max', 'year_min', 'mileage_max']));
 
   function updateDraft(event: Event) {
-    const params = new URLSearchParams();
-    for (const [key, value] of new FormData(event.currentTarget as HTMLFormElement)) {
-      if (typeof value === 'string') params.append(key, value);
-    }
-    pending = parseListingFilters(params);
+    pending = normalizeListingMakeTransition(pending, listingFiltersFromFormData(new FormData(event.currentTarget as HTMLFormElement)));
     onDraftChange(pending);
   }
-  function clean(event: FormDataEvent) {
-    for (const key of new Set(event.formData.keys())) {
-      if (event.formData.getAll(key).every(value => value === '')) event.formData.delete(key);
-    }
+  function changeMake(event: Event) {
+    const nextMake = (event.currentTarget as HTMLSelectElement).value;
+    model = listingModelAfterMakeChange(make, nextMake, model);
+    make = nextMake;
   }
+  const clean = (event: FormDataEvent) => cleanListingFormData(event.formData);
 </script>
 
 <form id="dn-desktop-discovery" class="dn-discovery" {@attach observePanel} method="GET" action={resolve('/listing-grid')} oninput={updateDraft} onchange={updateDraft} onformdata={clean}>
@@ -90,16 +89,15 @@
     </div>
   </div>
   <div class="dn-discovery__facets">
-    <label><span>Марка</span><select name="make" bind:value={make} onchange={() => model = ''}>{#each listingFilterOptions.makes as value (value)}<option {value}>{value || 'Всички'}</option>{/each}</select></label>
+    <label><span>Марка</span><select name="make" value={make} onchange={changeMake}>{#each listingFilterOptions.makes as value (value)}<option {value}>{value || 'Всички'}</option>{/each}</select></label>
     <label><span>Модел</span><select name="model" bind:value={model}>{#each models as value (value)}<option {value}>{value || 'Всички'}</option>{/each}</select></label>
     <label><span>Купе</span><select name="body" value={filters.body}>{#each listingFilterOptions.bodies as value (value)}<option {value}>{bodyLabel(value) || 'Всички'}</option>{/each}</select></label>
-    <label><span>Цена до</span><select name="price_max" value={filters.priceMax?.toString() ?? ''}>{#each prices as value (value)}<option {value}>{value ? `${number(value)} €` : 'Без лимит'}</option>{/each}</select></label>
+    <label><span>Цена до</span><select name="price_max" value={filters.priceMax?.toString() ?? ''}>{#each prices as value (value)}<option {value}>{value ? `${formatListingNumber(value)} €` : 'Без лимит'}</option>{/each}</select></label>
     <label><span>Година от</span><select name="year_min" value={filters.yearMin?.toString() ?? ''}>{#each years as value (value)}<option {value}>{value || 'Всички'}</option>{/each}</select></label>
-    <label><span>Пробег до</span><select name="mileage_max" value={filters.mileageMax?.toString() ?? ''}>{#each mileages as value (value)}<option {value}>{value ? `${number(value)} км` : 'Без лимит'}</option>{/each}</select></label>
+    <label><span>Пробег до</span><select name="mileage_max" value={filters.mileageMax?.toString() ?? ''}>{#each mileages as value (value)}<option {value}>{value ? `${formatListingNumber(value)} км` : 'Без лимит'}</option>{/each}</select></label>
   </div>
 
-  {#each hiddenFields as [name, value] (name)}<input type="hidden" {name} {value} />{/each}
-  {#each filters.equipment as value (value)}<input type="hidden" name="equipment" {value} />{/each}
+  {#each hiddenFields as [name, value], index (`${name}-${value}-${index}`)}<input type="hidden" {name} {value} />{/each}
 </form>
 
 <div class="dn-discovery-sticky" popover="manual" {@attach attachSticky} role="region" aria-label="Бързо търсене на автомобили">

@@ -1,24 +1,43 @@
 <script lang="ts">
   import { preserveScrollOffset } from '$lib/ui/overlay';
-  import { onDestroy } from 'svelte';
-  let releaseOffset: ((restoreScroll?: boolean) => void) | undefined;
-  onDestroy(() => releaseOffset?.(false));
+  import { onDestroy, tick, type Snippet } from 'svelte';
   import { page } from '$app/state';
   import { resolve } from '$app/paths';
-  import { tick, type Snippet } from 'svelte';
   import type { Attachment } from 'svelte/attachments';
-  import { bodyLabel, listingParams, listingFilterOptions as options, listingModelsForMake, parseListingFilters, type ListingFilters } from '$data/listing';
+  import { listingParams, type ListingFilters } from '$data/listing';
+  import {
+    cleanListingFormData,
+    listingFacetOptionLabel,
+    listingFacetOptions,
+    listingFiltersFromFormData,
+    preservedListingFacetEntries,
+    type ListingFacetField
+  } from '$data/listing-draft';
   import Icon from '$components/ui/Icon.svelte';
 
-  let { children, filters, onApply, fullScreen = false, id = 'dn-quick-filter' }: { children: Snippet<[(event: MouseEvent, field: string, title: string) => void, boolean]>; filters?: ListingFilters; onApply?: (filters: ListingFilters) => void; fullScreen?: boolean; id?: string } = $props();
-  const params = $derived(filters ? listingParams(filters) : page.url.searchParams);
+  type BaseProps = {
+    children: Snippet<[(event: MouseEvent, field: ListingFacetField, title: string) => void, boolean]>;
+    fullScreen?: boolean;
+    id?: string;
+  };
+  type Props = BaseProps & (
+    | { mode: 'url'; filters?: never; onApply?: never }
+    | { mode: 'draft'; filters: ListingFilters; onApply: (filters: ListingFilters) => void }
+  );
+
+  let props: Props = $props();
+  const id = $derived(props.id ?? 'dn-quick-filter');
+  const fullScreen = $derived(props.fullScreen ?? false);
+  const params = $derived(props.mode === 'draft' ? listingParams(props.filters) : page.url.searchParams);
+  let releaseOffset: ((restoreScroll?: boolean) => void) | undefined;
+  onDestroy(() => releaseOffset?.(false));
+
   let dialog: HTMLDialogElement;
   let heading: HTMLHeadingElement;
   let searchInput: HTMLInputElement;
   let trigger: HTMLElement;
-
   let opened = $state(false);
-  let field = $state('make');
+  let field = $state<ListingFacetField>('make');
   let title = $state('Марка');
   let selected = $state('');
   let minimum = $state('');
@@ -31,31 +50,14 @@
   const range = $derived(field === 'price' || field === 'year');
   const searchable = $derived(!range && field !== 'mileage_max' && field !== 'sort');
   const searchLabel = $derived(field === 'make' ? 'Търси марка' : field === 'model' ? 'Търси модел' : `Търси в ${title.toLocaleLowerCase('bg-BG')}`);
-  const optionLabel = (option: string) => field === 'body' ? bodyLabel(option) || 'Всички' : field === 'sort' ? options.sorts.find(([value]) => value === (option || 'default'))?.[1] ?? option : option === 'new' ? 'Нови' : option === 'used' ? 'Употребявани' : option || 'Всички';
+  const optionLabel = (option: string) => listingFacetOptionLabel(field, option);
   const matchesSearch = (option: string) => search.trim().toLocaleLowerCase('bg-BG').split(/\s+/).every(term => optionLabel(option).toLocaleLowerCase('bg-BG').includes(term));
   const invalid = $derived(range && minimum !== '' && maximum !== '' && Number(minimum) > Number(maximum));
-  const choices = $derived.by((): readonly string[] => {
-    switch (field) {
-      case 'sort': return options.sorts.map(([value]) => value === 'default' ? '' : value);
-      case 'make': return options.makes;
-      case 'model': return listingModelsForMake(params.get('make') ?? '');
-      case 'body': return options.bodies;
-      case 'fuel': return options.fuels;
-      case 'transmission': return options.transmissions;
-      case 'version': return options.versions;
-      case 'condition': return ['', 'used', 'new'];
-      case 'equipment': return options.equipment;
-      default: return [];
-    }
-  });
+  const choices = $derived(listingFacetOptions(field, params.get('make') ?? ''));
   const visibleChoices = $derived(choices.filter(matchesSearch));
-  const preserved = $derived([...params.entries()].filter(([key]) => {
-    if (range) return key !== `${field}_min` && key !== `${field}_max`;
-    if (field === 'make' && key === 'model' && selected !== params.get('make')) return false;
-    return key !== field;
-  }));
+  const preserved = $derived(preservedListingFacetEntries(params, field, selected));
 
-  async function open(event: MouseEvent, nextField: string, nextTitle: string) {
+  async function open(event: MouseEvent, nextField: ListingFacetField, nextTitle: string) {
     trigger = event.currentTarget as HTMLElement;
     field = nextField;
     title = nextTitle;
@@ -64,40 +66,32 @@
     minimum = params.get(`${field}_min`) ?? '';
     maximum = params.get(`${field}_max`) ?? '';
     equipment = params.getAll('equipment');
-    if (!onApply) releaseOffset = preserveScrollOffset('--dn-quick-scroll');
+    if (props.mode === 'url') releaseOffset = preserveScrollOffset('--dn-quick-scroll');
     opened = true;
     await tick();
     dialog.showModal();
     heading.focus();
   }
+
   function restore() {
     opened = false;
-    if (!onApply) {
-      releaseOffset?.();
-    }
+    if (props.mode === 'url') releaseOffset?.();
     if (trigger?.isConnected) trigger.focus();
   }
   function clear() { selected = ''; minimum = ''; maximum = ''; equipment = []; search = ''; }
   function submit(event: SubmitEvent) {
-    if (onApply) {
+    if (props.mode === 'draft') {
       event.preventDefault();
-      const values = new URLSearchParams();
-      for (const [key, value] of new FormData(event.currentTarget as HTMLFormElement)) if (typeof value === 'string') values.append(key, value);
-      onApply(parseListingFilters(values));
+      props.onApply(listingFiltersFromFormData(new FormData(event.currentTarget as HTMLFormElement)));
     }
     dialog.close();
   }
-  function clean(event: FormDataEvent) {
-    for (const key of new Set(event.formData.keys())) {
-      if (event.formData.getAll(key).every(value => value === '')) event.formData.delete(key);
-    }
-  }
 </script>
 
-{@render children(open, opened)}
+{@render props.children(open, opened)}
 
-<dialog {id} class={['dn-quick-sheet', { searchable, 'full-screen': fullScreen, standalone: !onApply }]} aria-labelledby={`${id}-title`} {@attach attachDialog} onclose={restore} onclick={event => { if (event.target === event.currentTarget) dialog.close(); }}>
-  <form method="GET" action={resolve('/listing-grid')} onformdata={clean} onsubmit={submit}>
+<dialog {id} class={['dn-quick-sheet', { searchable, 'full-screen': fullScreen, standalone: props.mode === 'url' }]} aria-labelledby={`${id}-title`} {@attach attachDialog} onclose={restore} onclick={event => { if (event.target === event.currentTarget) dialog.close(); }}>
+  <form method="GET" action={resolve('/listing-grid')} onformdata={(event) => cleanListingFormData(event.formData)} onsubmit={submit}>
     <header>
       <h2 id={`${id}-title`} tabindex="-1" {@attach attachHeading}>{title}</h2>
       <button type="button" class="close" aria-label="Затвори избора" onclick={() => dialog.close()}><Icon name="x" size={22} /></button>
