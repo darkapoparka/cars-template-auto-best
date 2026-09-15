@@ -6,12 +6,13 @@ The homepage brand cards use a curated, brand-authentic mix rather than forcing 
 | --- | --- | --- | --- |
 | Land Rover | `static/assets/images/brand-curated/land-rover-classic.png` | Restored from the original Auto Best template partner artwork | Classic green oval retained as supplied. The inherited source is not claimed as an official manufacturer download. |
 | Mercedes-Benz | `static/assets/images/brand-curated/mercedes-benz-star-chrome.webp` | Reused from the sibling Day & Night import template | Chrome/silver star retained as supplied. The inherited source is not claimed as an official manufacturer download. |
-| Audi | `static/assets/images/brand-official/audi-rings-official.svg` | Audi global-site rings asset | Official black SVG retained without geometric or colour edits. |
+| Audi | `static/assets/images/brand-curated/audi-rings-silver-cardog.svg` | Cardog Icons `core/optimized/Audi Logo.svg`, commit `05c4001e83a09a189721a0851546291f71f7e31c` | MIT-licensed multitone vector. The red Audi wordmark paths were removed and the viewBox was cropped to the rings for this compact navigation card. |
 
-Audi source URL at retrieval time:
+Cardog source and license:
 
-- `https://static.audi.com/assets/images/frontend/rings18-2GJCA2FU.svg`
+- `https://github.com/cardog-ai/icons/blob/05c4001e83a09a189721a0851546291f71f7e31c/core/optimized/Audi%20Logo.svg`
+- `provenance/cardog-icons-LICENSE.txt`
 
-The cards use measured visible bounds so raster padding does not make one marque appear smaller than another. Mobile targets a 46px optical height with an 84px width cap; desktop targets 60px with a 116px cap.
+The cards use measured visible bounds so transparent padding does not make one marque appear smaller than another. Mobile targets a 46px optical height with an 84px width cap; desktop targets 60px with a 116px cap.
 
 The marks remain trademarks of their respective owners and are used only as vehicle-marque navigation labels.

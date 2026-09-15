@@ -28,7 +28,7 @@ const brandArtwork = [
   { label: 'Mercedes-Benz', image: '/assets/images/brand-curated/mercedes-benz-star-chrome.webp', width: 240, height: 180, bounds: [40, 10, 200, 170] },
   { label: 'Dongfeng', image: '/assets/images/partner/parner9.png', width: 140, height: 80, bounds: [12, 10, 128, 70] },
   { label: 'Isuzu', image: '/assets/images/partner/parner10.png', width: 140, height: 80, bounds: [11, 10, 129, 70] },
-  { label: 'Audi', image: '/assets/images/brand-official/audi-rings-official.svg', width: 52, height: 18, bounds: [0, 0, 52, 18] },
+  { label: 'Audi', image: '/assets/images/brand-curated/audi-rings-silver-cardog.svg', width: 424, height: 164, bounds: [0, 0, 424, 164] },
   { label: 'BMW', image: '/assets/images/partner/parner12.png', width: 140, height: 80, bounds: [33, 3, 107, 77] }
 ] as const;
 
