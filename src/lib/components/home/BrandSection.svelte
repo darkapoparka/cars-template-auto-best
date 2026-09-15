@@ -27,7 +27,7 @@
         {#each brands as brand (brand.label)}
           <a class="dn-brand-card" class:dn-brand-card--additional={!mobileBrands.has(brand.label)} class:dn-brand-card--secondary={!expanded && !mobileBrands.has(brand.label)} data-stock-count={brand.count} href={resolve(`/listing-grid?make=${encodeURIComponent(brand.label)}`)}>
             <span class="dn-brand-card__image">
-              <span class="dn-brand-card__frame" style:--logo-width={`${logoWidth(brand)}px`} style:--logo-ratio={`${brand.bounds[2] - brand.bounds[0]} / ${brand.bounds[3] - brand.bounds[1]}`} style:--logo-image-width={`${brand.width / (brand.bounds[2] - brand.bounds[0]) * 100}%`} style:--logo-left={`${-brand.bounds[0] / (brand.bounds[2] - brand.bounds[0]) * 100}%`} style:--logo-top={`${-brand.bounds[1] / (brand.bounds[3] - brand.bounds[1]) * 100}%`}><img src={brand.image} alt={`${brand.label} лого`} loading="lazy" decoding="async" width={brand.width} height={brand.height} /></span>
+              <span class="dn-brand-card__frame" style:--logo-width={`${logoWidth(brand)}px`} style:--logo-ratio={`${brand.bounds[2] - brand.bounds[0]} / ${brand.bounds[3] - brand.bounds[1]}`} style:--logo-image-width={`${brand.width / (brand.bounds[2] - brand.bounds[0]) * 100}%`} style:--logo-left={`${-brand.bounds[0] / (brand.bounds[2] - brand.bounds[0]) * 100}%`} style:--logo-top={`${-brand.bounds[1] / (brand.bounds[3] - brand.bounds[1]) * 100}%`}><img class:dn-brand-card__logo--negative={brand.label === 'Mercedes-Benz'} src={brand.image} alt={`${brand.label} лого`} loading="lazy" decoding="async" width={brand.width} height={brand.height} /></span>
             </span>
             <strong>{brand.label}</strong>
           </a>
@@ -46,6 +46,7 @@
 
 <style>
   .dn-brand-card__frame { display: contents; }
+  .dn-brand-card__logo--negative { filter: brightness(0) saturate(100%); }
   .dn-discovery-toggle { display: none; }
   @media (max-width: 767px) {
     .dn-discovery-toggle { display: flex; width: 100%; min-height: 44px; align-items: center; justify-content: center; margin-top: 10px; border: 1px solid #d9dde1; border-radius: var(--dn-radius-button); background: #eceef0; color: #24272c; font: inherit; font-size: var(--dn-control-size); font-weight: var(--dn-control-weight); }
