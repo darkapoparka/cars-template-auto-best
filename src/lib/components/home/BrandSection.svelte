@@ -2,13 +2,12 @@
   import { resolve } from '$app/paths';
   import { brands } from '$data/home';
   const mobileBrands = new Set(brands.filter(brand => brand.count > 0).slice(0, 3).map(brand => brand.label));
-  const mobileLogoWidths: Record<string, number> = {
-    'Land Rover': 76,
-    'Mercedes-Benz': 50,
-    Audi: 80
-  };
-  const logoWidth = (brand: (typeof brands)[number]) => mobileLogoWidths[brand.label]
-    ?? Math.min(84, 44 * (brand.bounds[2] - brand.bounds[0]) / (brand.bounds[3] - brand.bounds[1]));
+  const mobileLogoMaxWidth = 84;
+  const mobileLogoOpticalHeight = 44;
+  const logoWidth = (brand: (typeof brands)[number]) => Math.round(Math.min(
+    mobileLogoMaxWidth,
+    mobileLogoOpticalHeight * (brand.bounds[2] - brand.bounds[0]) / (brand.bounds[3] - brand.bounds[1])
+  ));
   let expanded = $state(false);
 </script>
 
@@ -83,7 +82,7 @@
   }
 
   @media (max-width: 767px) {
-    .dn-brand-section { padding: 12px 0 12px; background: var(--dn-mobile-canvas); }
+    .dn-brand-section { padding: var(--dn-space-5) 0 var(--dn-space-2); background: var(--dn-mobile-canvas); }
     .dn-brand-shell { padding-inline: 0; border-radius: 0; background: transparent; }
     .dn-brand-hero { padding: 0; }
     .dn-brand-hero__copy { gap: 16px; }

@@ -147,10 +147,14 @@
       transform: translateX(-50%);
     }
 
-    .dn-mobile-core-card--blue .dn-mobile-core-card__art img { width: 106%; }
-    .dn-mobile-core-card--red .dn-mobile-core-card__art img { width: 138%; }
-    .dn-mobile-core-card--ice .dn-mobile-core-card__art img { width: 136%; }
-    .dn-mobile-core-card--dark .dn-mobile-core-card__art img { width: 108%; }
+    .dn-mobile-core-card--blue .dn-mobile-core-card__art img { width: clamp(152px, 106%, 164px); }
+    .dn-mobile-core-card--red .dn-mobile-core-card__art img,
+    .dn-mobile-core-card--ice .dn-mobile-core-card__art img { width: clamp(206px, 128%, 220px); }
+    .dn-mobile-core-card--dark .dn-mobile-core-card__art img {
+      width: clamp(172px, 121%, 216px);
+      height: 121%;
+      bottom: -15px;
+    }
     .dn-mobile-core-card:focus-visible { outline: 3px solid var(--dn-focus); outline-offset: 3px; }
   }
 

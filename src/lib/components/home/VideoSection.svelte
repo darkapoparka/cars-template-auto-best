@@ -118,7 +118,7 @@
   }
 
   @media (max-width: 767px) {
-    .dn-videos { padding: 28px 0 12px; background: var(--dn-mobile-canvas); }
+    .dn-videos { padding: var(--dn-space-5) 0 var(--dn-space-3); background: var(--dn-mobile-canvas); }
     .dn-videos > .container { padding: 14px; overflow: hidden; border-radius: 18px; background: var(--dn-ink-deep); }
     .dn-videos__panel { margin: 0; padding: 0; border-radius: 0; background: transparent; }
     .dn-videos__heading { min-height: 0; grid-template-columns: minmax(0, 1fr) 44px; gap: 12px; padding: 2px 2px 14px; border-radius: 0; background: transparent; }

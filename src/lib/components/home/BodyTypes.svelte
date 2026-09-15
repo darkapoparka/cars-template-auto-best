@@ -262,7 +262,7 @@
 
   @media (max-width: 767px) {
     .dn-body-types {
-      padding: 24px 0 6px;
+      padding: var(--dn-space-5) 0 var(--dn-space-2);
       background: var(--dn-mobile-canvas);
     }
 

@@ -132,7 +132,7 @@
 
   @media (max-width: 767px) {
     .dn-inventory {
-      padding: 20px 0 12px;
+      padding: var(--dn-space-6) 0 0;
       background: var(--dn-mobile-canvas);
     }
 
@@ -183,8 +183,8 @@
       grid-template-columns: none;
       gap: var(--dn-home-carousel-gap);
       overflow-x: auto;
-      padding: 0 12px 12px;
-      scroll-padding-left: 12px;
+      padding: 0 var(--dn-space-3) var(--dn-space-2);
+      scroll-padding-left: var(--dn-space-3);
       scroll-snap-type: x proximity;
       scrollbar-width: none;
     }
