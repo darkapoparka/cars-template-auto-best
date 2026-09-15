@@ -1,31 +1,33 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
-  import type { ContactTopicId } from '$data/company';
+  import type { Attachment } from 'svelte/attachments';
   import { leadSite } from '$config/lead-site';
+  import type { ShellPresentation } from '$data/shell';
   import Header from './Header.svelte';
   import Footer from './Footer.svelte';
 
-  type ShellRoute = 'home' | 'listing' | 'vehicle-detail' | 'contact' | 'about' | 'blog' | 'content';
-  interface Props {
-    children: Snippet;
-    route?: ShellRoute;
-    workflowJourney?: boolean;
-    contactTopic?: ContactTopicId | null;
-    showFooterActions?: boolean;
-    showMobileFooter?: boolean;
-  }
-
-  let { children, route = 'content', workflowJourney = false, contactTopic = null, showFooterActions = true, showMobileFooter = false }: Props = $props();
-  const mainLayout = $derived(['home', 'listing', 'contact', 'about', 'blog'].includes(route) ? 'flush' : 'default');
-  const mobileBottom = $derived(showMobileFooter ? 'footer' : route === 'vehicle-detail' ? 'detail' : 'nav');
+  let { children, presentation }: { children: Snippet; presentation: ShellPresentation } = $props();
+  let footerIntersecting = $state(false);
+  const observeFooter: Attachment<HTMLElement> = node => {
+    if (!('IntersectionObserver' in window)) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      footerIntersecting = Boolean(entry?.isIntersecting && entry.intersectionRatio > 0.02);
+    }, { threshold: [0, 0.02, 0.2] });
+    observer.observe(node);
+    return () => {
+      observer.disconnect();
+      footerIntersecting = false;
+    };
+  };
+  const mobileFooterVisible = $derived(presentation.showMobileFooter && footerIntersecting);
 </script>
 
 <div
   class="dn-app-shell"
-  data-route={route}
-  data-contact-topic={contactTopic ?? undefined}
-  data-journey={workflowJourney ? 'workflow' : undefined}
-  data-mobile-bottom={mobileBottom}
+  data-route={presentation.route}
+  data-contact-topic={presentation.contactTopic ?? undefined}
+  data-journey={presentation.workflowJourney ? 'workflow' : undefined}
+  data-mobile-bottom={presentation.mobileBottom}
   style:--dn-red={leadSite.theme.accent}
   style:--dn-red-hover={leadSite.theme.accentHover}
   style:--dn-workflow-canvas={leadSite.theme.workflowCanvas}
@@ -50,7 +52,7 @@
   style:--dn-theme-action-dark-end={leadSite.theme.actionTones.dark[1]}
 >
   <a class="dn-skip-link" href="#main-content">Към съдържанието</a>
-  <Header />
-  <main id="main-content" data-layout={mainLayout} tabindex="-1">{@render children()}</main>
-  <Footer showActions={showFooterActions} {showMobileFooter} />
+  <Header presentation={presentation.header} {mobileFooterVisible} />
+  <main id="main-content" data-layout={presentation.mainLayout} tabindex="-1">{@render children()}</main>
+  <Footer showActions={presentation.showFooterActions} showMobileFooter={presentation.showMobileFooter} {observeFooter} />
 </div>

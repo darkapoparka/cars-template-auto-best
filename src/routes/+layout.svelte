@@ -5,37 +5,24 @@
   import { page } from '$app/state';
   import SiteShell from '$components/layout/SiteShell.svelte';
   import type { Snippet } from 'svelte';
-  import { resolveContactTopic } from '$data/company';
+  import { resolveShellPresentation } from '$data/shell';
 
   let { children }: { children: Snippet } = $props();
-  const showFooterActions = $derived(page.url.pathname !== '/');
-  const showMobileFooter = $derived(page.url.pathname === '/' || page.url.pathname === '/about-us');
-  const contactTopic = $derived(page.url.pathname === '/contact' ? resolveContactTopic(page.url.searchParams.get('topic')).id : null);
-  const workflowJourney = $derived(page.url.pathname === '/contact' && (contactTopic === 'trade-in' || contactTopic === 'import'));
-  const shellRoute = $derived.by(() => {
-    const path = page.url.pathname;
-    if (path === '/') return 'home' as const;
-    if (path === '/listing-grid') return 'listing' as const;
-    if (path.startsWith('/listing-detail-v1/')) return 'vehicle-detail' as const;
-    if (path === '/contact') return 'contact' as const;
-    if (path === '/about-us') return 'about' as const;
-    if (path === '/blog') return 'blog' as const;
-    return 'content' as const;
-  });
+  const presentation = $derived(resolveShellPresentation(page.url, page.status));
   $effect(() => {
-    document.documentElement.classList.toggle('dn-html--workflow', workflowJourney);
+    document.documentElement.classList.toggle('dn-html--workflow', presentation.workflowJourney);
     return () => document.documentElement.classList.remove('dn-html--workflow');
   });
   const indexable = canIndex();
   const canonicalUrl = $derived(template.canonicalOrigin ? `${template.canonicalOrigin}${page.url.pathname}` : null);
 </script>
 
-<svelte:body class:dn-body--workflow={workflowJourney} />
+<svelte:body class:dn-body--workflow={presentation.workflowJourney} />
 <svelte:head>
   {#if canonicalUrl}<link rel="canonical" href={canonicalUrl} />{/if}
   {#if !indexable}<meta name="robots" content="noindex, nofollow" />{/if}
 </svelte:head>
 
-<SiteShell route={shellRoute} {contactTopic} {workflowJourney} {showFooterActions} {showMobileFooter}>
+<SiteShell {presentation}>
   {@render children()}
 </SiteShell>

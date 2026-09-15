@@ -2,17 +2,19 @@
   import { lockPageScroll } from '$lib/ui/overlay';
   import { afterNavigate } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { page } from '$app/state';
-  import { onDestroy, onMount, tick } from 'svelte';
+  import { onDestroy, tick } from 'svelte';
   import type { Attachment } from 'svelte/attachments';
   import Icon from '$components/ui/Icon.svelte';
   import NavigationFeatureCard from './NavigationFeatureCard.svelte';
   import ActionLink from '$components/ui/ActionLink.svelte';
   import MobileMenu from './MobileMenu.svelte';
   import MobileNavIcon from './MobileNavIcon.svelte';
-  import { vehicleContactHref, selectedVehicle } from '$data/journeys';
+  import { vehicleContactHref } from '$data/journeys';
   import { brand } from '$config/brand';
   import { navigation, type InternalNavigationHref, type MegaMenu, type NavigationHref, type NavigationItem } from '$data/navigation';
+  import type { HeaderPresentation } from '$data/shell';
+
+  let { presentation, mobileFooterVisible = false }: { presentation: HeaderPresentation; mobileFooterVisible?: boolean } = $props();
 
   let mega = $state<MegaMenu | null>(null);
   let megaItemId = $state('');
@@ -24,21 +26,13 @@
   let megaPanel: HTMLDivElement | undefined;
   let megaTrigger: HTMLAnchorElement | undefined;
   let releaseScroll: (() => void) | undefined;
-  let mobileFooterVisible = $state(false);
-  const compactDetailHeader = $derived(
-    page.url.pathname.startsWith('/blog-detail/') || page.url.pathname.startsWith('/listing-detail-v1/')
-  );
-  const detailVehicle = $derived(page.status === 200 && page.url.pathname.startsWith('/listing-detail-v1/') ? selectedVehicle(page.params.id ?? null) : null);
-  const vehicleDetailHeader = $derived(Boolean(detailVehicle));
-  const mobileSurfaceHeader = $derived(page.url.pathname === '/');
-  const listingHeader = $derived(page.url.pathname === '/listing-grid');
-  const homeOverlayHeader = $derived(page.url.pathname === '/');
-  const mobileTopic = $derived(page.url.searchParams.get('topic'));
-  const mobileMenuSection = $derived(
-    page.url.pathname.startsWith('/about-us') ||
-    page.url.pathname.startsWith('/blog') ||
-    (page.url.pathname.startsWith('/contact') && mobileTopic !== 'trade-in' && mobileTopic !== 'import')
-  );
+  const compactDetailHeader = $derived(presentation.compactDetailHeader);
+  const detailVehicle = $derived(presentation.detailVehicle);
+  const vehicleDetailHeader = $derived(presentation.vehicleDetailHeader);
+  const mobileSurfaceHeader = $derived(presentation.mobileSurfaceHeader);
+  const listingHeader = $derived(presentation.listingHeader);
+  const homeOverlayHeader = $derived(presentation.homeOverlayHeader);
+  const contactOverlayHeader = $derived(presentation.contactOverlayHeader);
 
   const isInternalHref = (href: NavigationHref): href is InternalNavigationHref => href.startsWith('/');
   const phoneLinkAttributes = { href: brand.phoneHref } as const;
@@ -92,22 +86,8 @@
     };
   };
 
-  const isActive = (item: NavigationItem) => {
-    const path = page.url.pathname;
-    if (item.href === '/') return path === '/';
-    if (item.href === '/listing-grid') return path.startsWith('/listing');
-    if (item.href === '/blog') return path.startsWith('/blog');
-    return path === item.href || path.startsWith(`${item.href}/`);
-  };
-
-  const isExactDestination = (item: NavigationItem) => {
-    const destination = new URL(resolve(item.href), page.url);
-    return (
-      destination.pathname === page.url.pathname &&
-      destination.search === page.url.search &&
-      destination.hash === page.url.hash
-    );
-  };
+  const isActive = (item: NavigationItem) => presentation.navigation[item.id]?.active ?? false;
+  const isExactDestination = (item: NavigationItem) => presentation.navigation[item.id]?.current ?? false;
 
   const openMega = (item: NavigationItem, trigger?: HTMLAnchorElement) => {
     mega = item.menu ?? null;
@@ -192,16 +172,6 @@
   };
 
 
-  onMount(() => {
-    const footer = document.getElementById('dn-site-footer');
-    if (!footer || !('IntersectionObserver' in window)) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      mobileFooterVisible = Boolean(entry?.isIntersecting && entry.intersectionRatio > 0.02);
-    }, { threshold: [0, 0.02, 0.2] });
-    observer.observe(footer);
-    return () => observer.disconnect();
-  });
-
   onDestroy(() => {
     releaseScroll?.();
   });
@@ -224,7 +194,7 @@
   class:dn-header-fixed--vehicle-detail={vehicleDetailHeader}
   class:dn-header-fixed--mobile-surface={mobileSurfaceHeader}
   class:dn-header-fixed--home-overlay={homeOverlayHeader}
-  class:dn-header-fixed--contact-overlay={page.url.pathname === '/contact'}
+  class:dn-header-fixed--contact-overlay={contactOverlayHeader}
   class:dn-header-fixed--listing={listingHeader}
 >
   <header
@@ -249,7 +219,7 @@
           <div class="dn-logo-box">
             <a class="dn-logo" href={resolve('/')} aria-label={`${brand.name} — начало`}>
               <picture>
-                {#if mobileSurfaceHeader || page.url.pathname === '/contact'}
+                {#if mobileSurfaceHeader || contactOverlayHeader}
                   <source media="(max-width: 991px)" srcset={brand.logoOnDark} />
                 {/if}
                 <img src={brand.logo} alt={brand.name} width="220" height="58" fetchpriority="high" />
@@ -356,7 +326,7 @@
     </div>
 
     {#if mobileOpen}
-      <MobileMenu {closeMobile} {attachMobileMenu} {attachMobileCloseButton} {listingHeader} />
+      <MobileMenu {closeMobile} {attachMobileMenu} {attachMobileCloseButton} active={presentation.mobileMenu} />
     {/if}
   </header>
 
@@ -372,39 +342,39 @@
     {:else}
       <nav class="dn-mobile-bottom-nav" class:dn-mobile-bottom-nav--footer-visible={mobileFooterVisible} aria-label="Основни действия">
         <a
-          class:active={page.url.pathname === '/'}
+          class:active={presentation.mobileNavigation.home}
           href={resolve('/')}
-          aria-current={page.url.pathname === '/' ? 'page' : undefined}
+          aria-current={presentation.mobileNavigation.home ? 'page' : undefined}
         >
           <span class="dn-mobile-bottom-nav__icon"><MobileNavIcon name="home" /></span>
           <span>Начало</span>
         </a>
         <a
-          class:active={page.url.pathname.startsWith('/listing')}
+          class:active={presentation.mobileNavigation.listing}
           href={resolve('/listing-grid')}
-          aria-current={page.url.pathname.startsWith('/listing') ? 'page' : undefined}
+          aria-current={presentation.mobileNavigation.listing ? 'page' : undefined}
         >
           <span class="dn-mobile-bottom-nav__icon"><MobileNavIcon name="cars" /></span>
           <span>Коли</span>
         </a>
         <a
-          class:active={page.url.pathname === '/contact' && mobileTopic === 'trade-in'}
+          class:active={presentation.mobileNavigation.tradeIn}
           href={resolve('/contact?topic=trade-in')}
-          aria-current={page.url.pathname === '/contact' && mobileTopic === 'trade-in' ? 'page' : undefined}
+          aria-current={presentation.mobileNavigation.tradeIn ? 'page' : undefined}
         >
           <span class="dn-mobile-bottom-nav__icon"><MobileNavIcon name="sell" /></span>
           <span>Продай</span>
         </a>
         <a
-          class:active={page.url.pathname === '/contact' && mobileTopic === 'import'}
+          class:active={presentation.mobileNavigation.import}
           href={resolve('/contact?topic=import')}
-          aria-current={page.url.pathname === '/contact' && mobileTopic === 'import' ? 'page' : undefined}
+          aria-current={presentation.mobileNavigation.import ? 'page' : undefined}
         >
           <span class="dn-mobile-bottom-nav__icon"><MobileNavIcon name="import" /></span>
           <span>Внос</span>
         </a>
         <button
-          class:active={mobileMenuSection}
+          class:active={presentation.mobileNavigation.menu}
           type="button"
           aria-controls="dn-mobile-menu"
           aria-expanded={mobileOpen}
