@@ -33,6 +33,7 @@
   let pending = $derived(filters);
   let pinned = $state(false);
   let stickyBar = $state<HTMLDivElement>();
+  let dialogReturnFocus = $state<HTMLButtonElement>();
   const attachSticky: Attachment<HTMLDivElement> = node => { stickyBar = node; return () => { stickyBar = undefined; }; };
   const observePanel: Attachment<HTMLFormElement> = node => {
     if (!enableSticky) { pinned = false; return; }
@@ -52,6 +53,12 @@
     if (pinned) stickyBar.showPopover();
     else stickyBar.hidePopover();
   });
+  $effect(() => {
+    if (filtersOpen || !dialogReturnFocus) return;
+    requestAnimationFrame(() => {
+      if (dialogReturnFocus?.isConnected) dialogReturnFocus.focus({ preventScroll: true });
+    });
+  });
   let models = $derived(listingModelsForMake(make));
   let activeCount = $derived(activeFilterCount(pending));
   let summary = $derived([pending.q, pending.make, pending.model].filter(Boolean).join(' · ') || keywordPlaceholder);
@@ -69,18 +76,22 @@
     model = listingModelAfterMakeChange(make, nextMake, model);
     make = nextMake;
   }
+  function openDiscoveryFilters(event: MouseEvent, field?: string) {
+    dialogReturnFocus = event.currentTarget as HTMLButtonElement;
+    openFilters(event, field);
+  }
   const clean = (event: FormDataEvent) => cleanListingFormData(event.formData);
 </script>
 
 <form id="dn-desktop-discovery" class="dn-discovery" {@attach observePanel} method="GET" action={resolve('/listing-grid')} oninput={updateDraft} onchange={updateDraft} onformdata={clean}>
   <div class="dn-discovery__toolbar">
     <div class="dn-discovery__search">
-      <button class="dn-discovery__keyword" type="button" aria-label={keywordPlaceholder} aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openFilters}>
+      <button class="dn-discovery__keyword" type="button" aria-label={keywordPlaceholder} aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openDiscoveryFilters}>
         <Icon name="search" size={20} />
         <span>{filters.q || keywordPlaceholder}</span>
       </button>
       {#if showFilterAction}
-        <button class="dn-discovery__filters" type="button" title="Всички филтри" aria-label={activeCount ? `Всички филтри: ${activeCount} активни` : 'Всички филтри'} aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openFilters}>
+        <button class="dn-discovery__filters" type="button" title="Всички филтри" aria-label={activeCount ? `Всички филтри: ${activeCount} активни` : 'Всички филтри'} aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openDiscoveryFilters}>
           <Icon name="adjustments" size={18} strokeWidth={1.8} /><span>Филтри</span>
           {#if activeCount}<span class="dn-discovery__count" aria-hidden="true">{activeCount}</span>{/if}
         </button>
@@ -101,10 +112,10 @@
 </form>
 
 <div class="dn-discovery-sticky" popover="manual" {@attach attachSticky} role="region" aria-label="Бързо търсене на автомобили">
-  <button class="dn-discovery-sticky__keyword" type="button" aria-label="Отвори търсенето на автомобили" aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openFilters}>
+  <button class="dn-discovery-sticky__keyword" type="button" aria-label="Отвори търсенето на автомобили" aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openDiscoveryFilters}>
     <Icon name="search" size={20} /><span>{summary}</span>
   </button>
-  <button class="dn-discovery-sticky__filters" type="button" aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openFilters}>
+  <button class="dn-discovery-sticky__filters" type="button" aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openDiscoveryFilters}>
     <Icon name="adjustments" size={20} /><span>Филтри</span>{#if activeCount}<span class="dn-discovery-sticky__count">{activeCount}</span>{/if}
   </button>
   <button class="dn-discovery-sticky__submit" type="submit" form="dn-desktop-discovery" aria-label="Търси" title="Търси"><Icon name="search" size={21} /></button>
