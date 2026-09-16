@@ -26,26 +26,30 @@ jobs:
           python <<'PY'
           from pathlib import Path
           path = Path('src/lib/components/listing/VehicleSearchDialog.svelte')
-          text = path.read_text(encoding='utf-8')
-          old = """  const restorePage = () => {
-            filtersOpen = false;
-            releaseOffset?.();
-            if (returnFocus?.isConnected) returnFocus.focus();
-          };"""
-          new = """  const restorePage = () => {
-            filtersOpen = false;
-            releaseOffset?.();
-            const target = returnFocus;
-            let attempts = 0;
-            const restoreFocus = () => {
-              if (target?.isConnected) {
-                target.focus({ preventScroll: true });
-                if (target.matches(':focus')) return;
-              }
-              if (attempts++ < 60) requestAnimationFrame(restoreFocus);
-            };
-            setTimeout(() => requestAnimationFrame(restoreFocus), 0);
-          };"""
+          text = path.read_text(encoding='utf-8').replace('\r\n', '\n')
+          old = '\n'.join([
+              '  const restorePage = () => {',
+              '    filtersOpen = false;',
+              '    releaseOffset?.();',
+              '    if (returnFocus?.isConnected) returnFocus.focus();',
+              '  };'
+          ])
+          new = '\n'.join([
+              '  const restorePage = () => {',
+              '    filtersOpen = false;',
+              '    releaseOffset?.();',
+              '    const target = returnFocus;',
+              '    let attempts = 0;',
+              '    const restoreFocus = () => {',
+              '      if (target?.isConnected) {',
+              '        target.focus({ preventScroll: true });',
+              "        if (target.matches(':focus')) return;",
+              '      }',
+              '      if (attempts++ < 60) requestAnimationFrame(restoreFocus);',
+              '    };',
+              '    setTimeout(() => requestAnimationFrame(restoreFocus), 0);',
+              '  };'
+          ])
           if text.count(old) != 1:
               raise SystemExit(f'expected one restorePage block, found {text.count(old)}')
           path.write_text(text.replace(old, new), encoding='utf-8')
