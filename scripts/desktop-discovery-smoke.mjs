@@ -75,7 +75,7 @@ try {
         await page.keyboard.press('Escape');
         await page.waitForFunction(() => document.querySelector('.dn-discovery-sticky__filters').getAttribute('aria-expanded') === 'false');
         await dialog.waitFor({ state: 'hidden' });
-        assert.equal(await bar.isVisible(), true);
+        await bar.waitFor({ state: 'visible' });
         assert.equal(await filters.evaluate(el => el === document.activeElement), true);
         await bar.locator('.dn-discovery-sticky__keyword').click();
         await dialog.waitFor({ state: 'visible' });
