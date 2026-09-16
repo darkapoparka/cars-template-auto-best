@@ -76,7 +76,7 @@ try {
         await page.waitForFunction(() => document.querySelector('.dn-discovery-sticky__filters').getAttribute('aria-expanded') === 'false');
         await dialog.waitFor({ state: 'hidden' });
         await bar.waitFor({ state: 'visible' });
-        assert.equal(await filters.evaluate(el => el === document.activeElement), true);
+        await page.waitForFunction(() => document.querySelector('.dn-discovery-sticky__filters') === document.activeElement);
         await bar.locator('.dn-discovery-sticky__keyword').click();
         await dialog.waitFor({ state: 'visible' });
         await page.waitForFunction(() => document.querySelector('#dn-listing-filter-dialog input[name=q]') === document.activeElement);
