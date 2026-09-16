@@ -2,7 +2,11 @@
   import { resolve } from '$app/paths';
   import { bodyTypes } from '$data/home';
 
-  const mobileBodyTypes = new Set<string>(bodyTypes.filter(item => item.count > 0).slice(0, 3).map(item => item.query));
+  const mobileBodyTypes = new Set<string>(
+    [...bodyTypes.filter((item) => item.count > 0), ...bodyTypes.filter((item) => item.count <= 0)]
+      .slice(0, 3)
+      .map((item) => item.query)
+  );
   const mobileArtworkWidth: Record<string, number> = {
     SUV: 94,
     Wagon: 100,
