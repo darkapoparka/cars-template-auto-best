@@ -72,11 +72,23 @@
   $effect(() => {
     if (filtersOpen || !dialogReturnFocusKey) return;
     const key = dialogReturnFocusKey;
-    const timer = window.setTimeout(() => {
+    let frame = 0;
+    let remainingFrames = 6;
+    const restore = () => {
       const target = returnFocusElement(key);
-      if (target?.isConnected) target.focus({ preventScroll: true });
+      const stickyTarget = key === 'sticky-keyword' || key === 'sticky-filters';
+      if (target?.isConnected && (!stickyTarget || stickyBar?.matches(':popover-open'))) {
+        target.focus({ preventScroll: true });
+      }
+      if (remainingFrames-- > 0) frame = window.requestAnimationFrame(restore);
+    };
+    const timer = window.setTimeout(() => {
+      frame = window.requestAnimationFrame(restore);
     }, 0);
-    return () => window.clearTimeout(timer);
+    return () => {
+      window.clearTimeout(timer);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   });
   let models = $derived(listingModelsForMake(make));
   let activeCount = $derived(activeFilterCount(pending));
