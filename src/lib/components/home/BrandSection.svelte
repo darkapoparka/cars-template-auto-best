@@ -1,7 +1,11 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
   import { brands } from '$data/home';
-  const mobileBrands = new Set(brands.filter(brand => brand.count > 0).slice(0, 3).map(brand => brand.label));
+  const mobileBrands = new Set(
+    [...brands.filter((brand) => brand.count > 0), ...brands.filter((brand) => brand.count <= 0)]
+      .slice(0, 3)
+      .map((brand) => brand.label)
+  );
   const logoWidth = (brand: (typeof brands)[number], opticalHeight: number, maxWidth: number) => Math.round(Math.min(
     maxWidth,
     opticalHeight * (brand.bounds[2] - brand.bounds[0]) / (brand.bounds[3] - brand.bounds[1])
