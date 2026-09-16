@@ -19,6 +19,12 @@
     normalizeListingMakeTransition
   } from '$data/listing-draft';
 
+  type DiscoveryTriggerKey =
+    | 'desktop-keyword'
+    | 'desktop-filters'
+    | 'sticky-keyword'
+    | 'sticky-filters';
+
   let { filters, openFilters, filtersOpen, onDraftChange, showFilterAction = true, enableSticky = true, keywordPlaceholder = 'Марка, модел или ключова дума' }: {
     showFilterAction?: boolean;
     enableSticky?: boolean;
@@ -33,7 +39,7 @@
   let pending = $derived(filters);
   let pinned = $state(false);
   let stickyBar = $state<HTMLDivElement>();
-  let dialogReturnFocus = $state<HTMLButtonElement>();
+  let dialogReturnFocusKey = $state<DiscoveryTriggerKey>();
   const attachSticky: Attachment<HTMLDivElement> = node => { stickyBar = node; return () => { stickyBar = undefined; }; };
   const observePanel: Attachment<HTMLFormElement> = node => {
     if (!enableSticky) { pinned = false; return; }
@@ -54,10 +60,13 @@
     else stickyBar.hidePopover();
   });
   $effect(() => {
-    if (filtersOpen || !dialogReturnFocus) return;
-    requestAnimationFrame(() => {
-      if (dialogReturnFocus?.isConnected) dialogReturnFocus.focus({ preventScroll: true });
-    });
+    if (filtersOpen || !dialogReturnFocusKey) return;
+    const key = dialogReturnFocusKey;
+    const timer = window.setTimeout(() => {
+      const target = document.querySelector<HTMLButtonElement>(`[data-discovery-trigger="${key}"]`);
+      if (target?.isConnected) target.focus({ preventScroll: true });
+    }, 0);
+    return () => window.clearTimeout(timer);
   });
   let models = $derived(listingModelsForMake(make));
   let activeCount = $derived(activeFilterCount(pending));
@@ -77,7 +86,8 @@
     make = nextMake;
   }
   function openDiscoveryFilters(event: MouseEvent, field?: string) {
-    dialogReturnFocus = event.currentTarget as HTMLButtonElement;
+    const target = event.currentTarget as HTMLButtonElement;
+    dialogReturnFocusKey = target.dataset.discoveryTrigger as DiscoveryTriggerKey;
     openFilters(event, field);
   }
   const clean = (event: FormDataEvent) => cleanListingFormData(event.formData);
@@ -86,12 +96,12 @@
 <form id="dn-desktop-discovery" class="dn-discovery" {@attach observePanel} method="GET" action={resolve('/listing-grid')} oninput={updateDraft} onchange={updateDraft} onformdata={clean}>
   <div class="dn-discovery__toolbar">
     <div class="dn-discovery__search">
-      <button class="dn-discovery__keyword" type="button" aria-label={keywordPlaceholder} aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openDiscoveryFilters}>
+      <button class="dn-discovery__keyword" data-discovery-trigger="desktop-keyword" type="button" aria-label={keywordPlaceholder} aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openDiscoveryFilters}>
         <Icon name="search" size={20} />
         <span>{filters.q || keywordPlaceholder}</span>
       </button>
       {#if showFilterAction}
-        <button class="dn-discovery__filters" type="button" title="Всички филтри" aria-label={activeCount ? `Всички филтри: ${activeCount} активни` : 'Всички филтри'} aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openDiscoveryFilters}>
+        <button class="dn-discovery__filters" data-discovery-trigger="desktop-filters" type="button" title="Всички филтри" aria-label={activeCount ? `Всички филтри: ${activeCount} активни` : 'Всички филтри'} aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openDiscoveryFilters}>
           <Icon name="adjustments" size={18} strokeWidth={1.8} /><span>Филтри</span>
           {#if activeCount}<span class="dn-discovery__count" aria-hidden="true">{activeCount}</span>{/if}
         </button>
@@ -112,10 +122,10 @@
 </form>
 
 <div class="dn-discovery-sticky" popover="manual" {@attach attachSticky} role="region" aria-label="Бързо търсене на автомобили">
-  <button class="dn-discovery-sticky__keyword" type="button" aria-label="Отвори търсенето на автомобили" aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openDiscoveryFilters}>
+  <button class="dn-discovery-sticky__keyword" data-discovery-trigger="sticky-keyword" type="button" aria-label="Отвори търсенето на автомобили" aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openDiscoveryFilters}>
     <Icon name="search" size={20} /><span>{summary}</span>
   </button>
-  <button class="dn-discovery-sticky__filters" type="button" aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openDiscoveryFilters}>
+  <button class="dn-discovery-sticky__filters" data-discovery-trigger="sticky-filters" type="button" aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openDiscoveryFilters}>
     <Icon name="adjustments" size={20} /><span>Филтри</span>{#if activeCount}<span class="dn-discovery-sticky__count">{activeCount}</span>{/if}
   </button>
   <button class="dn-discovery-sticky__submit" type="submit" form="dn-desktop-discovery" aria-label="Търси" title="Търси"><Icon name="search" size={21} /></button>
