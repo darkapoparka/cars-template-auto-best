@@ -97,7 +97,16 @@
   const restorePage = () => {
     filtersOpen = false;
     releaseOffset?.();
-    if (returnFocus?.isConnected) returnFocus.focus();
+    const target = returnFocus;
+    let attempts = 0;
+    const restoreFocus = () => {
+      if (target?.isConnected) {
+        target.focus({ preventScroll: true });
+        if (target.matches(':focus')) return;
+      }
+      if (attempts++ < 60) requestAnimationFrame(restoreFocus);
+    };
+    setTimeout(() => requestAnimationFrame(restoreFocus), 0);
   };
   const cleanFormData = (event: FormDataEvent) => cleanListingFormData(event.formData);
 </script>
