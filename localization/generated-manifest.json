@@ -18,7 +18,7 @@
     "localization/template.reviewed.json": "e8276265d20a7069f25dfca610af2fa39125bb2f7ae392c174a5a4a9bd30c1b5",
     "localization/dealer.reviewed.json": "22ebd7f3ba2ce8ff5e78964797431bad1075e46c67cfea194f5b024ca0a7ff2f"
   },
-  "policySha256": "e0adcfd9ca1efaf30c1410540cdbef25d2144bf9dc447971f0ce3b38cc5928c0",
+  "policySha256": "5cac2494777341dfb0f2cbc886de13a554dee17bfa46ba8b116ddf57a2a700bc",
   "ambiguousAliases": [
     "About",
     "Address and visits",
