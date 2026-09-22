@@ -28,15 +28,11 @@
   .dn-hero__location { display: none; }
 
   @media (min-width: 992px) {
-    .dn-hero.dn-route-hero {
-      --dn-route-hero-height: 720px;
-      background: radial-gradient(ellipse at 50% 70%, var(--dn-theme-hero-surface-mid), var(--dn-ink-deep) 72%);
-    }
-    .dn-hero__inner { height: 380px; padding-top: 0; }
-    .dn-hero .dn-hero__copy { position: absolute; bottom: 32px; width: min(760px, calc(100% - 96px)); display: block; }
-    .dn-hero__copy h1 { color: var(--dn-white); font-size: var(--dn-text-hero); line-height: var(--dn-leading-section); letter-spacing: var(--dn-tracking-heading); text-wrap: balance; }
-    .dn-hero__copy .dn-hero__location { display: block; max-width: 620px; margin: 16px auto 0; color: var(--dn-text-on-ink); font-size: var(--dn-text-body); line-height: var(--dn-leading-body); text-wrap: balance; }
-    .dn-hero :global(.dn-hero-vehicles) { --car-baseline: 560px; height: 720px; }
+    .dn-hero { background: var(--dn-ink-deep); }
+    .dn-hero__inner { height: 360px; padding-top: 0; }
+    .dn-hero .dn-hero__copy { position: absolute; bottom: 24px; width: min(800px, calc(100% - 480px)); display: block; }
+    .dn-hero__copy h1 { color: #fff; font-size: var(--dn-text-fluid-hero); line-height: var(--dn-leading-section); }
+    .dn-hero__copy .dn-hero__location { display: block; margin: 8px auto 0; color: #d7d9dd; font-size: var(--dn-text-body); line-height: var(--dn-leading-body); }
   }
 
   .dn-hero__title-mobile {
