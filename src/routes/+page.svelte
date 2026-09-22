@@ -13,6 +13,7 @@
   import TrustActions from '$components/home/TrustActions.svelte';
   import VideoSection from '$components/home/VideoSection.svelte';
   import { brand } from '$config/brand';
+  import { leadSite } from '$config/lead-site';
 
 </script>
 
@@ -21,7 +22,9 @@
   <meta name="description" content={i18n.t("m_ed2d6b74bc69", { p0: i18n.dealer('city') })} />
 </svelte:head>
 
-<div class="dn-home-page">
+<div class="dn-home-page"
+  style:--dn-section-banner-graphite={`url("${leadSite.artwork.sectionBanners.graphite}")`}
+  style:--dn-section-banner-crimson={`url("${leadSite.artwork.sectionBanners.crimson}")`}>
   <div class="dn-home-slot dn-home-slot--hero"><Hero /></div>
   <div class="dn-home-slot dn-home-slot--search"><SearchBox /></div>
   <div class="dn-home-slot dn-home-slot--mobile-actions"><MobileCoreActions /></div>
@@ -106,22 +109,9 @@
       overflow: hidden;
       margin-bottom: 0;
       border-radius: var(--dn-radius-lg);
-      background: linear-gradient(90deg, var(--dn-ink-deep), var(--dn-theme-hero-surface-mid) 23%, var(--dn-theme-hero-surface-mid) 77%, var(--dn-ink-deep));
+      background: var(--dn-theme-hero-surface-mid) var(--dn-section-banner-graphite) center / cover no-repeat;
       box-shadow: inset 0 1px 0 rgb(255 255 255 / 9%);
       text-align: center;
-    }
-
-    .dn-home-page :global(:is(.dn-home-section-heading--branded, .dn-home-section-heading--banner)::before) {
-      position: absolute;
-      top: var(--dn-space-4);
-      left: 50%;
-      width: 52px;
-      height: 3px;
-      border-radius: var(--dn-pill);
-      background: var(--dn-red);
-      content: '';
-      transform: translateX(-50%);
-      pointer-events: none;
     }
 
     .dn-home-page :global(:is(.dn-home-section-heading--branded, .dn-home-section-heading--banner) > :is(h2, p, a)) { position: relative; z-index: 1; }
@@ -129,9 +119,8 @@
     .dn-home-page :global(.dn-home-section-heading--branded > h2) { color: var(--dn-white); }
     .dn-home-page :global(.dn-home-section-heading--branded > p) { color: var(--dn-text-on-ink); }
     .dn-home-page :global(.dn-home-section-heading--red) {
-      background: linear-gradient(90deg, var(--dn-theme-campaign-accent), var(--dn-red) 23%, var(--dn-red) 77%, var(--dn-theme-campaign-accent));
+      background: var(--dn-red) var(--dn-section-banner-crimson) center / cover no-repeat;
     }
-    .dn-home-page :global(.dn-home-section-heading--red::before) { background: rgb(255 255 255 / 80%); }
 
     .dn-home-page :global(.dn-home-banner-frame) {
       min-height: var(--dn-home-heading-banner-height);

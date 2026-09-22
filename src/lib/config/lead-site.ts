@@ -32,6 +32,7 @@ type LeadSiteConfig = {
     contactHero: { desktop: SiteAssetPath; sellMobile: SiteAssetPath; importMobile: SiteAssetPath; support: SiteAssetPath };
     blogHero: SiteAssetPath;
     editorialBanner: SiteAssetPath;
+    sectionBanners: { graphite: SiteAssetPath; crimson: SiteAssetPath };
     home: { collection: SiteAssetPath; sell: SiteAssetPath; sellCompact: SiteAssetPath; import: SiteAssetPath };
     routeHero: {
       standard: Record<RouteHeroAsset, SiteAssetPath>;
@@ -98,6 +99,10 @@ export const leadSite = {
     },
     blogHero: '/assets/images/lead/day-night-blog-hero-v2.webp',
     editorialBanner: '/assets/images/lead/day-night-editorial-banner-v2.webp',
+    sectionBanners: {
+      graphite: '/assets/images/lead/auto-best-banner-graphite-v1.png',
+      crimson: '/assets/images/lead/auto-best-banner-crimson-v1.png'
+    },
     home: {
       collection,
       sell: mobileSell,
