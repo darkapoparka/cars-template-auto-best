@@ -330,6 +330,23 @@
   .dn-app-shell .dn-blog-grid { margin-top: 0; }
 }
 
+/* Discovery titles have their own full-width lane above the vehicle artwork. */
+@media (min-width: 992px) {
+  .dn-app-shell .dn-route-hero:is(.dn-hero, .dn-listing-hero) .dn-route-hero__copy {
+    width: min(1120px, calc(100% - 64px));
+  }
+  .dn-app-shell .dn-route-hero:is(.dn-hero, .dn-listing-hero) .dn-route-hero__copy h1 {
+    font-size: var(--dn-text-hero);
+    white-space: nowrap;
+    text-wrap: nowrap;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .dn-app-shell .dn-route-hero:is(.dn-hero, .dn-listing-hero) .dn-route-hero__copy h1 {
+    font-size: var(--dn-text-section);
+  }
+}
+
 /* Mobile banners share the desktop palette; content stays in normal route flow. */
 @media (max-width: 991px) {
   .dn-app-shell .dn-hero.dn-route-hero,

@@ -173,7 +173,7 @@
     .dn-search-wrap > .container { width: var(--dn-discovery-width); }
     .dn-search { padding: var(--dn-discovery-padding); border-radius: var(--dn-discovery-radius); box-shadow: 0 8px 24px rgb(0 0 0 / 12%); }
     .dn-search :global(.dn-discovery__facets) {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.4fr) minmax(0, .8fr) minmax(0, 1.4fr);
+      grid-template-columns: repeat(6, minmax(0, 1fr));
       gap: var(--dn-space-3);
     }
     .dn-search :global(.dn-discovery__facets select) {
