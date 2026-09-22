@@ -29,7 +29,7 @@
 
   @media (min-width: 992px) {
     .dn-hero { background: var(--dn-ink-deep); }
-    .dn-hero__inner { height: 320px; padding-top: 0; }
+    .dn-hero__inner { height: 360px; padding-top: 0; }
     .dn-hero .dn-hero__copy { position: absolute; bottom: 24px; width: min(800px, calc(100% - 480px)); display: block; }
     .dn-hero__copy h1 { color: #fff; font-size: var(--dn-text-fluid-hero); line-height: var(--dn-leading-section); }
     .dn-hero__copy .dn-hero__location { display: block; margin: 8px auto 0; color: #d7d9dd; font-size: var(--dn-text-body); line-height: var(--dn-leading-body); }

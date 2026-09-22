@@ -61,7 +61,12 @@
 <footer id="dn-site-footer" {@attach observeFooter} class={['dn-footer', { 'dn-footer--mobile-hidden': !showMobileFooter }]}>
   <div class="container dn-footer__grid">
     <div class="dn-footer__intro">
-      <a class="dn-footer__logo" href={i18n.href(resolve('/'))}><img src={brand.logo} alt={brand.name} width="220" height="58" /></a>
+      <a class="dn-footer__logo" href={i18n.href(resolve('/'))}>
+        <picture>
+          <source media="(min-width: 768px)" srcset={brand.logoOnDark} />
+          <img src={brand.logo} alt={brand.name} width="220" height="58" />
+        </picture>
+      </a>
       <span class="dn-footer__tagline">{i18n.t("m_5cf2001dbaf7")}</span>
       <p>{i18n.t("m_9785a63caa9d")}</p>
     </div>
@@ -116,6 +121,7 @@
   .dn-footer__grid { display: grid; grid-template-columns: 1.2fr .8fr .65fr 1.3fr; align-items: start; gap: 40px; }
   .dn-footer__grid > * { min-width: 0; }
   .dn-footer__logo { display: inline-flex; min-height: var(--dn-control-hit-height); align-items: center; }
+  .dn-footer__logo picture { display: block; }
   .dn-footer__logo img { width: 190px; height: 50px; object-fit: contain; }
   .dn-footer__tagline { display: block; margin-top: var(--dn-space-2); color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
   .dn-footer__intro p { max-width: 300px; margin: var(--dn-space-4) 0 0; color: var(--dn-muted); font-size: var(--dn-text-body); line-height: var(--dn-leading-body); }
@@ -131,6 +137,32 @@
   .dn-footer__contact-arrow { display: grid; justify-self: center; place-items: center; transform: rotate(-45deg); color: var(--dn-muted); }
   .dn-footer__appointment { margin: var(--dn-space-1) 0 0; color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
   .dn-footer__bottom { display: flex; justify-content: space-between; gap: var(--dn-space-4); margin-top: 32px; padding-top: var(--dn-space-4); border-top: 1px solid var(--dn-line); color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
+
+  @media (min-width: 768px) {
+    .dn-footer {
+      margin-top: var(--dn-space-8);
+      padding-block: 64px var(--dn-space-6);
+      border: 0;
+      border-radius: 40px 40px 0 0;
+      background:
+        radial-gradient(ellipse at 87% 0%, rgb(var(--dn-theme-accent-rgb) / 18%), transparent 38%),
+        var(--dn-ink-deep);
+      color: var(--dn-white);
+    }
+    .dn-footer__grid { gap: 48px; }
+    .dn-footer__tagline, .dn-footer__intro p, .dn-footer__appointment { color: var(--dn-muted-on-ink); }
+    .dn-footer nav strong, .dn-footer__contact h2 { color: var(--dn-white); }
+    .dn-footer nav a { color: var(--dn-muted-on-ink); }
+    .dn-footer nav a:hover { color: var(--dn-white); text-decoration: underline; text-underline-offset: 4px; }
+    .dn-footer .dn-footer__contact-link { color: var(--dn-text-on-ink); }
+    .dn-footer .dn-footer__contact-link:hover { color: var(--dn-white); }
+    .dn-footer__contact-arrow { color: var(--dn-white); transition: transform 180ms ease; }
+    .dn-footer__contact-link:hover .dn-footer__contact-arrow { transform: translate(3px, -3px) rotate(-45deg); }
+    .dn-footer__call { transition: background-color 180ms ease, transform 180ms ease, box-shadow 180ms ease; }
+    .dn-footer .dn-footer__call:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgb(0 0 0 / 24%); }
+    .dn-footer__bottom { margin-top: 44px; padding-top: 0; border: 0; color: var(--dn-muted-on-ink); }
+    .dn-footer a:focus-visible { outline-color: var(--dn-white); }
+  }
 
   @media (min-width: 768px) and (max-width: 1100px) {
     .dn-footer-actions__grid, .dn-footer__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -151,5 +183,11 @@
     .dn-footer__company a { color: var(--dn-ink); }
     .dn-footer__bottom { margin-top: var(--dn-space-2); padding-top: var(--dn-space-3); }
     .dn-footer__descriptor { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dn-footer__call, .dn-footer__contact-arrow { transition: none; }
+    .dn-footer .dn-footer__call:hover { transform: none; }
+    .dn-footer__contact-link:hover .dn-footer__contact-arrow { transform: rotate(-45deg); }
   }
 </style>

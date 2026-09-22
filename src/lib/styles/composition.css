@@ -296,6 +296,16 @@
   body:has(dialog[open]) .dn-mobile-detail-bar { display: none; }
 }
 
+@media (min-width: 768px) and (max-width: 991px) {
+  .dn-app-shell {
+    background: linear-gradient(
+      to bottom,
+      var(--dn-mobile-canvas) calc(100% - var(--dn-mobile-nav-height) - env(safe-area-inset-bottom)),
+      var(--dn-ink-deep) 0
+    );
+  }
+}
+
 @media (max-width: 600px) {
   .container, .dn-container { width: calc(100% - 24px); }
   .dn-section-heading { flex-direction: column; gap: 12px; }
@@ -312,6 +322,7 @@
 
 @media (min-width: 992px) {
   .dn-app-shell :is(.dn-hero, .dn-route-hero--studio, .dn-listing-stage) { --dn-route-hero-height: 540px; }
+  .dn-app-shell .dn-hero { --dn-route-hero-height: 580px; }
   .dn-app-shell .dn-body-types.dn-section { padding-top: 48px; }
   .dn-app-shell .dn-about-process { padding-top: 48px; }
   .dn-app-shell .dn-blog-hero.dn-route-hero--studio { height: var(--dn-route-hero-height); overflow: hidden; margin-bottom: 0; }
