@@ -87,6 +87,7 @@
       letter-spacing: var(--dn-cta-tracking);
       white-space: nowrap;
       margin-top: var(--dn-home-copy-gap);
+      box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
       transition: background-color 180ms ease, color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
     }
 
@@ -105,8 +106,22 @@
       overflow: hidden;
       margin-bottom: 0;
       border-radius: var(--dn-radius-lg);
-      background: var(--dn-theme-hero-surface-mid);
+      background: linear-gradient(90deg, var(--dn-ink-deep), var(--dn-theme-hero-surface-mid) 23%, var(--dn-theme-hero-surface-mid) 77%, var(--dn-ink-deep));
+      box-shadow: inset 0 1px 0 rgb(255 255 255 / 9%);
       text-align: center;
+    }
+
+    .dn-home-page :global(:is(.dn-home-section-heading--branded, .dn-home-section-heading--banner)::before) {
+      position: absolute;
+      top: var(--dn-space-4);
+      left: 50%;
+      width: 52px;
+      height: 3px;
+      border-radius: var(--dn-pill);
+      background: var(--dn-red);
+      content: '';
+      transform: translateX(-50%);
+      pointer-events: none;
     }
 
     .dn-home-page :global(:is(.dn-home-section-heading--branded, .dn-home-section-heading--banner) > :is(h2, p, a)) { position: relative; z-index: 1; }
@@ -114,8 +129,9 @@
     .dn-home-page :global(.dn-home-section-heading--branded > h2) { color: var(--dn-white); }
     .dn-home-page :global(.dn-home-section-heading--branded > p) { color: var(--dn-text-on-ink); }
     .dn-home-page :global(.dn-home-section-heading--red) {
-      background: var(--dn-red);
+      background: linear-gradient(90deg, var(--dn-theme-campaign-accent), var(--dn-red) 23%, var(--dn-red) 77%, var(--dn-theme-campaign-accent));
     }
+    .dn-home-page :global(.dn-home-section-heading--red::before) { background: rgb(255 255 255 / 80%); }
 
     .dn-home-page :global(.dn-home-banner-frame) {
       min-height: var(--dn-home-heading-banner-height);
@@ -140,7 +156,7 @@
       background: var(--dn-surface-hover);
       color: var(--dn-ink-strong);
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgb(0 0 0 / 14%);
+      box-shadow: 0 10px 24px rgb(0 0 0 / 18%);
     }
 
     .dn-home-page :global(.dn-home-section-action:active) { transform: translateY(0); box-shadow: none; }
