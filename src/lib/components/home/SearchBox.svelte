@@ -169,9 +169,20 @@
   }
 
   @media (min-width: 992px) {
-    .dn-search-wrap { margin-top: -220px; margin-bottom: 34px; }
+    .dn-search-wrap { margin-top: -340px; margin-bottom: 48px; }
     .dn-search-wrap > .container { width: var(--dn-discovery-width); }
-    .dn-search { padding: var(--dn-discovery-padding); border-radius: var(--dn-discovery-radius); }
+    .dn-search { padding: var(--dn-space-6); border-radius: var(--dn-radius-lg); box-shadow: var(--dn-shadow); }
+    .dn-search :global(.dn-discovery) { gap: var(--dn-space-5); }
+    .dn-search :global(.dn-discovery__facets) { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--dn-space-4) var(--dn-space-5); }
+    .dn-search :global(.dn-discovery__facets select) {
+      padding-inline: 16px 40px;
+      font-size: var(--dn-text-control-prominent);
+      transition: background-color 160ms ease, border-color 160ms ease;
+    }
+    .dn-search :global(.dn-discovery__facets select:hover) { background-color: var(--dn-white); border-color: var(--dn-line-emphasis); }
+    .dn-search :global(.dn-discovery__search:focus-within) { border-color: var(--dn-focus); }
+    .dn-search :global(.dn-discovery__submit) { transition: background-color 160ms ease, box-shadow 160ms ease; }
+    .dn-search :global(.dn-discovery__submit:hover) { box-shadow: 0 4px 12px rgb(0 0 0 / 16%); }
   }
 
   @media (min-width: 1440px) {
