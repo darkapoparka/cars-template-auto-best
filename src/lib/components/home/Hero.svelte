@@ -3,7 +3,6 @@
 
   const i18n = getI18n();
 
-  import { brand } from '$config/brand';
   import HeroVehicles from '$components/ui/HeroVehicles.svelte';
 </script>
 
@@ -31,8 +30,8 @@
     .dn-hero { background: var(--dn-ink-deep); }
     .dn-hero__inner { height: 360px; padding-top: 0; }
     .dn-hero .dn-hero__copy { position: absolute; bottom: 24px; width: min(800px, calc(100% - 480px)); display: block; }
-    .dn-hero__copy h1 { color: #fff; font-size: var(--dn-text-fluid-hero); line-height: var(--dn-leading-section); }
-    .dn-hero__copy .dn-hero__location { display: block; margin: 8px auto 0; color: #d7d9dd; font-size: var(--dn-text-body); line-height: var(--dn-leading-body); }
+    .dn-hero__copy h1 { color: var(--dn-white); font-size: var(--dn-text-fluid-hero); line-height: var(--dn-leading-section); letter-spacing: var(--dn-tracking-heading); text-wrap: balance; }
+    .dn-hero__copy .dn-hero__location { display: block; margin: var(--dn-space-3) auto 0; color: var(--dn-text-on-ink); font-size: var(--dn-text-body); line-height: var(--dn-leading-body); text-wrap: balance; }
   }
 
   .dn-hero__title-mobile {
