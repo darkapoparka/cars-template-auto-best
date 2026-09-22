@@ -6,7 +6,6 @@
 
   import { resolve } from '$app/paths';
   import { brands } from '$data/home';
-  const bannerBrands = brands.filter((brand) => ['Mercedes-Benz', 'Audi', 'BMW'].includes(brand.label));
   const mobileBrands = new Set(
     [...brands.filter((brand) => brand.count > 0), ...brands.filter((brand) => brand.count <= 0)]
       .slice(0, 3)
@@ -30,11 +29,6 @@
           <span class="dn-heading-mobile">{i18n.t("m_5216bd5728f8")}</span>
         </h2>
         <a class="dn-brand-hero__cta dn-home-section-action" href={i18n.href(resolve('/listing-grid'))} aria-label={i18n.t("m_7d6647b063a2")}><span class="dn-heading-desktop">{i18n.t("m_7d6647b063a2")}</span><span class="dn-heading-mobile" aria-hidden="true">{i18n.t("m_a52ace420f21")}</span></a>
-        <div class="dn-brand-banner-marks" aria-hidden="true">
-          {#each bannerBrands as bannerBrand (bannerBrand.label)}
-            <img class:dn-brand-banner-mark--audi={bannerBrand.label === 'Audi'} src={bannerBrand.image} alt="" loading="lazy" decoding="async" width={bannerBrand.width} height={bannerBrand.height} />
-          {/each}
-        </div>
       </div>
     </div>
     <div class="dn-brand-panel">
@@ -82,7 +76,6 @@
   .dn-brand-card strong { display: block; margin: 0; color: #24272c; font-size: var(--dn-text-body); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-heading); }
   .dn-brand-card:hover, .dn-brand-card:focus-visible { box-shadow: var(--dn-card-hover-shadow); }
   .dn-brand-hero__cta:hover { background: var(--dn-surface-hover); }
-  .dn-brand-banner-marks { display: none; }
   a:focus-visible { outline: 3px solid var(--dn-line-emphasis); outline-offset: 3px; }
 
   @media (min-width: 768px) and (max-width: 1199px) {
@@ -92,9 +85,6 @@
 
   @media (min-width: 992px) {
     .dn-brand-hero { padding: 0; }
-    .dn-brand-banner-marks { position: absolute; right: 4%; top: 0; display: flex; width: 34%; height: 100%; align-items: center; justify-content: space-around; gap: var(--dn-space-4); pointer-events: none; }
-    .dn-brand-banner-marks img { display: block; width: min(30%, 104px); height: 76px; object-fit: contain; filter: grayscale(1) brightness(1.35); opacity: .9; }
-    .dn-brand-banner-marks .dn-brand-banner-mark--audi { filter: brightness(0) invert(1); opacity: .78; }
     .dn-brand-panel { position: relative; margin-top: calc(-1 * var(--dn-home-banner-overlap)); padding: 24px; border-radius: var(--dn-radius); }
     .dn-brand-card__image { height: 72px; }
     .dn-brand-card__frame { width: var(--logo-desktop-width); }
