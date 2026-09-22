@@ -32,7 +32,7 @@ type LeadSiteConfig = {
     contactHero: { desktop: SiteAssetPath; sellMobile: SiteAssetPath; importMobile: SiteAssetPath; support: SiteAssetPath };
     blogHero: SiteAssetPath;
     editorialBanner: SiteAssetPath;
-    home: { collection: SiteAssetPath; sell: SiteAssetPath; sellCompact: SiteAssetPath; import: SiteAssetPath };
+    home: { collection: SiteAssetPath; sell: SiteAssetPath; sellCompact: SiteAssetPath; import: SiteAssetPath; sectionCoupe: SiteAssetPath; sectionSuv: SiteAssetPath };
     routeHero: {
       standard: Record<RouteHeroAsset, SiteAssetPath>;
       colored: Partial<Record<RouteHeroAsset, SiteAssetPath>>;
@@ -102,7 +102,9 @@ export const leadSite = {
       collection,
       sell: mobileSell,
       sellCompact: '/assets/images/lead/day-night-sell-banner-v2.webp',
-      import: mobileImport
+      import: mobileImport,
+      sectionCoupe: '/assets/images/lead/day-night-section-coupe-v1.png',
+      sectionSuv: '/assets/images/lead/day-night-section-suv-v1.png'
     },
     routeHero: {
       standard: {

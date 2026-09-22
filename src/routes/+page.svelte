@@ -13,6 +13,7 @@
   import TrustActions from '$components/home/TrustActions.svelte';
   import VideoSection from '$components/home/VideoSection.svelte';
   import { brand } from '$config/brand';
+  import { leadSite } from '$config/lead-site';
 
 </script>
 
@@ -21,7 +22,11 @@
   <meta name="description" content={i18n.t("m_ed2d6b74bc69", { p0: i18n.dealer('city') })} />
 </svelte:head>
 
-<div class="dn-home-page">
+<div
+  class="dn-home-page"
+  style:--dn-home-banner-coupe={`url("${leadSite.artwork.home.sectionCoupe}")`}
+  style:--dn-home-banner-suv={`url("${leadSite.artwork.home.sectionSuv}")`}
+>
   <div class="dn-home-slot dn-home-slot--hero"><Hero /></div>
   <div class="dn-home-slot dn-home-slot--search"><SearchBox /></div>
   <div class="dn-home-slot dn-home-slot--mobile-actions"><MobileCoreActions /></div>
@@ -111,20 +116,6 @@
       text-align: center;
     }
 
-    .dn-home-page :global(:is(.dn-home-section-heading--branded, .dn-home-section-heading--banner)::after) {
-      position: absolute;
-      z-index: 0;
-      top: -380px;
-      right: -105px;
-      width: 520px;
-      height: 520px;
-      border: 1px solid rgb(255 255 255 / 15%);
-      border-radius: 50%;
-      box-shadow: 0 0 0 64px rgb(255 255 255 / 3%), 0 0 0 128px rgb(255 255 255 / 2%);
-      content: '';
-      pointer-events: none;
-    }
-
     .dn-home-page :global(:is(.dn-home-section-heading--branded, .dn-home-section-heading--banner) > :is(h2, p, a)) { position: relative; z-index: 1; }
 
     .dn-home-page :global(.dn-home-section-heading--branded > h2) { color: var(--dn-white); }
@@ -136,10 +127,31 @@
     }
 
     .dn-home-page :global(.dn-home-banner-frame) {
-      min-height: var(--dn-home-heading-banner-height);
+      min-height: calc(var(--dn-home-heading-banner-height) + var(--dn-space-8));
       padding: var(--dn-home-banner-padding);
       padding-top: calc(var(--dn-space-7) - var(--dn-home-banner-overlap) / 2);
       padding-bottom: calc(var(--dn-space-7) + var(--dn-home-banner-overlap) / 2);
+    }
+    .dn-home-page :global(:is(.dn-inventory__heading, .dn-brand-hero__copy)::after),
+    .dn-home-page :global(:is(.dn-body-types__heading, .dn-editorial__heading)::before) {
+      position: absolute;
+      z-index: 0;
+      bottom: -12px;
+      width: 36%;
+      height: 94%;
+      background-repeat: no-repeat;
+      background-position: center bottom;
+      background-size: contain;
+      content: '';
+      pointer-events: none;
+    }
+    .dn-home-page :global(:is(.dn-inventory__heading, .dn-brand-hero__copy)::after) {
+      right: -2%;
+      background-image: var(--dn-home-banner-coupe);
+    }
+    .dn-home-page :global(:is(.dn-body-types__heading, .dn-editorial__heading)::before) {
+      left: -2%;
+      background-image: var(--dn-home-banner-suv);
     }
     .dn-home-page :global(.dn-home-banner-copy) {
       display: flex;
