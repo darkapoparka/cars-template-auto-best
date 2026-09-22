@@ -215,6 +215,7 @@
           <li><Icon name="map-pin" size={18} strokeWidth={1.75} /><span>{i18n.dealer('address')}</span></li>
           <li><Icon name="phone" size={18} strokeWidth={1.75} /><a {...phoneLinkAttributes}>{brand.phone}</a></li>
           <li class="dn-topbar__item--appointment"><Icon name="clock" size={18} strokeWidth={1.75} /><span>{i18n.dealer('appointment')}</span></li>
+          <li class="dn-topbar__settings"><LocaleTrigger /></li>
         </ul>
       </div>
     </div>
@@ -292,14 +293,13 @@
           </nav>
 
           <div class="dn-header-actions">
-            <LocaleTrigger />
             <ActionLink class="dn-header-action dn-header-action--secondary" href="/contact">
               <Icon name="mail" size={17} strokeWidth={1.8} />
               <span>{i18n.t("m_0e3416f5f251")}</span>
             </ActionLink>
             <ActionLink class="dn-header-action dn-header-action--primary" href={detailVehicle ? vehicleContactHref(detailVehicle.id) : '/contact?topic=inspection'}>
               <Icon name="calendar" size={17} strokeWidth={1.8} />
-              <span>{i18n.t("m_be4b2e6f02d6")}</span>
+              <span>{i18n.t('action.viewingShort')}</span>
             </ActionLink>
           </div>
 
@@ -440,6 +440,12 @@
   .dn-mega__side-action > :global(.dn-mega__cta) { width: 100%; min-height: 42px; display: inline-flex; align-items: center; justify-content: center; padding: 11px 16px; border-radius: var(--dn-radius-button); background: var(--dn-red); color: #fff; }
 
   @media (min-width: 992px) {
+    .dn-header .dn-header__inner { grid-template-columns: minmax(160px, 1fr) auto minmax(160px, 1fr); }
+    .dn-header-actions { justify-self: end; white-space: nowrap; }
+    .dn-topbar__list { gap: var(--dn-space-4); font-size: var(--dn-text-meta); }
+    .dn-topbar__settings { flex-shrink: 0; }
+    .dn-topbar__settings :global(.cars-locale-trigger) { border-color: transparent; border-radius: var(--dn-radius-control); font-size: var(--dn-text-meta); }
+    .dn-topbar__settings :global(.cars-locale-trigger:hover) { background: var(--dn-surface); opacity: 1; }
     .dn-header:not(.dn-header--compact) .dn-header__inner { min-height: 84px; }
     .dn-topbar, .dn-topbar__inner { min-height: 44px; }
     .dn-header:not(.dn-header--compact) .dn-logo img { height: 56px; }
