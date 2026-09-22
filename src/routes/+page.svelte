@@ -24,8 +24,8 @@
 
 <div
   class="dn-home-page"
-  style:--dn-home-banner-coupe={`url("${leadSite.artwork.home.sectionCoupe}")`}
-  style:--dn-home-banner-suv={`url("${leadSite.artwork.home.sectionSuv}")`}
+  style:--dn-home-banner-body-types={`url("${leadSite.artwork.home.bodyTypes}")`}
+  style:--dn-home-banner-buying-guides={`url("${leadSite.artwork.home.buyingGuides}")`}
 >
   <div class="dn-home-slot dn-home-slot--hero"><Hero /></div>
   <div class="dn-home-slot dn-home-slot--search"><SearchBox /></div>
@@ -110,9 +110,7 @@
       overflow: hidden;
       margin-bottom: 0;
       border-radius: var(--dn-radius-lg);
-      background:
-        radial-gradient(ellipse at 8% 100%, rgb(255 255 255 / 8%), transparent 46%),
-        linear-gradient(120deg, var(--dn-theme-hero-surface-mid), var(--dn-ink-deep));
+      background: var(--dn-theme-hero-surface-mid);
       text-align: center;
     }
 
@@ -121,37 +119,34 @@
     .dn-home-page :global(.dn-home-section-heading--branded > h2) { color: var(--dn-white); }
     .dn-home-page :global(.dn-home-section-heading--branded > p) { color: var(--dn-text-on-ink); }
     .dn-home-page :global(.dn-home-section-heading--red) {
-      background:
-        radial-gradient(ellipse at 8% 100%, rgb(255 255 255 / 17%), transparent 48%),
-        linear-gradient(120deg, var(--dn-red), var(--dn-theme-campaign-accent));
+      background: var(--dn-red);
     }
 
     .dn-home-page :global(.dn-home-banner-frame) {
-      min-height: calc(var(--dn-home-heading-banner-height) + var(--dn-space-8));
+      min-height: calc(var(--dn-home-heading-banner-height) + var(--dn-space-4));
       padding: var(--dn-home-banner-padding);
       padding-top: calc(var(--dn-space-7) - var(--dn-home-banner-overlap) / 2);
       padding-bottom: calc(var(--dn-space-7) + var(--dn-home-banner-overlap) / 2);
     }
-    .dn-home-page :global(:is(.dn-inventory__heading, .dn-brand-hero__copy)::after),
-    .dn-home-page :global(:is(.dn-body-types__heading, .dn-editorial__heading)::before) {
+    .dn-home-page :global(:is(.dn-body-types__heading, .dn-editorial__heading)::after) {
       position: absolute;
       z-index: 0;
-      bottom: -12px;
-      width: 36%;
-      height: 94%;
+      right: 3%;
+      bottom: 0;
+      width: 42%;
+      height: 100%;
       background-repeat: no-repeat;
-      background-position: center bottom;
+      background-position: center center;
       background-size: contain;
       content: '';
       pointer-events: none;
     }
-    .dn-home-page :global(:is(.dn-inventory__heading, .dn-brand-hero__copy)::after) {
-      right: -2%;
-      background-image: var(--dn-home-banner-coupe);
+    .dn-home-page :global(.dn-body-types__heading::after) {
+      background-image: var(--dn-home-banner-body-types);
     }
-    .dn-home-page :global(:is(.dn-body-types__heading, .dn-editorial__heading)::before) {
-      left: -2%;
-      background-image: var(--dn-home-banner-suv);
+    .dn-home-page :global(.dn-editorial__heading::after) {
+      width: 30%;
+      background-image: var(--dn-home-banner-buying-guides);
     }
     .dn-home-page :global(.dn-home-banner-copy) {
       display: flex;
@@ -163,6 +158,18 @@
     .dn-home-page :global(.dn-home-banner-copy > .dn-home-section-action) {
       margin-top: calc(var(--dn-home-cta-gap) - var(--dn-home-copy-gap));
       align-self: center;
+    }
+    .dn-home-page :global(:is(.dn-body-types__heading, .dn-brand-hero__copy, .dn-editorial__heading).dn-home-banner-copy) {
+      align-items: flex-start;
+      padding-left: clamp(var(--dn-space-8), 5vw, 72px);
+      text-align: left;
+    }
+    .dn-home-page :global(:is(.dn-body-types__heading, .dn-brand-hero__copy, .dn-editorial__heading) > .dn-home-section-title) {
+      max-width: 60%;
+      text-align: left;
+    }
+    .dn-home-page :global(:is(.dn-body-types__heading, .dn-brand-hero__copy, .dn-editorial__heading).dn-home-banner-copy > .dn-home-section-action) {
+      align-self: flex-start;
     }
 
     .dn-home-page :global(.dn-home-section-action:hover) {
