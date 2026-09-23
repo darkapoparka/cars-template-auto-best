@@ -9,7 +9,6 @@
   import ContactVehicle from './ContactVehicle.svelte';
   import Icon from '$components/ui/Icon.svelte';
   import HeroVehicles from '$components/ui/HeroVehicles.svelte';
-  import DesktopHeroScene from '$components/ui/DesktopHeroScene.svelte';
   import type { ContactTopic } from '$data/company';
 
   let { topic, vehicle = null }: { topic: ContactTopic; vehicle?: Vehicle | null } = $props();
@@ -23,11 +22,7 @@
 </script>
 
 <section class="dn-contact-hero dn-route-hero" class:dn-route-hero--studio={topic.id !== 'general'} class:dn-route-hero--charcoal={topic.id === 'general'} class:dn-contact-hero--vehicle={topic.id === 'leasing' && !!vehicle} class:dn-contact-hero--general={topic.id === 'general'} class:dn-contact-hero--workflow={topic.id === 'trade-in' || topic.id === 'import'} class:dn-contact-hero--import={topic.id === 'import'} aria-labelledby="contact-title">
-  {#if topic.id === 'general'}
-    <DesktopHeroScene scene="contact" />
-  {:else}
-    <HeroVehicles pair="contact" mobile={topic.id === 'trade-in' || topic.id === 'import'} mobileScene={topic.id === 'trade-in' ? 'sell' : topic.id === 'import' ? 'import' : 'car'} />
-  {/if}
+  <HeroVehicles pair="contact" mobile={topic.id === 'trade-in' || topic.id === 'import'} mobileScene={topic.id === 'trade-in' ? 'sell' : topic.id === 'import' ? 'import' : 'car'} />
   <div class="container dn-contact-hero__content dn-route-hero__layout">
     <div class="dn-contact-hero__copy dn-route-hero__copy">
       <h1 id="contact-title"><span class="dn-contact-hero__desktop-title">{topic.id === 'general' ? i18n.t("m_d7def4b82f7c") : topic.id === 'trade-in' ? i18n.t("m_3d25686c3130") : i18n.text(topic.title)}</span><span class="dn-contact-hero__mobile-title">{topic.id === 'general' ? i18n.t("m_2b5c3d26721a") : topic.id === 'trade-in' ? i18n.t("m_3d25686c3130") : i18n.text(topic.title)}</span></h1>

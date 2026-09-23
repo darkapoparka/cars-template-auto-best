@@ -4,12 +4,10 @@
   const i18n = getI18n();
 
   import HeroVehicles from '$components/ui/HeroVehicles.svelte';
-  import DesktopHeroScene from '$components/ui/DesktopHeroScene.svelte';
 </script>
 
 <section class="dn-hero dn-route-hero dn-route-hero--light dn-discovery-hero" aria-labelledby="home-hero-title">
-  <DesktopHeroScene scene="home" />
-  <HeroVehicles pair="home" mobile desktop={false} />
+  <HeroVehicles pair="home" mobile />
   <div class="container dn-hero__inner dn-route-hero__layout">
     <div class="dn-hero__copy dn-route-hero__copy">
       <h1 id="home-hero-title">

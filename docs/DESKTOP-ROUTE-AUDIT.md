@@ -4,7 +4,38 @@ Scope: Home, `/listing-grid`, `/about-us`, `/blog`, and general `/contact` in th
 standalone Auto Best master. Local review uses `http://127.0.0.1:5174` and Node
 22.23.2. Both Bulgarian and English are covered.
 
-## Owner-directed visual revision
+## Final direction — cutout refinement
+
+After comparing the generated scenes with the existing visual language, the owner
+approved restoring cutouts on Home and Inventory, returning Contact to a neutral
+treatment, and keeping About's warm architectural scene and Blog unchanged.
+This supersedes the four-scene revision documented below.
+
+- Home: pale grey surface, dark typography, original G-Class/Urus cutouts.
+- Inventory: solid charcoal surface, white typography, original Golf/A45 cutouts.
+- Contact: its original neutral charcoal surface and M4/RS5 cutouts.
+- About: retained warm architectural scene and red primary action.
+- Blog: retained its accepted neutral surface and artwork.
+
+Home and Inventory's cutouts have a shared 120–160px body height and a baseline
+50px above the banner bottom. Their inner edges remain outside the search lane.
+They load only at 1440px and above, where there is room beside the controls;
+smaller desktop widths prioritize the full-size search panel and readable copy.
+All five desktop banners remain 540px tall. Mobile artwork and geometry stay intact.
+
+The three unused generated scenes remain archived with their provenance but are
+not rendered or downloaded. About alone requests a generated scene on desktop.
+The shared cutout component no longer needs the temporary desktop-disable prop.
+
+Final verification: `npm run validate` passed, all 50 BG/EN route/viewport cases
+passed, and all eight journey cases passed. The route suite now verifies cutout
+loading and clearance from search controls as well as About-only scene requests.
+Rendered desktop captures were inspected at 1024, 1440 and 1920px. Logs and
+screenshots use the `cutouts-` prefix under `artifacts/desktop-route-audit/`.
+The 23 pre-existing dirty paths remain excluded and match the preservation snapshot.
+These results apply to the local working preview, not an exact clean release.
+
+## Earlier four-scene revision
 
 The owner accepted Blog and requested more character in the other banners after
 the initial audit. This revision supersedes the solid-only palette below. Home

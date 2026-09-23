@@ -49,6 +49,7 @@ try {
                 header: rect(document.querySelector('.dn-header-fixed')),
                 backgroundImage: getComputedStyle(hero).backgroundImage,
                 scene: scene ? { src: scene.currentSrc, ...rect(scene) } : null,
+                cutouts: [...hero.querySelectorAll('.dn-hero-vehicles__car img')].map(image => ({ src: image.currentSrc, ...rect(image) })),
                 font: getComputedStyle(heading).fontFamily,
                 headingSize: getComputedStyle(heading).fontSize,
                 leadSize: getComputedStyle(lead).fontSize,
@@ -59,17 +60,25 @@ try {
             assert(geometry.overflow <= 1, 'Horizontal page overflow');
             assert.deepEqual(geometry.broken, [], 'Broken visible images');
             assert.deepEqual(errors, [], 'Browser runtime errors');
-            const hasScene = route !== 'blog' && width >= 992;
+            const hasScene = route === 'about-us' && width >= 992;
             assert.equal(sceneRequests.length, hasScene ? 1 : 0, 'Only the visible route scene is requested; phones load none');
             if (hasScene) {
-              const sceneName = route === 'listing-grid' ? 'inventory' : route === 'about-us' ? 'about' : route || 'home';
-              assert(geometry.scene.src.endsWith(`auto-best-desktop-${sceneName}-v1.webp`), 'Correct scene for route');
+              assert(geometry.scene.src.endsWith('auto-best-desktop-about-v1.webp'), 'Only About retains the architectural scene');
               assert.equal(geometry.scene.height, geometry.hero.height - (width < 1200 ? 140 : 0), 'Laptop crop keeps scene edges below navigation');
               assert.equal(geometry.scene.bottom, geometry.hero.bottom, 'Scene meets the banner baseline');
             }
+            if (route !== 'about-us') {
+              assert.equal(geometry.scene, null, 'Cutout routes omit the full scene element');
+              assert.equal(geometry.cutouts.length, 2, 'The original cutout pair is rendered');
+              assert(geometry.cutouts.every(image => width >= 1440 ? image.src.startsWith('http') : image.src.startsWith('data:')), 'Cutouts load only at wide desktop sizes');
+              if (width >= 1440 && (route === '' || route === 'listing-grid')) {
+                assert(geometry.cutouts[0].right <= geometry.controls.x, 'Left car stays clear of search');
+                assert(geometry.cutouts[1].x >= geometry.controls.right, 'Right car stays clear of search');
+              }
+            }
             if (width >= 992) {
               assert.equal(geometry.hero.height, 540, 'Shared desktop hero height');
-              if (route === 'blog') assert.equal(geometry.backgroundImage, 'none', 'Blog retains its approved solid surface');
+              if (!hasScene) assert.equal(geometry.backgroundImage, 'none', 'Cutouts use solid neutral surfaces');
               assert.equal(geometry.headingSize, width < 1200 ? '42px' : '48px');
               assert.equal(geometry.leadSize, '18px');
               assert(geometry.copy.y >= geometry.header.bottom + 8, 'Hero text clears navigation');
