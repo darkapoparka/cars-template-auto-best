@@ -151,6 +151,7 @@
   @media (min-width: 992px) {
     .dn-trust-card { min-height: var(--dn-home-banner-height); padding: var(--dn-home-banner-padding); border-radius: var(--dn-radius-lg); background: var(--dn-theme-hero-surface-deep); }
     .dn-trust-card--red { background: var(--dn-surface-panel); color: var(--dn-ink); }
+    .dn-trust-actions[data-banner-group='ownership'] .dn-trust-card--red { background: var(--dn-theme-action-ice-start); color: var(--dn-theme-action-ice-ink); }
     .dn-trust-card--red p { color: var(--dn-muted); }
     .dn-trust-card--red .dn-trust-card__action { background: var(--dn-red); color: var(--dn-white); }
     .dn-trust-card--red .dn-trust-card__action:hover { background: var(--dn-red-hover); }

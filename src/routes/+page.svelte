@@ -116,13 +116,19 @@
     .dn-home-page :global(.dn-home-section-heading--branded > h2) { color: var(--dn-white); }
     .dn-home-page :global(.dn-home-section-heading--branded > p) { color: var(--dn-text-on-ink); }
     .dn-home-page :global(.dn-home-section-heading--light) {
-      background: var(--dn-surface-panel);
+      background: var(--dn-surface-subtle);
     }
+    .dn-home-page :global(.dn-home-section-heading--ice) { background: var(--dn-theme-action-ice-start); }
     .dn-home-page :global(.dn-home-section-heading--light > h2) { color: var(--dn-ink); }
     .dn-home-page :global(.dn-home-section-heading--light > p) { color: var(--dn-muted); }
     .dn-home-page :global(.dn-home-section-heading--light > .dn-home-section-action) { background: var(--dn-red); color: var(--dn-white); }
     .dn-home-page :global(.dn-home-section-heading--light > .dn-home-section-action:is(:hover, :focus-visible)) { background: var(--dn-red-hover); color: var(--dn-white); }
     .dn-home-page :global(.dn-home-section-heading--light > .dn-home-section-action:focus-visible) { outline-color: var(--dn-focus); }
+
+    /* A visible seam separates the heading from its overlapping card tray. */
+    .dn-home-page :global(:is(.dn-inventory__grid, .dn-body-types__viewport, .dn-brand-panel, .dn-editorial__cards, .dn-videos__panel)) {
+      box-shadow: inset 0 1px 0 var(--dn-line-strong);
+    }
 
     .dn-home-page :global(.dn-home-banner-frame) {
       min-height: var(--dn-home-heading-banner-height);
