@@ -209,7 +209,12 @@
     }
 
     .dn-body-type {
-      background: #fff;
+      background: var(--dn-surface-subtle);
+      isolation: isolate;
+    }
+
+    .dn-body-type__image img {
+      mix-blend-mode: multiply;
     }
 
     .dn-body-types {

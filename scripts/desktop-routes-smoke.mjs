@@ -103,7 +103,8 @@ try {
               if (route === '' || route === 'blog') assert.equal(await page.locator('.dn-route-hero').evaluate(e => getComputedStyle(e).backgroundColor), 'rgb(255, 255, 255)', 'Light heroes are white above the grey page');
               if (route === '') {
                 for (const section of await page.locator('.dn-home-content-section').all()) assert.equal(await section.evaluate(e => getComputedStyle(e).backgroundColor), 'rgb(244, 245, 247)', 'Home sections use one canvas');
-                for (const card of await page.locator('.dn-vehicle-card, .dn-body-type, .dn-brand-card').all()) assert.equal(await card.evaluate(e => getComputedStyle(e).backgroundColor), 'rgb(255, 255, 255)', 'Home cards remain white');
+                for (const card of await page.locator('.dn-vehicle-card').all()) assert.equal(await card.evaluate(e => getComputedStyle(e).backgroundColor), 'rgb(255, 255, 255)', 'Vehicle cards remain white');
+                for (const card of await page.locator('.dn-body-type, .dn-brand-card').all()) assert.equal(await card.evaluate(e => getComputedStyle(e).backgroundColor), 'rgb(246, 247, 249)', 'Discovery tiles are distinct from their white section containers');
               }
               if (route === 'contact') assert((await page.locator('.dn-contact-section--general').evaluate(e => getComputedStyle(e).backgroundImage)).includes('rgb(244, 245, 247)'), 'Contact uses the grey canvas below the hero');
               if (route === 'about-us') {

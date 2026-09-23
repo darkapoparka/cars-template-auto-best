@@ -8,8 +8,9 @@ The route heroes, mobile layout, existing vehicle artwork and destinations stay 
 - Inventory, brands, editorial and video section headers use the solid charcoal
   family from the desktop Inventory hero, separating them from the white panels.
   Body types reuse the pale ice-blue start colour from mobile Import.
-- Desktop sections share the light-grey page canvas; vehicle/body/brand/editorial
-  cards and their rounded section containers are white. The Home hero and
+- Desktop sections share the light-grey page canvas; vehicle/editorial cards and
+  rounded section containers are white. Inner brand and body-type tiles use the
+  subtle-grey surface so their rounded card shapes remain visible. The Home hero and
   Sell campaign card are white; the other campaign/banner colours stay intact.
 - Preserve the rounded banner treatment: headings have 20px corners and the white
   card panels have 16px corners, with the established 24px overlap. There is no
