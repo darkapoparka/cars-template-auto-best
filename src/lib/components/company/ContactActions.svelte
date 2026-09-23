@@ -28,9 +28,9 @@
     <Icon name="map-pin" size={18} />
     <span>{i18n.dealer('address')}</span>
   </p>
-  <div class="dn-contact-actions__social" role="group" aria-label={i18n.t('m_b16446d4331a')}>
+  <div class="dn-contact-actions__social dn-social-profile-links" role="group" aria-label={i18n.t('m_b16446d4331a')}>
     {#each profiles.filter(profile => profile.href) as profile (profile.name)}
-      <a href={profile.href} target="_blank" rel="noopener noreferrer" aria-label={profile.label} title={profile.label}>
+      <a class="dn-social-profile-link" href={profile.href} target="_blank" rel="noopener noreferrer" aria-label={i18n.t('m_c0b8af66cd54', { p0: profile.label })} title={profile.label}>
         <SocialBrandIcon name={profile.name} />
       </a>
     {/each}
@@ -84,20 +84,7 @@
       text-align: center;
     }
     .dn-contact-actions__address :global(svg) { flex-shrink: 0; }
-    .dn-contact-actions__social { display: flex; gap: var(--dn-space-3); }
-    .dn-contact-actions__social a {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 44px;
-      box-sizing: border-box;
-      border: 1px solid var(--dn-line-on-ink);
-      border-radius: var(--dn-radius-button);
-      color: var(--dn-white);
-      transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
-    }
-    .dn-contact-actions__social a:hover { background: var(--dn-white); border-color: var(--dn-white); color: var(--dn-ink); }
+    .dn-contact-actions__social { --dn-social-focus: var(--dn-white); }
     .dn-contact-actions a:focus-visible { outline: 2px solid var(--dn-white); outline-offset: 4px; }
   }
 

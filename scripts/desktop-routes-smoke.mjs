@@ -13,6 +13,7 @@ try {
   for (const locale of ['bg', 'en']) {
     for (const width of [390, 992, 1024, 1440, 1920]) {
       const context = await returningContext(browser, { viewport: { width, height: 1000 }, reducedMotion: 'reduce' });
+      await context.addCookies([{ name: 'cars_locale', value: locale, url: base, httpOnly: true, sameSite: 'Lax' }]);
       const page = await context.newPage();
       for (const route of routes) {
         await suite.check(`${locale}/${route || 'home'} at ${width}`, async () => {
@@ -70,7 +71,7 @@ try {
             if (route !== 'about-us') {
               assert.equal(geometry.scene, null, 'Cutout routes omit the full scene element');
               assert.equal(geometry.cutouts.length, 2, 'The original cutout pair is rendered');
-              assert(geometry.cutouts.every(image => width >= 1440 ? image.src.startsWith('http') : image.src.startsWith('data:')), 'Cutouts load only at wide desktop sizes');
+              assert(geometry.cutouts.every(image => width >= 1440 ? (!image.width || image.src.startsWith('http')) : image.src.startsWith('data:')), 'Visible wide cutouts load; narrow screens use placeholders');
               if (width >= 1440 && (route === '' || route === 'listing-grid')) {
                 assert(geometry.cutouts[0].right <= geometry.controls.x, 'Left car stays clear of search');
                 assert(geometry.cutouts[1].x >= geometry.controls.right, 'Right car stays clear of search');
@@ -84,11 +85,18 @@ try {
               assert(geometry.copy.y >= geometry.header.bottom + 8, 'Hero text clears navigation');
               assert(geometry.controls.y >= geometry.copy.bottom + 20, 'Hero controls clear copy');
               assert(geometry.controls.bottom <= geometry.hero.bottom + 1, 'Hero controls fit banner');
-              if (route === 'listing-grid') {
-                assert.equal(geometry.lead.height, 0, 'Desktop Inventory moves the count into search');
-                assert.equal(await page.locator('.dn-discovery .dn-discovery__results').innerText(), '(8)');
-              } else {
-                assert(geometry.lead.y >= geometry.heading.bottom, 'Title and lead do not overlap');
+              assert(geometry.lead.y >= geometry.heading.bottom, 'Title and lead do not overlap');
+              if (route === 'listing-grid') assert.equal(await page.locator('.dn-listing-hero__copy p').innerText(), locale === 'bg' ? '8 автомобила' : '8 cars');
+              if (route === 'about-us' || route === 'contact') {
+                const social = page.locator(route === 'about-us' ? '.dn-about-socials a' : '.dn-contact-actions__social a');
+                assert.equal(await social.count(), 3);
+                for (const link of await social.all()) {
+                  const box = await link.boundingBox();
+                  assert.equal(box.width, 56); assert.equal(box.height, 56);
+                  assert.equal((await link.locator('svg').boundingBox()).width, 28);
+                  assert.equal(await link.evaluate(e => getComputedStyle(e).backgroundColor), 'rgb(255, 255, 255)');
+                  assert(box.y + box.height <= geometry.hero.bottom, 'Social controls fit within hero');
+                }
               }
               const surface = { '': '.dn-inventory', 'listing-grid': '.dn-listing-results', 'about-us': '.dn-about-process', 'blog': '.dn-blog-index' }[route];
               if (surface) assert.equal(await page.locator(surface).evaluate(e => getComputedStyle(e).backgroundColor), 'rgb(255, 255, 255)', 'Desktop routes share a white content canvas');
@@ -119,16 +127,15 @@ try {
               assert.equal(await search.evaluate(e => getComputedStyle(e).outlineStyle), 'solid', 'Search has a visible focus outline');
             }
             if (route === 'listing-grid' && width === 1440) {
-              const count = page.locator('.dn-discovery .dn-discovery__results');
+              const count = page.locator('.dn-listing-hero__copy p');
               await page.locator('.dn-discovery select[name=make]').selectOption('Audi');
-              await page.waitForFunction(() => document.querySelector('.dn-discovery__results')?.textContent === '(2)');
-              assert.equal(await count.innerText(), '(2)', 'Count follows pending filters');
               await page.locator('.dn-discovery__submit').click();
-              await page.waitForURL(url => url.searchParams.get('make') === 'Audi');
+              await page.waitForURL(url => url.searchParams.get('make') === 'Audi', { waitUntil: 'domcontentloaded' });
+              assert(new URL(page.url()).pathname.startsWith(`/${locale}/`), 'Search preserves the chosen language');
               assert.equal(await page.locator('.dn-listing-results .dn-vehicle-card').count(), 2);
-              assert.equal(await count.innerText(), '(2)', 'Applied result count agrees with cards');
+              assert.equal(await count.innerText(), locale === 'bg' ? '2 автомобила' : '2 cars', 'Hero count agrees with applied results');
               await page.goto(`${base}/${locale}/listing-grid?q=zzzznomatch`, { waitUntil: 'domcontentloaded' });
-              assert.equal(await count.innerText(), '(0)', 'Zero matches remain explicit');
+              assert.equal(await count.innerText(), locale === 'bg' ? '0 автомобила' : '0 cars', 'Zero matches remain explicit');
               assert.equal(await page.locator('.dn-listing-results .dn-vehicle-card').count(), 0);
             }
             return geometry;

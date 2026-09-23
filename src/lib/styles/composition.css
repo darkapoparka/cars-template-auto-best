@@ -68,6 +68,24 @@
 }
 
 @media (min-width: 992px) {
+  .dn-app-shell .dn-social-profile-links { display: flex; gap: var(--dn-space-4); }
+  .dn-app-shell .dn-social-profile-links .dn-social-profile-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 56px;
+    width: 56px;
+    height: 56px;
+    box-sizing: border-box;
+    border: 0;
+    border-radius: var(--dn-pill);
+    background: var(--dn-white);
+    color: var(--dn-ink);
+  }
+  .dn-social-profile-link .dn-social-brand-icon { width: 28px; height: 28px; }
+  .dn-app-shell .dn-social-profile-links .dn-social-profile-link:hover { background: var(--dn-ink); color: var(--dn-white); }
+  .dn-app-shell .dn-social-profile-links .dn-social-profile-link:focus-visible { outline: 2px solid var(--dn-social-focus, var(--dn-focus)); outline-offset: 4px; }
+
   .dn-listing-stage {
     --dn-studio-background: var(--dn-theme-hero-surface-deep);
     --dn-studio-heading: #fff;

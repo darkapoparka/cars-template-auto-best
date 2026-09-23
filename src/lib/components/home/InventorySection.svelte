@@ -5,6 +5,7 @@
   import BrowseAllCard from './BrowseAllCard.svelte';
   import { resolve } from '$app/paths';
   import VehicleCard from '$components/vehicles/VehicleCard.svelte';
+  import Icon from '$components/ui/Icon.svelte';
   import { featuredVehicles } from '$data/inventory';
 </script>
 
@@ -16,7 +17,7 @@
         <span class="dn-heading-mobile">{i18n.t("m_fd88b7330e98")}</span>
       </h2>
       <a class="dn-inventory__all dn-home-section-action" href={i18n.href(resolve('/listing-grid'))} aria-label={i18n.t("m_7d6647b063a2")}>
-        <span class="dn-heading-desktop">{i18n.t("m_7d6647b063a2")}</span>
+        <span class="dn-heading-desktop dn-inventory__desktop-action">{i18n.t("m_30a64216eaea")} <Icon name="arrow-right" size={18} /></span>
         <span class="dn-heading-mobile" aria-hidden="true">{i18n.t("m_a52ace420f21")}</span>
       </a>
     </div>
@@ -31,6 +32,7 @@
 </section>
 
 <style>
+  .dn-inventory__desktop-action { display: inline-flex; align-items: center; gap: var(--dn-space-2); }
   
 
   .dn-inventory {

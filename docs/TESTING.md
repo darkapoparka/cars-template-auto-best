@@ -97,8 +97,9 @@ heroes, About-only scene requests, responsive cutout loading and search clearanc
 title/description/control separation, real Onest
 glyph rendering (including Cyrillic), visible images, page overflow and runtime
 errors. Desktop content canvases are white; About keeps a neutral architectural
-hero and a light map panel. Inventory shows its count beside the search prompt,
-with pending, applied and zero-result cases checked in BG/EN. It warms lazy images before saving full-page 1440px/390px captures under
+hero and a light map panel. Inventory shows its concise count below the hero title,
+with applied and zero-result cases checked in BG/EN. About/Contact social controls
+share desktop geometry. It warms lazy images before saving full-page 1440px/390px captures under
 `artifacts/desktop-routes-smoke/`. Search, filter drafts, sticky controls, keyboard
 focus and article return behavior remain covered by desktop-discovery and journey
 suites. See [desktop route audit](DESKTOP-ROUTE-AUDIT.md) for the styling contract.

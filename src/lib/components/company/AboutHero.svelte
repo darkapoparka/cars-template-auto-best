@@ -30,9 +30,9 @@
     {#if socialProfiles.some(profile => profile.href)}
     <nav class="dn-about-socials" aria-label={i18n.t("m_3931afa2068d")}>
       <span>{i18n.t("m_9200ee75efd0")}</span>
-      <div class="dn-about-socials__links">
+      <div class="dn-about-socials__links dn-social-profile-links">
         {#each socialProfiles.filter(profile => profile.href) as profile (profile.name)}
-          <a href={i18n.href(profile.href)} target="_blank" rel="noopener noreferrer" aria-label={i18n.t("m_c0b8af66cd54", { p0: profile.label })}>
+          <a class="dn-social-profile-link" href={i18n.href(profile.href)} target="_blank" rel="noopener noreferrer" aria-label={i18n.t("m_c0b8af66cd54", { p0: profile.label })}>
             <SocialBrandIcon name={profile.name} size={28} />
           </a>
         {/each}
@@ -53,8 +53,5 @@
     .dn-about-hero :global(.dn-desktop-hero-scene) { filter: grayscale(1); }
     .dn-about-socials { position: absolute; top: calc(var(--dn-route-hero-control-top) + 68px); left: 0; width: 100%; gap: 12px; }
     .dn-about-socials > span { color: var(--dn-ink); }
-    .dn-about-socials a { width: 56px; height: 56px; background: var(--dn-white); border-color: transparent; color: var(--dn-ink); }
-    .dn-about-socials a:hover { background: var(--dn-ink); color: var(--dn-white); }
-    .dn-about-socials a:focus-visible { outline-color: var(--dn-focus); }
   }
 </style>

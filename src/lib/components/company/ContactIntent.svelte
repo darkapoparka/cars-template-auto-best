@@ -69,9 +69,9 @@
 
     <div class="dn-contact-social" role="group" aria-label={i18n.t("m_b16446d4331a")}>
       <span>{i18n.t("m_b16446d4331a")}</span>
-      <div>
+      <div class="dn-social-profile-links">
         {#each socialPlatforms.filter(profile => profile.href) as platform (platform.name)}
-          <a href={i18n.href(platform.href)} target="_blank" rel="noopener noreferrer" aria-label={platform.label} title={platform.label}>
+          <a class="dn-social-profile-link" href={i18n.href(platform.href)} target="_blank" rel="noopener noreferrer" aria-label={i18n.t('m_c0b8af66cd54', { p0: platform.label })} title={platform.label}>
             <SocialBrandIcon name={platform.name} />
           </a>
         {/each}

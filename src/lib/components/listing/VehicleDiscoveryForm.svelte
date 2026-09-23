@@ -10,8 +10,6 @@
   import type { Attachment } from 'svelte/attachments';
   import {
     activeFilterCount,
-    filterListingVehicles,
-    listingVehicles,
     bodyLabel,
     listingFilterOptions,
     listingHiddenFields,
@@ -27,8 +25,7 @@
     normalizeListingMakeTransition
   } from '$data/listing-draft';
 
-  let { filters, openFilters, filtersOpen, onDraftChange, showFilterAction = true, enableSticky = true, showResultCount = false, keywordPlaceholder = 'Марка, модел или ключова дума' }: {
-    showResultCount?: boolean;
+  let { filters, openFilters, filtersOpen, onDraftChange, showFilterAction = true, enableSticky = true, keywordPlaceholder = 'Марка, модел или ключова дума' }: {
     showFilterAction?: boolean;
     enableSticky?: boolean;
     keywordPlaceholder?: string;
@@ -63,8 +60,6 @@
   });
   let models = $derived(listingModelsForMake(make));
   let activeCount = $derived(activeFilterCount(pending));
-  let resultCount = $derived(showResultCount ? filterListingVehicles(listingVehicles, pending, i18n.locale).length : undefined);
-  let resultLabel = $derived(i18n.t("m_af99c6f42480", { p0: resultCount ?? 0, p1: resultCount === 1 ? i18n.t("m_2b2961a431b2") : i18n.t("m_1f58b1e965af") }));
   let summary = $derived([pending.q, pending.make, pending.model].filter(Boolean).join(' · ') || i18n.text(keywordPlaceholder));
   let prices = $derived(listingOptionsWithCurrent(listingFilterOptions.prices, filters.priceMax?.toString() ?? ''));
   let years = $derived(listingOptionsWithCurrent(listingFilterOptions.years, filters.yearMin?.toString() ?? ''));
@@ -86,10 +81,9 @@
 <form id="dn-desktop-discovery" class="dn-discovery" {@attach observePanel} method="GET" action={i18n.href(resolve('/listing-grid'))} oninput={updateDraft} onchange={updateDraft} onformdata={clean}>
   <div class="dn-discovery__toolbar">
     <div class="dn-discovery__search">
-      <button class="dn-discovery__keyword" type="button" aria-label={showResultCount ? `${i18n.text(keywordPlaceholder)}, ${resultLabel}` : i18n.text(keywordPlaceholder)} aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openFilters}>
+      <button class="dn-discovery__keyword" type="button" aria-label={i18n.text(keywordPlaceholder)} aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openFilters}>
         <Icon name="search" size={18} />
         <span>{filters.q || i18n.text(keywordPlaceholder)}</span>
-        {#if resultCount !== undefined}<span class="dn-discovery__results" aria-hidden="true">({resultCount})</span>{/if}
       </button>
       {#if showFilterAction}
         <button class="dn-discovery__filters" type="button" title={i18n.t("m_3deeda2a1ebe")} aria-label={activeCount ? i18n.t("m_8a61a4d5543e", { p0: activeCount }) : i18n.t("m_3deeda2a1ebe")} aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openFilters}>
@@ -113,9 +107,8 @@
 </form>
 
 <div class="dn-discovery-sticky" popover="manual" {@attach attachSticky} role="region" aria-label={i18n.t("m_8451d82f9587")}>
-  <button class="dn-discovery-sticky__keyword" type="button" aria-label={showResultCount ? `${i18n.t("m_a6403c514411")}, ${resultLabel}` : i18n.t("m_a6403c514411")} aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openFilters}>
+  <button class="dn-discovery-sticky__keyword" type="button" aria-label={i18n.t("m_a6403c514411")} aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openFilters}>
     <Icon name="search" size={18} /><span>{summary}</span>
-    {#if resultCount !== undefined}<span class="dn-discovery__results" aria-hidden="true">({resultCount})</span>{/if}
   </button>
   <button class="dn-discovery-sticky__filters" type="button" aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openFilters}>
     <Icon name="adjustments" size={18} /><span>{i18n.t("m_546ebb8eb993")}</span>{#if activeCount}<span class="dn-discovery-sticky__count">{activeCount}</span>{/if}
@@ -124,7 +117,6 @@
 </div>
 
 <style>
-  .dn-discovery__results { flex: 0 0 auto; }
   .dn-discovery {
     --dn-discovery-gap: 14px;
     --dn-discovery-search-height: var(--dn-control-height-default);
