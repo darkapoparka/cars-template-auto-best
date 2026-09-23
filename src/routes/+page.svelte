@@ -13,7 +13,6 @@
   import TrustActions from '$components/home/TrustActions.svelte';
   import VideoSection from '$components/home/VideoSection.svelte';
   import { brand } from '$config/brand';
-  import { leadSite } from '$config/lead-site';
 
 </script>
 
@@ -22,9 +21,7 @@
   <meta name="description" content={i18n.t("m_ed2d6b74bc69", { p0: i18n.dealer('city') })} />
 </svelte:head>
 
-<div class="dn-home-page"
-  style:--dn-section-banner-graphite={`url("${leadSite.artwork.sectionBanners.graphite}")`}
-  style:--dn-section-banner-crimson={`url("${leadSite.artwork.sectionBanners.crimson}")`}>
+<div class="dn-home-page">
   <div class="dn-home-slot dn-home-slot--hero"><Hero /></div>
   <div class="dn-home-slot dn-home-slot--search"><SearchBox /></div>
   <div class="dn-home-slot dn-home-slot--mobile-actions"><MobileCoreActions /></div>
@@ -85,18 +82,18 @@
       border: 1px solid transparent;
       border-radius: var(--dn-radius-button);
       background: var(--dn-surface-raised);
-      color: #24272c;
+      color: var(--dn-ink);
       font: var(--dn-cta-font);
       letter-spacing: var(--dn-cta-tracking);
       white-space: nowrap;
       margin-top: var(--dn-home-copy-gap);
-      box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
-      transition: background-color 180ms ease, color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+      box-shadow: none;
+      transition: background-color 180ms ease, color 180ms ease;
     }
 
     .dn-home-page :global(.dn-body-types__all),
     .dn-home-page :global(.dn-brand-hero__cta) {
-      border-color: #e1e4e8;
+      border-color: transparent;
     }
 
     .dn-home-page :global(.dn-home-section-heading--banner > .dn-home-section-action) {
@@ -109,8 +106,8 @@
       overflow: hidden;
       margin-bottom: 0;
       border-radius: var(--dn-radius-lg);
-      background: var(--dn-theme-hero-surface-mid) var(--dn-section-banner-graphite) center / cover no-repeat;
-      box-shadow: inset 0 1px 0 rgb(255 255 255 / 9%);
+      background: var(--dn-theme-hero-surface-deep);
+      box-shadow: none;
       text-align: center;
     }
 
@@ -118,9 +115,14 @@
 
     .dn-home-page :global(.dn-home-section-heading--branded > h2) { color: var(--dn-white); }
     .dn-home-page :global(.dn-home-section-heading--branded > p) { color: var(--dn-text-on-ink); }
-    .dn-home-page :global(.dn-home-section-heading--red) {
-      background: var(--dn-red) var(--dn-section-banner-crimson) center / cover no-repeat;
+    .dn-home-page :global(.dn-home-section-heading--light) {
+      background: var(--dn-surface-panel);
     }
+    .dn-home-page :global(.dn-home-section-heading--light > h2) { color: var(--dn-ink); }
+    .dn-home-page :global(.dn-home-section-heading--light > p) { color: var(--dn-muted); }
+    .dn-home-page :global(.dn-home-section-heading--light > .dn-home-section-action) { background: var(--dn-red); color: var(--dn-white); }
+    .dn-home-page :global(.dn-home-section-heading--light > .dn-home-section-action:is(:hover, :focus-visible)) { background: var(--dn-red-hover); color: var(--dn-white); }
+    .dn-home-page :global(.dn-home-section-heading--light > .dn-home-section-action:focus-visible) { outline-color: var(--dn-focus); }
 
     .dn-home-page :global(.dn-home-banner-frame) {
       min-height: var(--dn-home-heading-banner-height);
@@ -144,8 +146,6 @@
     .dn-home-page :global(.dn-home-section-action:hover) {
       background: var(--dn-surface-hover);
       color: var(--dn-ink-strong);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 24px rgb(0 0 0 / 18%);
     }
 
     .dn-home-page :global(.dn-home-section-action:active) { transform: translateY(0); box-shadow: none; }
@@ -153,7 +153,7 @@
     .dn-home-page :global(.dn-home-section-action:focus-visible) {
       background: var(--dn-surface-hover);
       color: var(--dn-ink-strong);
-      outline: 3px solid var(--dn-line-emphasis);
+      outline: 3px solid var(--dn-white);
       outline-offset: 3px;
     }
   }

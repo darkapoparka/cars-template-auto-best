@@ -72,7 +72,7 @@
     <h2 class="dn-sr-only">{variant === 'cards' ? i18n.t("m_5dfe5d699973") : group === 'browse' ? i18n.t("m_d064a1978f8f") : i18n.t("m_5526464e7543")}</h2>
     <div class="dn-trust-actions__panel">
       {#if variant === 'cards'}
-        <div class="dn-services-heading dn-home-section-heading dn-home-section-heading--branded dn-home-section-heading--red dn-home-banner-frame dn-home-banner-copy">
+        <div class="dn-services-heading dn-home-section-heading dn-home-section-heading--branded dn-home-section-heading--light dn-home-banner-frame dn-home-banner-copy">
           <h2 class="dn-home-section-title">{i18n.t("m_5dfe5d699973")}</h2>
           
           <a class="dn-home-section-action" href={i18n.href(resolve('/contact'))}>{i18n.t("m_d7def4b82f7c")}</a>
@@ -149,18 +149,23 @@
   .dn-trust-card__vehicle :global(img) { object-position: right center; }
   .dn-trust-card__lineup { display: block; width: 100%; height: 100%; object-fit: contain; }
   @media (min-width: 992px) {
-    .dn-trust-card { min-height: var(--dn-home-banner-height); padding: var(--dn-home-banner-padding); }
+    .dn-trust-card { min-height: var(--dn-home-banner-height); padding: var(--dn-home-banner-padding); border-radius: var(--dn-radius-lg); background: var(--dn-theme-hero-surface-deep); }
+    .dn-trust-card--red { background: var(--dn-surface-panel); color: var(--dn-ink); }
+    .dn-trust-card--red p { color: var(--dn-muted); }
+    .dn-trust-card--red .dn-trust-card__action { background: var(--dn-red); color: var(--dn-white); }
+    .dn-trust-card--red .dn-trust-card__action:hover { background: var(--dn-red-hover); }
+    .dn-trust-card.dn-trust-card--red a:focus-visible { outline-color: var(--dn-focus); }
     .dn-trust-card h3 a { display: inline-flex; min-height: 44px; align-items: center; }
     .dn-trust-card__content { justify-content: flex-start; }
     .dn-trust-card h3 { margin: 0; }
     .dn-trust-card p { margin: var(--dn-home-copy-gap) 0 0; }
-    .dn-trust-card .dn-trust-card__action { margin-top: var(--dn-home-cta-gap); }
+    .dn-trust-card .dn-trust-card__action { width: max-content; margin-top: var(--dn-home-cta-gap); white-space: nowrap; }
+    .dn-trust-card--ownership .dn-trust-card__vehicle { width: min(340px, 42%); right: -24px; }
     .dn-trust-card--campaign { container-type: inline-size; }
     .dn-trust-card--campaign .dn-trust-card__content { width: 100%; }
-    .dn-trust-card--campaign p { width: calc(40% - var(--dn-home-copy-gap)); }
-    .dn-trust-card--campaign .dn-trust-card__action { width: max-content; white-space: nowrap; }
+    .dn-trust-card--campaign p { width: 50%; }
     .dn-trust-card__vehicle--campaign {
-      --car-height: min(144px, calc((100cqw + 64px) * .55 / 2.676744));
+      --car-height: min(144px, calc(min(55cqw, 100cqw - 244px) / var(--art-width)));
       top: calc(206px - var(--car-height) * var(--art-bottom));
       right: calc(16px - var(--car-height) * var(--art-right));
       bottom: auto;
@@ -168,17 +173,10 @@
       height: calc(var(--car-height) * var(--art-height));
     }
   }
-  @media (min-width: 992px) and (max-width: 1199px) {
-    .dn-trust-card--campaign p { width: 50%; }
-    .dn-trust-card__vehicle--campaign { --car-height: calc((100cqw - 192px) / 2.676744); }
-  }
   .dn-trust-card__action { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; gap: 9px; align-self: flex-start; margin-top: auto; padding: 10px 14px; border-radius: var(--dn-radius-button); background: #fff; color: #202329; font: var(--dn-cta-font); letter-spacing: var(--dn-cta-tracking); }
   .dn-trust-card__action:hover { background: #eceef1; }
   @media (min-width: 992px) and (hover: hover) {
-    .dn-trust-card { transition: transform 180ms ease, box-shadow 180ms ease; }
-    .dn-trust-card:hover { transform: translateY(-3px); box-shadow: 0 18px 32px rgb(0 0 0 / 14%); }
-    .dn-trust-card__action { transition: background-color 180ms ease, transform 180ms ease; }
-    .dn-trust-card__action:hover { transform: translateY(-2px); }
+    .dn-trust-card__action { transition: background-color 180ms ease; }
   }
   .dn-trust-card a:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
   .dn-home-services { padding: 32px 0 64px; background: #fff; }
