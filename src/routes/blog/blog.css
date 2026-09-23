@@ -105,6 +105,10 @@
   background: #fff;
 }
 
+@media (min-width: 992px) {
+  .dn-blog-index { background: var(--dn-surface-canvas); }
+}
+
 .dn-blog-index > .container {
   width: min(1320px, 100%);
   padding-inline: 12px;

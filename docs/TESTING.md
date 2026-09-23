@@ -96,8 +96,9 @@ general Contact in Bulgarian and English at 992, 1024, 1440 and 1920px, plus a
 heroes, About-only scene requests, responsive cutout loading and search clearance,
 title/description/control separation, real Onest
 glyph rendering (including Cyrillic), visible images, page overflow and runtime
-errors. Desktop content canvases are white; About keeps a neutral architectural
-hero and a light map panel. Inventory shows its concise count below the hero title,
+errors. Desktop content canvases are light grey with white cards; Home/Blog heroes
+are white and About keeps a neutral architectural hero and white map panel.
+Inventory shows its concise count below the hero title,
 with applied and zero-result cases checked in BG/EN. About/Contact social controls
 share desktop geometry. It warms lazy images before saving full-page 1440px/390px captures under
 `artifacts/desktop-routes-smoke/`. Search, filter drafts, sticky controls, keyboard

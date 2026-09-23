@@ -99,9 +99,16 @@ try {
                 }
               }
               const surface = { '': '.dn-inventory', 'listing-grid': '.dn-listing-results', 'about-us': '.dn-about-process', 'blog': '.dn-blog-index' }[route];
-              if (surface) assert.equal(await page.locator(surface).evaluate(e => getComputedStyle(e).backgroundColor), 'rgb(255, 255, 255)', 'Desktop routes share a white content canvas');
+              if (surface) assert.equal(await page.locator(surface).evaluate(e => getComputedStyle(e).backgroundColor), 'rgb(244, 245, 247)', 'Desktop routes share a light-grey content canvas');
+              if (route === '' || route === 'blog') assert.equal(await page.locator('.dn-route-hero').evaluate(e => getComputedStyle(e).backgroundColor), 'rgb(255, 255, 255)', 'Light heroes are white above the grey page');
+              if (route === '') {
+                for (const section of await page.locator('.dn-home-content-section').all()) assert.equal(await section.evaluate(e => getComputedStyle(e).backgroundColor), 'rgb(244, 245, 247)', 'Home sections use one canvas');
+                for (const card of await page.locator('.dn-vehicle-card, .dn-body-type, .dn-brand-card').all()) assert.equal(await card.evaluate(e => getComputedStyle(e).backgroundColor), 'rgb(255, 255, 255)', 'Home cards remain white');
+              }
+              if (route === 'contact') assert((await page.locator('.dn-contact-section--general').evaluate(e => getComputedStyle(e).backgroundImage)).includes('rgb(244, 245, 247)'), 'Contact uses the grey canvas below the hero');
               if (route === 'about-us') {
-                assert.equal(await page.locator('.dn-about-showroom').evaluate(e => getComputedStyle(e).backgroundColor), 'rgb(255, 255, 255)', 'Map sits on the same white canvas');
+                assert.equal(await page.locator('.dn-about-showroom').evaluate(e => getComputedStyle(e).backgroundColor), 'rgb(244, 245, 247)', 'Map sits on the shared grey canvas');
+                for (const card of await page.locator('.dn-about-service-card, .dn-about-showroom__card').all()) assert.equal(await card.evaluate(e => getComputedStyle(e).backgroundColor), 'rgb(255, 255, 255)', 'About cards and map panel are white');
                 assert.equal(await page.locator('.dn-desktop-hero-scene').evaluate(e => getComputedStyle(e).filter), 'grayscale(1)', 'Architecture uses the neutral palette');
               }
               // Verify actual glyph rendering, including Cyrillic, rather than only the CSS font stack.

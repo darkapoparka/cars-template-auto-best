@@ -1,10 +1,15 @@
 # Desktop surface and hero-copy polish — 23 September 2026
 
-Home, Inventory, About, Blog and Contact now share a white desktop content canvas.
-Grey remains a contained card/panel surface. Rounded corners, the 24px Home panel
+Home, Inventory, About, Blog and Contact share the existing light-grey desktop
+canvas (`--dn-surface-canvas`) with white cards, search and map panels
+(`--dn-surface-raised`). Home grid wrappers use the canvas colour so the individual
+white cards remain distinct. This replaces the earlier white-page/grey-card pass.
+Rounded corners, the 24px Home panel
 overlap, cutout cars and the shared 540px route hero height are retained.
 
 - Home uses the configured city and address without the appointment instruction.
+  Home and Blog use white heroes; Inventory remains charcoal. The desktop shell
+  also uses the grey canvas so gaps between sections match the content areas.
   Brands and Editorial now use the established charcoal heading treatment; Body
   Types retains pale blue. Banner composition and heights remain unchanged.
 - Inventory retains a concise localized count below its hero title, matching the
@@ -18,9 +23,9 @@ overlap, cutout cars and the shared 540px route hero height are retained.
   retain their original sizes.
 - About keeps its architectural scene with a desktop CSS greyscale treatment. The
   introductory brand heading is unboxed, with its duplicate inventory action
-  removed. Service cards and the rounded map panel use the shared grey surface on
-  white. The old dark map stage and duplicate desktop map rules are removed.
-- Inventory results and Contact content use the same white surface as Home/Blog.
+  removed. Service cards and the rounded map panel are white on light grey.
+  The old dark map stage and duplicate desktop map rules are removed.
+- Inventory results and Contact content use the same grey canvas as Home/Blog.
   No palette token, dealer address, image asset or mobile design was changed.
 
 Source owners are the Home/Listing/About components and the About/Contact route
@@ -33,7 +38,7 @@ Node 22.23.2; owned checkout server at `http://127.0.0.1:5174`:
 
 - `npm run validate`: static, domain, localization, Svelte/type checks and build.
 - `scripts/desktop-routes-smoke.mjs`: 50 BG/EN cases at 390, 992, 1024, 1440 and
-  1920px. Includes white canvases, hero geometry, Onest rendering, images, overflow,
+  1920px. Includes grey canvases, white cards/light heroes, hero geometry, Onest rendering, images, overflow,
   runtime errors, matching social controls and applied/zero-result counts. Map traffic is cancelled
   by navigating to a blank page before closing each browser context.
 - `scripts/desktop-discovery-smoke.mjs`: six Home/Inventory search, sticky draft,
@@ -48,6 +53,10 @@ Node 22.23.2; owned checkout server at `http://127.0.0.1:5174`:
   separately in `cta-social-focused/report.json` after changing its navigation
   wait to DOM readiness instead of the full load event. Language preferences match
   each test locale, and hidden Contact cutouts are not required to download.
+  The final grey-canvas/white-card pass uses `final-canvas-*` logs and captures.
+  Its 49 route cases passed immediately; BG Home at 992px passed a focused rerun
+  after an initial font-readiness assertion. All twelve Home geometry/contrast
+  cases and `npm run validate` passed. No font source or typography was changed.
 
 The 23 pre-existing dirty paths are preserved; only task-owned changes in the two
 shared search files are staged. Checks describe the local combined working source,

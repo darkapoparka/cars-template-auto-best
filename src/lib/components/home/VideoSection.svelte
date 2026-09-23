@@ -27,7 +27,7 @@
 </script>
 
 {#if brand.youtubeUrl && featuredVideos.length > 0}
-<section class="dn-videos" aria-labelledby="videos-title">
+<section class="dn-videos dn-home-content-section" aria-labelledby="videos-title">
   <div class="container">
       <div class="dn-videos__heading dn-home-section-heading dn-home-section-heading--banner dn-home-banner-frame dn-home-banner-copy">
         <h2 id="videos-title" class="dn-home-section-title"><span class="dn-videos__wordmark"><span class="dn-videos__brand-mark"><SocialBrandIcon name="youtube" size={40} /></span>{i18n.t("m_fb7accfff8c6")}</span></h2>

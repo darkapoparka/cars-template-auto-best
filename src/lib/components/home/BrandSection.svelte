@@ -21,7 +21,7 @@
   let expanded = $state(false);
 </script>
 
-<section class="dn-brand-section" aria-labelledby="brand-title">
+<section class="dn-brand-section dn-home-content-section" aria-labelledby="brand-title">
   <div class="container dn-brand-shell">
     <div class="dn-brand-hero">
       <div class="dn-brand-hero__copy dn-home-section-heading dn-home-section-heading--branded dn-home-banner-frame dn-home-banner-copy dn-home-section-heading--compact">

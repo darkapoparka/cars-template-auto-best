@@ -8,6 +8,9 @@ The route heroes, mobile layout, existing vehicle artwork and destinations stay 
 - Inventory, brands, editorial and video section headers use the solid charcoal
   family from the desktop Inventory hero, separating them from the grey panels.
   Body types reuse the pale ice-blue start colour from mobile Import.
+- Desktop sections share the light-grey page canvas; vehicle/body/brand/editorial
+  cards remain white. Grid wrappers use the same canvas tone. The Home hero and
+  Sell campaign card are white; the other campaign/banner colours stay intact.
 - Preserve the rounded banner treatment: headings have 20px corners and the grey
   card panels have 16px corners, with the established 24px overlap. There is no
   divider border or inset shadow. Surface colours provide the separation.
@@ -22,7 +25,7 @@ The route heroes, mobile layout, existing vehicle artwork and destinations stay 
   Vertical padding compensates for the overlapping panel so copy stays centred
   in the visible banner area. Campaign cards retain a 234px minimum height,
   matching rounded corners, and equal heights within each pair.
-- Sell uses light grey and Import reuses the pale ice-blue surface, both with red
+- Sell uses white and Import reuses the pale ice-blue surface, both with red
   actions. Collection and Leasing use charcoal with white actions. Existing
   transparent vehicle artwork remains.
 - Campaign artwork scales to reserve room for action labels at laptop widths.

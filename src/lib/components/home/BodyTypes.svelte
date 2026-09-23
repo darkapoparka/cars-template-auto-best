@@ -20,7 +20,7 @@
   let expanded = $state(false);
 </script>
 
-<section class="dn-section dn-body-types" aria-labelledby="body-types-title">
+<section class="dn-section dn-body-types dn-home-content-section" aria-labelledby="body-types-title">
   <div class="container dn-body-types__panel">
     <div class="dn-section-heading dn-body-types__heading dn-home-section-heading dn-home-section-heading--branded dn-home-section-heading--light dn-home-section-heading--ice dn-home-banner-frame dn-home-banner-copy dn-home-section-heading--compact">
       <h2 id="body-types-title" class="dn-home-section-title">

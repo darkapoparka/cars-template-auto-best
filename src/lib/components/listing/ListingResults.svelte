@@ -99,7 +99,7 @@
   }
 
   @media (min-width: 992px) {
-    .dn-listing-results { background: var(--dn-surface-raised); }
+    .dn-listing-results { background: var(--dn-surface-canvas); }
   }
 
   .dn-listing-results__heading {

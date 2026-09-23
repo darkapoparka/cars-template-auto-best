@@ -9,7 +9,7 @@
   import { leadSite } from '$config/lead-site';
 </script>
 
-<section class="dn-editorial" aria-labelledby="editorial-title">
+<section class="dn-editorial dn-home-content-section" aria-labelledby="editorial-title">
   <div class="dn-editorial__banner" style:--dn-editorial-banner={`url("${leadSite.artwork.editorialBanner}")`}>
     <div class="container">
       <div class="dn-editorial__heading dn-home-section-heading dn-home-section-heading--branded dn-home-banner-frame dn-home-banner-copy">

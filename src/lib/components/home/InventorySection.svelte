@@ -9,7 +9,7 @@
   import { featuredVehicles } from '$data/inventory';
 </script>
 
-<section class="dn-section dn-inventory" aria-labelledby="featured-title">
+<section class="dn-section dn-inventory dn-home-content-section" aria-labelledby="featured-title">
   <div class="container dn-inventory-panel">
     <div class="dn-inventory__heading dn-home-section-heading dn-home-section-heading--branded dn-home-banner-frame dn-home-banner-copy">
       <h2 id="featured-title" class="dn-home-section-title">

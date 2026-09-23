@@ -27,7 +27,7 @@
   .dn-hero__location { display: none; }
 
   @media (min-width: 992px) {
-    .dn-hero { background: var(--dn-surface-panel); }
+    .dn-hero { background: var(--dn-surface-raised); }
     .dn-hero__copy .dn-hero__location { display: block; color: var(--dn-studio-description); text-wrap: balance; }
   }
 

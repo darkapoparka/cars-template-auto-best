@@ -41,6 +41,9 @@
   }
 
   @media (min-width: 992px) {
+    .dn-home-page :global(.dn-home-content-section) {
+      background: var(--dn-surface-canvas);
+    }
     .dn-home-page :global(.dn-home-section-heading) {
       display: flex;
       flex-direction: column;
@@ -137,7 +140,7 @@
       margin: calc(-1 * var(--dn-home-banner-overlap)) 0 0;
       padding: var(--dn-space-6);
       border-radius: var(--dn-radius);
-      background: var(--dn-home-panel);
+      background: var(--dn-surface-canvas);
     }
 
     .dn-home-page :global(.dn-home-banner-frame) {

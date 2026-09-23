@@ -68,6 +68,7 @@
 }
 
 @media (min-width: 992px) {
+  .dn-app-shell { background: var(--dn-surface-canvas); }
   .dn-app-shell .dn-social-profile-links { display: flex; gap: var(--dn-space-4); }
   .dn-app-shell .dn-social-profile-links .dn-social-profile-link {
     display: inline-flex;
@@ -203,7 +204,7 @@
   }
 
   .dn-route-hero--neutral {
-    --dn-studio-background: var(--dn-surface-panel);
+    --dn-studio-background: var(--dn-surface-raised);
     --dn-studio-heading: var(--dn-ink);
     --dn-studio-description: var(--dn-muted);
   }
