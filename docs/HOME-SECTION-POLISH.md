@@ -6,12 +6,12 @@ The route heroes, mobile layout, existing vehicle artwork and destinations stay 
 ## Design
 
 - Inventory, brands, editorial and video section headers use the solid charcoal
-  family from the desktop Inventory hero, separating them from the grey panels.
+  family from the desktop Inventory hero, separating them from the white panels.
   Body types reuse the pale ice-blue start colour from mobile Import.
 - Desktop sections share the light-grey page canvas; vehicle/body/brand/editorial
-  cards remain white. Grid wrappers use the same canvas tone. The Home hero and
+  cards and their rounded section containers are white. The Home hero and
   Sell campaign card are white; the other campaign/banner colours stay intact.
-- Preserve the rounded banner treatment: headings have 20px corners and the grey
+- Preserve the rounded banner treatment: headings have 20px corners and the white
   card panels have 16px corners, with the established 24px overlap. There is no
   divider border or inset shadow. Surface colours provide the separation.
 - Light banners use red actions; dark banners use white actions. Buttons have flat
@@ -67,3 +67,8 @@ no added divider, and the existing vehicle artwork. The shared panel class is
 retained, so restoring the rounding does not restore duplicated component CSS.
 Current captures use `home-{section}-rounded.png` and `home-sections-rounded-*`.
 The earlier divider and square-join experiments are superseded.
+
+24 September: restored white surfaces to all five desktop section containers
+through their shared page rule. CSS policy and token checks passed; live browser
+checks confirmed white 16px-rounded panels on the grey canvas at 992/1440px and
+no mobile overflow at 390px. Dev server verified at port 5174.

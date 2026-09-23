@@ -140,7 +140,7 @@
       margin: calc(-1 * var(--dn-home-banner-overlap)) 0 0;
       padding: var(--dn-space-6);
       border-radius: var(--dn-radius);
-      background: var(--dn-surface-canvas);
+      background: var(--dn-surface-raised);
     }
 
     .dn-home-page :global(.dn-home-banner-frame) {

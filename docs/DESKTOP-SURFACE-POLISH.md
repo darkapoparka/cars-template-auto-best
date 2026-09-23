@@ -2,8 +2,8 @@
 
 Home, Inventory, About, Blog and Contact share the existing light-grey desktop
 canvas (`--dn-surface-canvas`) with white cards, search and map panels
-(`--dn-surface-raised`). Home grid wrappers use the canvas colour so the individual
-white cards remain distinct. This replaces the earlier white-page/grey-card pass.
+(`--dn-surface-raised`). Home grid wrappers are also white so each rounded section
+container remains distinct from the grey page. This replaces the earlier white-page/grey-card pass.
 Rounded corners, the 24px Home panel
 overlap, cutout cars and the shared 540px route hero height are retained.
 
