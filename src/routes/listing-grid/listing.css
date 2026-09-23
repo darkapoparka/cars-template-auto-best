@@ -13,28 +13,19 @@
 }
 
 .dn-listing-hero__media,
-.dn-listing-hero__overlay {
-  position: absolute;
-  inset: 0;
-}
+.dn-listing-hero__overlay { display: none; }
 
-.dn-listing-hero__media {
-  background: url('/assets/images/section/bg-4.jpg') center 45% / cover no-repeat;
-}
-
-.dn-listing-hero__overlay {
-  background: var(--dn-route-hero-overlay);
+/* The existing tablet photograph is separate from the solid desktop banner. */
+@media (min-width: 768px) and (max-width: 991px) {
+  .dn-listing-hero__media,
+  .dn-listing-hero__overlay { display: block; position: absolute; inset: 0; }
+  .dn-listing-hero__media { background: url('/assets/images/section/bg-4.jpg') center 45% / cover no-repeat; }
+  .dn-listing-hero__overlay { background: var(--dn-route-hero-overlay); }
 }
 
 @media (min-width: 992px) {
-  .dn-app-shell .dn-listing-stage {
-    --dn-hero-center-width: min(1040px, max(960px, calc(100vw - 560px)));
-  }
-
   .dn-app-shell .dn-listing-stage .dn-listing-hero.dn-route-hero--studio {
-    background:
-      radial-gradient(ellipse at 50% -24%, color-mix(in srgb, var(--dn-workflow-canvas) 86%, white), transparent 64%),
-      linear-gradient(125deg, var(--dn-workflow-canvas), color-mix(in srgb, var(--dn-workflow-canvas) 76%, var(--dn-ink-deep)));
+    background: var(--dn-workflow-canvas);
   }
 }
 
@@ -53,9 +44,6 @@
     overflow: visible;
   }
 
-  .dn-listing-stage[data-layout='hero-discovery'] .dn-route-hero__layout {
-    padding-bottom: 0;
-  }
 }
 
 @media (max-width: 767px) {

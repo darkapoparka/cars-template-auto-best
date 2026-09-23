@@ -7,23 +7,6 @@
   color: #fff;
 }
 
-.dn-about-hero__media,
-.dn-about-hero__overlay {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.dn-about-hero__media {
-  object-fit: cover;
-  object-position: center;
-}
-
-.dn-about-hero__overlay {
-  background: var(--dn-route-hero-overlay);
-}
-
 .dn-about-hero__lead {
   color: rgba(255, 255, 255, .84);
 }
@@ -60,7 +43,6 @@
 
 .dn-about-intro__action { display: none; }
 @media (min-width: 992px) {
-  .dn-app-shell .dn-about-hero.dn-route-hero { min-height: 540px; height: 540px; }
   .dn-app-shell .dn-about-hero .dn-about-button { display: inline-flex; }
   .dn-about-process.dn-section { padding: 56px 0 64px; background: #f3f4f6; }
   .dn-about-process .dn-about-section-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px 40px; max-width: none; padding: 28px 32px; border-radius: 20px; background: #fff; box-shadow: 0 8px 24px rgba(18, 25, 38, .06); text-align: left; align-items: center; }
@@ -75,7 +57,7 @@
   .dn-about-process .dn-about-service-card__icon svg { width: 44px; height: 44px; }
   .dn-about-process .dn-about-service-card h3 { font-size: var(--dn-text-card); }
   .dn-about-process .dn-about-service-card p { margin: 12px 0 24px; font-size: var(--dn-text-body); line-height: var(--dn-leading-body); }
-  .dn-about-process .dn-about-service-card > a { min-height: 44px; padding: 0 10px; font-size: var(--dn-text-meta); }
+  .dn-about-process .dn-about-service-card > a { min-height: 44px; padding: 8px 12px; font-size: var(--dn-control-size); font-weight: var(--dn-control-weight); line-height: var(--dn-leading-control); }
   .dn-about-process .dn-about-service-card > a:focus-visible { outline: 2px solid var(--dn-red); outline-offset: 3px; }
 }
 

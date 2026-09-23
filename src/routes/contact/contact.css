@@ -8,28 +8,7 @@
   overflow: hidden;
   background: #16191e;
   color: #fff;
-  padding-top: 0 !important;
-}
-
-.dn-contact-hero__media,
-.dn-contact-hero__overlay {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.dn-contact-hero__media {
-  object-fit: cover;
-  object-position: 58% center;
-}
-
-@media (min-width: 992px) {
-  .dn-contact-hero picture > .dn-contact-hero__media { filter: saturate(.65); }
-}
-
-.dn-contact-hero__overlay {
-  background: var(--dn-route-hero-overlay);
+  padding-top: 0;
 }
 
 .dn-contact-button {
@@ -679,13 +658,8 @@
     background: var(--dn-theme-contact-surface);
   }
 
-  .dn-app-shell .dn-contact-hero--general :is(.dn-hero-vehicles, .dn-contact-hero__overlay, .dn-contact-hero__action) {
+  .dn-app-shell .dn-contact-hero--general :is(.dn-hero-vehicles, .dn-contact-hero__action) {
     display: none;
-  }
-
-  .dn-app-shell .dn-contact-hero--general .dn-route-hero__copy {
-    left: 50%;
-    transform: translateX(-50%);
   }
 
   .dn-app-shell .dn-contact-section--general {
@@ -777,9 +751,6 @@
     top: var(--dn-route-hero-control-top);
   }
 
-  .dn-app-shell .dn-contact-hero.dn-contact-hero--vehicle .dn-route-hero__copy {
-    bottom: 24px;
-  }
 }
 
 /* Import journey: focused request flow, visually aligned with the homepage search box. */
@@ -787,10 +758,6 @@
   .dn-contact-hero--import.dn-route-hero {
     height: 220px;
     min-height: 220px;
-  }
-
-  .dn-contact-hero--import .dn-contact-hero__media {
-    object-position: 66% 58%;
   }
 
   .dn-contact-section--import {
