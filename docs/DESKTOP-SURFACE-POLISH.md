@@ -3,14 +3,14 @@
 Home, Inventory, About, Blog and Contact share the existing light-grey desktop
 canvas (`--dn-surface-canvas`) with white cards, search and map panels
 (`--dn-surface-raised`). Home grid wrappers are also white so each rounded section
-container remains distinct from the grey page. Inner brand and body-type tiles use
-`--dn-surface-subtle` on desktop to remain distinct inside those white containers.
+container remains distinct from the grey page. Inner brand, body-type and vehicle
+cards stay white, with `--dn-card-shadow` and a stronger hover shadow on desktop.
 This replaces the earlier white-page/grey-card pass.
 Rounded corners, the 24px Home panel
 overlap, cutout cars and the shared 540px route hero height are retained.
 
 - Home uses the configured city and address without the appointment instruction.
-  Home and Blog use white heroes; Inventory remains charcoal. The desktop shell
+  Home uses a soft-grey hero, Blog uses white and Inventory remains charcoal. The desktop shell
   also uses the grey canvas so gaps between sections match the content areas.
   Brands and Editorial now use the established charcoal heading treatment; Body
   Types retains pale blue. Banner composition and heights remain unchanged.

@@ -86,7 +86,7 @@
 
   @media (min-width: 992px) {
     .dn-brand-hero { padding: 0; }
-    .dn-brand-card { background: var(--dn-surface-subtle); }
+    .dn-brand-card { background: var(--dn-surface-raised); box-shadow: var(--dn-card-shadow); }
     .dn-brand-card__image { height: 72px; }
     .dn-brand-card__frame { width: var(--logo-desktop-width); }
     .dn-brand-card strong { font-size: var(--dn-text-lead); line-height: var(--dn-leading-body); }

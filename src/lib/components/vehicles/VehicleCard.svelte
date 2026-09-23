@@ -292,7 +292,7 @@
 
   @media (min-width: 992px) {
     .dn-vehicle-card {
-      box-shadow: 0 0 0 1px rgb(32 35 41 / 6%);
+      box-shadow: var(--dn-card-shadow);
       transition: box-shadow 120ms ease-out, transform 180ms ease-out;
     }
 
@@ -312,7 +312,7 @@
     .dn-vehicle-card__amount { margin-top: 0; }
 
     @media (hover: hover) and (pointer: fine) {
-      .dn-vehicle-card:hover { box-shadow: 0 0 0 1px rgb(32 35 41 / 12%), 0 6px 18px rgb(32 35 41 / 8%); }
+      .dn-vehicle-card:hover { box-shadow: var(--dn-card-hover-shadow); }
     }
   }
 
