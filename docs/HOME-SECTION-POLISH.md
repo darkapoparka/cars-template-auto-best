@@ -5,8 +5,8 @@ The route heroes, mobile layout, existing vehicle artwork and destinations stay 
 
 ## Design
 
-- Inventory and video section headers use the solid charcoal family from the
-  desktop Inventory hero. Brands and editorial use a softer neutral surface.
+- Inventory, brands, editorial and video section headers use the solid charcoal
+  family from the desktop Inventory hero, separating them from the grey panels.
   Body types reuse the pale ice-blue start colour from mobile Import.
 - Preserve the rounded banner treatment: headings have 20px corners and the grey
   card panels have 16px corners, with the established 24px overlap. There is no
@@ -31,7 +31,7 @@ The route heroes, mobile layout, existing vehicle artwork and destinations stay 
 Shared Home banner presentation and the semantic `dn-home-section-panel` style
 live in `src/routes/+page.svelte`. All five card panels opt into that class;
 duplicated desktop overlap, padding and corner rules are removed from their owners.
-BodyTypes, BrandSection and Editorial select the light variants; TrustActions owns campaign card styling.
+BodyTypes selects the pale-blue light variant; TrustActions owns campaign card styling.
 Existing unrelated changes, including tokens and the VideoSection close-icon
 size adjustment, are preserved and excluded from the task commit.
 

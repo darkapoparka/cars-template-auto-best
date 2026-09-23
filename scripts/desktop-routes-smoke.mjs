@@ -84,7 +84,18 @@ try {
               assert(geometry.copy.y >= geometry.header.bottom + 8, 'Hero text clears navigation');
               assert(geometry.controls.y >= geometry.copy.bottom + 20, 'Hero controls clear copy');
               assert(geometry.controls.bottom <= geometry.hero.bottom + 1, 'Hero controls fit banner');
-              assert(geometry.lead.y >= geometry.heading.bottom, 'Title and lead do not overlap');
+              if (route === 'listing-grid') {
+                assert.equal(geometry.lead.height, 0, 'Desktop Inventory moves the count into search');
+                assert.equal(await page.locator('.dn-discovery .dn-discovery__results').innerText(), '(8)');
+              } else {
+                assert(geometry.lead.y >= geometry.heading.bottom, 'Title and lead do not overlap');
+              }
+              const surface = { '': '.dn-inventory', 'listing-grid': '.dn-listing-results', 'about-us': '.dn-about-process', 'blog': '.dn-blog-index' }[route];
+              if (surface) assert.equal(await page.locator(surface).evaluate(e => getComputedStyle(e).backgroundColor), 'rgb(255, 255, 255)', 'Desktop routes share a white content canvas');
+              if (route === 'about-us') {
+                assert.equal(await page.locator('.dn-about-showroom').evaluate(e => getComputedStyle(e).backgroundColor), 'rgb(255, 255, 255)', 'Map sits on the same white canvas');
+                assert.equal(await page.locator('.dn-desktop-hero-scene').evaluate(e => getComputedStyle(e).filter), 'grayscale(1)', 'Architecture uses the neutral palette');
+              }
               // Verify actual glyph rendering, including Cyrillic, rather than only the CSS font stack.
               const cdp = await context.newCDPSession(page);
               await cdp.send('DOM.enable');
@@ -107,6 +118,19 @@ try {
               await search.focus();
               assert.equal(await search.evaluate(e => getComputedStyle(e).outlineStyle), 'solid', 'Search has a visible focus outline');
             }
+            if (route === 'listing-grid' && width === 1440) {
+              const count = page.locator('.dn-discovery .dn-discovery__results');
+              await page.locator('.dn-discovery select[name=make]').selectOption('Audi');
+              await page.waitForFunction(() => document.querySelector('.dn-discovery__results')?.textContent === '(2)');
+              assert.equal(await count.innerText(), '(2)', 'Count follows pending filters');
+              await page.locator('.dn-discovery__submit').click();
+              await page.waitForURL(url => url.searchParams.get('make') === 'Audi');
+              assert.equal(await page.locator('.dn-listing-results .dn-vehicle-card').count(), 2);
+              assert.equal(await count.innerText(), '(2)', 'Applied result count agrees with cards');
+              await page.goto(`${base}/${locale}/listing-grid?q=zzzznomatch`, { waitUntil: 'domcontentloaded' });
+              assert.equal(await count.innerText(), '(0)', 'Zero matches remain explicit');
+              assert.equal(await page.locator('.dn-listing-results .dn-vehicle-card').count(), 0);
+            }
             return geometry;
           } finally {
             page.off('pageerror', onError);
@@ -114,6 +138,8 @@ try {
           }
         });
       }
+      // Cancel embedded map traffic before disposing the context.
+      await page.goto('about:blank');
       await context.close();
     }
   }

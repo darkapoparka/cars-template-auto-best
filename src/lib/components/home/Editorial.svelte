@@ -11,7 +11,7 @@
 <section class="dn-editorial" aria-labelledby="editorial-title">
   <div class="dn-editorial__banner" style:--dn-editorial-banner={`url("${leadSite.artwork.editorialBanner}")`}>
     <div class="container">
-      <div class="dn-editorial__heading dn-home-section-heading dn-home-section-heading--branded dn-home-section-heading--light dn-home-banner-frame dn-home-banner-copy">
+      <div class="dn-editorial__heading dn-home-section-heading dn-home-section-heading--branded dn-home-banner-frame dn-home-banner-copy">
         <h2 id="editorial-title" class="dn-home-section-title">
           <span class="dn-heading-desktop">{i18n.t("m_7badc636af8e")}</span>
           <span class="dn-heading-mobile">{i18n.t("m_5062eeb4b9d4")}</span>

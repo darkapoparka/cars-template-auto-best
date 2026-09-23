@@ -18,3 +18,9 @@
     </div>
   </div>
 </section>
+
+<style>
+  @media (min-width: 992px) {
+    .dn-listing-hero__copy > p { display: none; }
+  }
+</style>

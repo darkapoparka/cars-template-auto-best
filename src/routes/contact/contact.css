@@ -667,7 +667,7 @@
     z-index: 1;
     margin-top: calc(var(--dn-route-hero-control-top) - var(--dn-route-hero-height));
     padding: 0 0 72px;
-    background: linear-gradient(to bottom, transparent calc(var(--dn-route-hero-height) - var(--dn-route-hero-control-top)), var(--dn-surface-canvas) 0);
+    background: linear-gradient(to bottom, transparent calc(var(--dn-route-hero-height) - var(--dn-route-hero-control-top)), var(--dn-surface-raised) 0);
     scroll-margin-top: 160px;
   }
 
@@ -722,7 +722,7 @@
     z-index: 1;
     margin-top: -140px;
     padding-top: 0;
-    background: linear-gradient(to bottom, transparent 140px, #f6f7f8 140px);
+    background: linear-gradient(to bottom, transparent 140px, var(--dn-surface-raised) 140px);
     scroll-margin-top: 160px;
   }
   .dn-contact-section--topic :is(.dn-contact-intent__main, .dn-contact-card) {

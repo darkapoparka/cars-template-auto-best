@@ -14,7 +14,7 @@
         <span class="dn-hero__title-desktop">{i18n.t("m_bb7c0e3ca487")}</span>
         <span class="dn-hero__title-mobile">{i18n.t("m_f92c64344e85")}</span>
       </h1>
-      <p class="dn-hero__location">{i18n.t("m_46b43b69d985", { p0: i18n.dealer('addressLine') })}</p>
+      <p class="dn-hero__location">{i18n.dealer('city')}, {i18n.dealer('addressLine')}</p>
     </div>
   </div>
 </section>

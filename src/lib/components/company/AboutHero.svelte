@@ -50,6 +50,7 @@
   .dn-about-socials a:hover { background: #fff; border-color: #fff; color: #1d1f23; }
   .dn-about-socials a:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
   @media (min-width: 992px) {
+    .dn-about-hero :global(.dn-desktop-hero-scene) { filter: grayscale(1); }
     .dn-about-socials { position: absolute; top: calc(var(--dn-route-hero-control-top) + 68px); left: 0; width: 100%; gap: 12px; }
     .dn-about-socials > span { color: var(--dn-ink); }
     .dn-about-socials a { width: 56px; height: 56px; background: var(--dn-white); border-color: transparent; color: var(--dn-ink); }

@@ -98,6 +98,10 @@
     background: #f4f5f7;
   }
 
+  @media (min-width: 992px) {
+    .dn-listing-results { background: var(--dn-surface-raised); }
+  }
+
   .dn-listing-results__heading {
     display: flex;
     align-items: center;
