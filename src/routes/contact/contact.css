@@ -672,8 +672,8 @@
   }
 }
 
-/* General Contact: shared hero baseline, one contact panel, then the map.
-   Keep the panel in document flow so longer dealer details can grow safely. */
+/* General Contact: shared hero baseline, separate contact cards, then the map.
+   Keep the cards in document flow so longer dealer details can grow safely. */
 @media (min-width: 992px) {
   .dn-app-shell .dn-contact-hero--general.dn-route-hero {
     align-items: flex-start;
@@ -706,17 +706,16 @@
   .dn-app-shell .dn-contact-section--general .dn-contact-hero-panel {
     width: min(960px, 100%);
     align-items: stretch;
-    gap: 48px;
+    gap: 24px;
+    padding: 0;
+    background: transparent;
+  }
+
+  .dn-app-shell .dn-contact-section--general .dn-contact-hero-panel :is(.dn-contact-intent__main, .dn-contact-card) {
     padding: 28px 32px;
     border-radius: 20px;
     background: var(--dn-white);
     box-shadow: var(--dn-card-hover-shadow);
-  }
-
-  .dn-app-shell .dn-contact-section--general .dn-contact-hero-panel :is(.dn-contact-intent__main, .dn-contact-card) {
-    padding: 0;
-    border-radius: 0;
-    background: transparent;
     text-align: left;
   }
 

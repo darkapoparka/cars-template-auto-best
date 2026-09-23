@@ -4,7 +4,7 @@ Baseline: `4370007`, saved master checkout on `main`. Scope is desktop Contact a
 
 ## Changes
 
-- General Contact uses one white, two-column panel on the established charcoal hero. Decorative desktop cars are hidden. The heading and panel retain the shared route baselines.
+- General Contact uses two separate white cards with a 24px gap on the established charcoal hero. Each card owns its padding, rounded corners and shadow; the shared grid has no surface. Decorative desktop cars are hidden. The heading and cards retain the shared route baselines.
 - The phone number has clearer hierarchy, social links have 44px hit areas, and directions align with the social row. Keyboard focus uses the shared focus color; transitions respect reduced motion.
 - The contact panel remains in document flow, allowing longer dealer details to increase its height without overlapping the map.
 - Eleven competing general-contact desktop CSS blocks are consolidated. The map heading is centered and its container uses the existing rounded surface pattern.
@@ -24,3 +24,7 @@ Baseline: `4370007`, saved master checkout on `main`. Scope is desktop Contact a
 Matching 1440×900 Contact screenshots are saved locally in `artifacts/contact-desktop-polish/before-desktop.png` and `after-desktop.png`. Supplemental topic and mobile screenshots are in the same ignored directory.
 
 The Google Maps iframe remained blank in the test browser, before and after the changes. Directions URLs were inspected but external map rendering was not verified. No calls, enquiries or external social actions were submitted. This is working-checkout QA, not exact-commit template-release or dealer-deployment evidence.
+
+## Visual correction after owner feedback
+
+The joined white panel was rejected. The desktop cards now render independently, retaining their 320px top baseline and equal heights. Verified Bulgarian at 1440px, English at 1024px, and mobile preservation at 390px with no horizontal overflow. CSS policy, typography and diff checks passed for this CSS-only correction. Matching screenshots are in `artifacts/contact-separate-cards/before.png` and `after.png`; earlier screenshots document the superseded joined panel.
