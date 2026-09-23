@@ -105,7 +105,7 @@
       isolation: isolate;
       overflow: hidden;
       margin-bottom: 0;
-      border-radius: var(--dn-radius-lg) var(--dn-radius-lg) 0 0;
+      border-radius: var(--dn-radius-lg);
       background: var(--dn-theme-hero-surface-deep);
       box-shadow: none;
       text-align: center;
@@ -127,15 +127,17 @@
 
     .dn-home-page :global(.dn-home-section-panel) {
       position: relative;
-      margin: 0;
+      margin: calc(-1 * var(--dn-home-banner-overlap)) 0 0;
       padding: var(--dn-space-6);
-      border-radius: 0 0 var(--dn-radius-lg) var(--dn-radius-lg);
+      border-radius: var(--dn-radius);
       background: var(--dn-home-panel);
     }
 
     .dn-home-page :global(.dn-home-banner-frame) {
       min-height: var(--dn-home-heading-banner-height);
       padding: var(--dn-home-banner-padding);
+      padding-top: calc(var(--dn-space-7) - var(--dn-home-banner-overlap) / 2);
+      padding-bottom: calc(var(--dn-space-7) + var(--dn-home-banner-overlap) / 2);
     }
     .dn-home-page :global(.dn-home-banner-copy) {
       display: flex;
