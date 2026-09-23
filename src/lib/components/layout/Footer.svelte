@@ -101,14 +101,18 @@
 
 <style>
   .dn-footer-actions { padding-block: var(--dn-space-6); background: var(--dn-surface); color: var(--dn-ink); }
-  .dn-footer-actions__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--dn-space-6); }
-  .dn-footer-actions__grid > a { display: grid; min-width: 0; grid-template-columns: 48px minmax(0, 1fr); align-items: center; gap: var(--dn-space-3); padding-block: var(--dn-space-2); }
+  .dn-footer-actions__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--dn-space-4); }
+  .dn-footer-actions__grid > a { display: grid; min-width: 0; min-height: 112px; grid-template-columns: 48px minmax(0, 1fr); align-items: center; gap: var(--dn-space-3); padding: var(--dn-space-4); border: 1px solid var(--dn-line); border-radius: var(--dn-radius); background: var(--dn-white); color: var(--dn-ink); text-decoration: none; }
   .dn-footer-actions__icon { display: grid; width: 48px; height: 48px; place-items: center; color: var(--dn-red); }
   .dn-footer-actions__icon :global(svg) { display: block; width: 44px; height: 44px; }
   .dn-footer-actions strong { display: block; margin-bottom: var(--dn-space-1); font-size: var(--dn-text-body); font-weight: var(--dn-weight-medium); line-height: var(--dn-leading-body); }
   .dn-footer-actions small { display: block; color: var(--dn-muted); font-size: var(--dn-text-meta); line-height: var(--dn-leading-meta); }
   .dn-footer-actions a:hover strong { color: var(--dn-red); }
-  .dn-footer-actions a:focus-visible { outline: 2px solid var(--dn-focus); outline-offset: 4px; border-radius: var(--dn-radius-sm); }
+  .dn-footer-actions a:focus-visible { outline: 2px solid var(--dn-focus); outline-offset: 3px; border-radius: var(--dn-radius); }
+  @media (min-width: 768px) and (hover: hover) {
+    .dn-footer-actions__grid > a { transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease; }
+    .dn-footer-actions__grid > a:hover { transform: translateY(-2px); border-color: var(--dn-line-strong); box-shadow: var(--dn-card-hover-shadow); }
+  }
 
   .dn-footer {
     margin-top: var(--dn-space-4);
@@ -186,6 +190,8 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .dn-footer-actions__grid > a { transition: none; }
+    .dn-footer-actions__grid > a:hover { transform: none; }
     .dn-footer__call, .dn-footer__contact-arrow { transition: none; }
     .dn-footer .dn-footer__call:hover { transform: none; }
     .dn-footer__contact-link:hover .dn-footer__contact-arrow { transform: rotate(-45deg); }
