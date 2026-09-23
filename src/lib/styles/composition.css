@@ -106,9 +106,9 @@
     display: none;
   }
 
-  .dn-route-hero--studio .dn-route-hero__layout {
+  .dn-route-hero .dn-route-hero__layout {
     width: min(1408px, 100%);
-    height: 320px;
+    height: var(--dn-route-hero-control-top);
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto auto;
@@ -117,34 +117,35 @@
     padding: 0 24px;
   }
 
-  .dn-route-hero--studio .dn-route-hero__copy {
+  .dn-route-hero .dn-route-hero__copy {
     display: block;
     position: absolute;
     bottom: 24px;
-    width: min(800px, calc(100% - 480px));
-    color: var(--dn-studio-heading, #202329);
+    width: min(1120px, calc(100% - 64px));
+    color: var(--dn-studio-heading, #fff);
     text-align: center;
   }
 
-  .dn-route-hero--studio .dn-route-hero__copy h1 {
-    color: var(--dn-studio-heading, #202329);
-    font-size: var(--dn-text-fluid-hero);
+  .dn-route-hero .dn-route-hero__copy h1 {
+    color: var(--dn-studio-heading, #fff);
+    font-size: var(--dn-text-hero);
     font-weight: var(--dn-weight-semibold);
     line-height: var(--dn-leading-section);
     text-wrap: balance;
   }
 
-  .dn-route-hero--studio .dn-route-hero__copy p {
+  .dn-route-hero .dn-route-hero__copy p {
+    width: min(100%, 1040px);
     max-width: 100%;
     margin: 8px auto 0;
-    color: var(--dn-studio-description, #626974);
+    color: var(--dn-studio-description, #fff);
     font-size: var(--dn-text-body);
     line-height: var(--dn-leading-body);
   }
 
   .dn-route-hero--studio .dn-route-hero__control {
     position: absolute;
-    top: 320px;
+    top: var(--dn-route-hero-control-top);
     margin-top: 0;
   }
 
@@ -166,10 +167,6 @@
   .dn-contact-hero.dn-route-hero--studio .dn-contact-hero__action {
     background: #fff;
     color: #202329;
-  }
-
-  .dn-app-shell :is(.dn-about-hero, .dn-contact-hero) .dn-route-hero__copy {
-    width: min(680px, calc(100% - 560px));
   }
 
   .dn-route-hero--charcoal .dn-about-button:is(:hover, :focus-visible) {
@@ -208,7 +205,7 @@
 
   .dn-blog-hero.dn-route-hero--studio .dn-blog-toolbar {
     position: absolute;
-    top: 320px;
+    top: var(--dn-route-hero-control-top);
     left: 24px;
     width: calc(100% - 48px);
     margin-top: 0;
@@ -230,6 +227,7 @@
 
 @media (min-width: 992px) {
   :root {
+    --dn-route-hero-height: 540px;
     --dn-route-hero-content-top: 284px;
     --dn-route-hero-control-top: 320px;
     --dn-route-hero-overlay: rgba(10, 12, 16, 0.56);
@@ -321,8 +319,6 @@
 }
 
 @media (min-width: 992px) {
-  .dn-app-shell :is(.dn-hero, .dn-route-hero--studio, .dn-listing-stage) { --dn-route-hero-height: 540px; }
-  .dn-app-shell .dn-hero { --dn-route-hero-height: 580px; }
   .dn-app-shell .dn-body-types.dn-section { padding-top: 48px; }
   .dn-app-shell .dn-about-process { padding-top: 48px; }
   .dn-app-shell .dn-blog-hero.dn-route-hero--studio { height: var(--dn-route-hero-height); overflow: hidden; margin-bottom: 0; }
@@ -330,21 +326,12 @@
   .dn-app-shell .dn-blog-grid { margin-top: 0; }
 }
 
-/* Discovery titles have their own full-width lane above the vehicle artwork. */
+/* Shared desktop control width and compact heading scale. */
 @media (min-width: 992px) {
   :root { --dn-hero-center-width: min(1040px, max(880px, calc(100vw - 560px))); }
-  .dn-discovery-hero .dn-route-hero__copy {
-    width: min(1120px, calc(100% - 64px));
-  }
-  .dn-discovery-hero .dn-route-hero__copy h1 {
-    font-size: var(--dn-text-hero);
-    line-height: var(--dn-leading-section);
-    letter-spacing: var(--dn-tracking-heading);
-    text-wrap: balance;
-  }
 }
 @media (min-width: 992px) and (max-width: 1199px) {
-  .dn-discovery-hero .dn-route-hero__copy h1 {
+  .dn-route-hero .dn-route-hero__copy h1 {
     font-size: var(--dn-text-section);
   }
 }

@@ -153,4 +153,11 @@
   @media (min-width: 992px) and (max-width: 1199px) { .dn-discovery__facets { gap: 10px; } .dn-discovery__facets select { padding-left: 10px; } }
   @media (min-width: 1440px) and (max-width: 1599px) { .dn-discovery .dn-discovery__facets select { padding-inline: 10px 28px; } }
   @media (max-width: 767px) { .dn-discovery { display: none; } }
+  @media (min-width: 992px) {
+    .dn-discovery .dn-discovery__facets { gap: var(--dn-space-3); }
+    .dn-discovery .dn-discovery__facets select { padding-inline: 10px 28px; font-size: var(--dn-control-size); cursor: pointer; transition: none; }
+    .dn-discovery .dn-discovery__facets select:hover { background-color: #eceef1; border-color: var(--dn-line-emphasis); }
+    .dn-discovery__search:focus-within { border-color: var(--dn-focus); }
+    .dn-discovery :is(.dn-discovery__keyword, .dn-discovery__submit) { transition: none; }
+  }
 </style>

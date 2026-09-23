@@ -740,11 +740,11 @@
 
 @media (min-width: 992px) {
   .dn-app-shell .dn-contact-hero .dn-contact-hero__vehicle {
-    top: 288px;
+    top: var(--dn-route-hero-control-top);
   }
 
   .dn-app-shell .dn-contact-hero.dn-contact-hero--vehicle .dn-route-hero__copy {
-    bottom: 40px;
+    bottom: 24px;
   }
 }
 
@@ -1193,19 +1193,21 @@
 /* Match general Contact to the established Cars/About desktop hero rhythm. */
 @media (min-width: 992px) {
   .dn-app-shell .dn-contact-hero--general.dn-route-hero {
+    align-items: flex-start;
     height: 540px;
     min-height: 540px;
     overflow: hidden;
   }
   .dn-contact-hero--general .dn-route-hero__layout {
-    height: 540px;
+    height: var(--dn-route-hero-control-top);
   }
   .dn-app-shell .dn-contact-hero--general .dn-route-hero__copy {
-    top: 201px;
-    width: min(800px, calc(100% - 480px));
+    top: auto;
+    bottom: 24px;
+    width: min(1120px, calc(100% - 64px));
   }
   .dn-app-shell .dn-contact-hero--general .dn-route-hero__copy h1 {
-    font-size: var(--dn-text-hero-large);
+    font-size: var(--dn-text-hero);
     line-height: var(--dn-leading-section);
   }
   .dn-app-shell .dn-contact-hero--general .dn-route-hero__copy p {
@@ -1216,7 +1218,7 @@
     line-height: var(--dn-leading-body);
   }
   .dn-app-shell .dn-contact-hero-panel.dn-contact-intent--general {
-    top: 320px;
+    top: var(--dn-route-hero-control-top);
   }
   .dn-app-shell .dn-contact-hero-panel.dn-contact-intent--general :is(.dn-contact-intent__main,.dn-contact-card) {
     min-height: 186px;
