@@ -105,7 +105,7 @@
       isolation: isolate;
       overflow: hidden;
       margin-bottom: 0;
-      border-radius: var(--dn-radius-lg);
+      border-radius: var(--dn-radius-lg) var(--dn-radius-lg) 0 0;
       background: var(--dn-theme-hero-surface-deep);
       box-shadow: none;
       text-align: center;
@@ -125,16 +125,17 @@
     .dn-home-page :global(.dn-home-section-heading--light > .dn-home-section-action:is(:hover, :focus-visible)) { background: var(--dn-red-hover); color: var(--dn-white); }
     .dn-home-page :global(.dn-home-section-heading--light > .dn-home-section-action:focus-visible) { outline-color: var(--dn-focus); }
 
-    /* A visible seam separates the heading from its overlapping card tray. */
-    .dn-home-page :global(:is(.dn-inventory__grid, .dn-body-types__viewport, .dn-brand-panel, .dn-editorial__cards, .dn-videos__panel)) {
-      box-shadow: inset 0 1px 0 var(--dn-line-strong);
+    .dn-home-page :global(.dn-home-section-panel) {
+      position: relative;
+      margin: 0;
+      padding: var(--dn-space-6);
+      border-radius: 0 0 var(--dn-radius-lg) var(--dn-radius-lg);
+      background: var(--dn-home-panel);
     }
 
     .dn-home-page :global(.dn-home-banner-frame) {
       min-height: var(--dn-home-heading-banner-height);
       padding: var(--dn-home-banner-padding);
-      padding-top: calc(var(--dn-space-7) - var(--dn-home-banner-overlap) / 2);
-      padding-bottom: calc(var(--dn-space-7) + var(--dn-home-banner-overlap) / 2);
     }
     .dn-home-page :global(.dn-home-banner-copy) {
       display: flex;

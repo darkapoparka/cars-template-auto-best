@@ -31,7 +31,7 @@
         <a class="dn-brand-hero__cta dn-home-section-action" href={i18n.href(resolve('/listing-grid'))} aria-label={i18n.t("m_7d6647b063a2")}><span class="dn-heading-desktop">{i18n.t("m_7d6647b063a2")}</span><span class="dn-heading-mobile" aria-hidden="true">{i18n.t("m_a52ace420f21")}</span></a>
       </div>
     </div>
-    <div class="dn-brand-panel">
+    <div class="dn-brand-panel dn-home-section-panel">
       <div id="brands-grid" class="dn-brand-grid" style:--brand-columns={Math.max(1, Math.min(brands.length, 6))}>
         {#each brands as brand (brand.label)}
           <a class="dn-brand-card" class:dn-brand-card--additional={!mobileBrands.has(brand.label)} class:dn-brand-card--secondary={!expanded && !mobileBrands.has(brand.label)} data-stock-count={brand.count} href={i18n.href(resolve(`/listing-grid?make=${encodeURIComponent(brand.label)}`))}>
@@ -85,7 +85,6 @@
 
   @media (min-width: 992px) {
     .dn-brand-hero { padding: 0; }
-    .dn-brand-panel { position: relative; margin-top: calc(-1 * var(--dn-home-banner-overlap)); padding: 24px; border-radius: var(--dn-radius); }
     .dn-brand-card__image { height: 72px; }
     .dn-brand-card__frame { width: var(--logo-desktop-width); }
     .dn-brand-card strong { font-size: var(--dn-text-lead); line-height: var(--dn-leading-body); }

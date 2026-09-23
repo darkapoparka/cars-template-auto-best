@@ -39,7 +39,7 @@
         </a>
       </div>
 
-    <div class="dn-videos__panel">
+    <div class="dn-videos__panel dn-home-section-panel">
       <div class="dn-videos__grid">
         {#each featuredVideos as video (video.id)}
           <article class="dn-video-card">
@@ -115,7 +115,6 @@
     .dn-videos .dn-videos__heading.dn-home-section-heading { min-height: var(--dn-home-heading-banner-height); }
     .dn-videos__heading h2 { justify-content: center; }
     .dn-videos__channel :global(svg) { width: 18px; height: 18px; stroke-width: 2; }
-    .dn-videos__panel { background: var(--dn-home-panel); }
   }
 
   @media (min-width: 768px) and (max-width: 991px) {

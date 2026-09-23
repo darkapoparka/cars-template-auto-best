@@ -31,7 +31,7 @@
       </a>
     </div>
 
-    <div class="dn-body-types__viewport">
+    <div class="dn-body-types__viewport dn-home-section-panel">
       <div class="dn-body-types__rail" id="body-types-grid" aria-label={i18n.t("m_b94720bac36c")}>
         {#each bodyTypes as item (item.query)}
           <a class="dn-body-type" class:dn-body-type--additional={!mobileBodyTypes.has(item.query)} class:dn-body-type--secondary={!expanded && !mobileBodyTypes.has(item.query)} data-stock-count={item.count} href={i18n.href(resolve(`/listing-grid?body=${encodeURIComponent(item.query)}`))}>
@@ -223,14 +223,6 @@
 
     .dn-body-types__heading h2 {
       font-size: var(--dn-text-heading);
-    }
-
-    .dn-body-types__viewport {
-      position: relative;
-      margin: calc(-1 * var(--dn-home-banner-overlap)) 0 0;
-      padding: 24px;
-      border-radius: var(--dn-radius);
-      background: var(--dn-home-panel);
     }
 
     .dn-body-types__rail {

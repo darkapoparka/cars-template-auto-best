@@ -23,7 +23,7 @@
   </div>
 
   <div class="container">
-    <div class="dn-editorial__cards">
+    <div class="dn-editorial__cards dn-home-section-panel">
       <div class="dn-editorial__layout">
         {#each editorial as item (item.title)}
           <article class="dn-editorial-item">
@@ -469,13 +469,6 @@
     .dn-editorial__cta:focus-visible {
       background: #24272c;
       color: #fff;
-    }
-
-    .dn-editorial__cards {
-      margin: calc(-1 * var(--dn-home-banner-overlap)) 0 0;
-      padding: 24px;
-      border-radius: var(--dn-radius);
-      background: var(--dn-home-panel);
     }
 
     .dn-editorial__layout {

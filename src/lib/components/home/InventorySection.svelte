@@ -21,7 +21,7 @@
       </a>
     </div>
 
-    <div class="dn-inventory__grid">
+    <div class="dn-inventory__grid dn-home-section-panel">
       {#each featuredVehicles.slice(0, 4) as vehicle, index (vehicle.id)}
         <VehicleCard {vehicle} showPrice priority={index < 4} />
       {/each}
@@ -246,11 +246,6 @@
     .dn-inventory__grid {
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 24px;
-      position: relative;
-      margin-top: -24px;
-      padding: 24px;
-      border-radius: 16px;
-      background: var(--dn-home-panel);
     }
   }
 
