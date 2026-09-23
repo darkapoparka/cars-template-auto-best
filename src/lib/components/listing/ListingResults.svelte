@@ -35,7 +35,7 @@
 
 <section class="dn-listing-results" data-slot="listing-results" aria-labelledby="listing-results-title">
   <div class="container">
-    <h1 id="listing-results-title" class="dn-sr-only">{i18n.t("m_065a8285dddf")}</h1>
+    <h1 id="listing-results-title" class="dn-sr-only dn-listing-results__title">{i18n.t("m_065a8285dddf")}</h1>
     <div class="dn-listing-results__heading">
       <div class="dn-listing-results__tools">
         <button class="dn-listing-results__filters" type="button" aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openFilters}>
@@ -76,6 +76,8 @@
 </section>
 
 <style>
+  /* The desktop hero owns the page heading; mobile omits that hero. */
+  .dn-listing-results__title { display: none; }
   .dn-listing-results__tools {
     display: inline-flex;
     align-items: center;
@@ -110,11 +112,11 @@
   .dn-listing-sort {
     position: relative;
     display: inline-flex;
-    width: 178px;
-    min-width: 178px;
+    width: 280px;
+    min-width: 280px;
     height: 44px;
     min-height: 44px;
-    flex: 0 0 178px;
+    flex: 0 0 280px;
     align-items: center;
     padding: 0;
     border: 0;
@@ -122,12 +124,11 @@
     background: #fff;
     color: #4d5562;
     cursor: pointer;
-    transition: border-color 160ms ease-out;
   }
 
   .dn-listing-sort:hover,
   .dn-listing-sort:focus-within {
-    border-color: #aeb4bd;
+    background: var(--dn-surface-subtle);
   }
 
   .dn-listing-sort::after {
@@ -219,6 +220,7 @@
   }
 
   @media (max-width: 767px) {
+    .dn-listing-results__title { display: block; }
     .dn-listing-results {
       padding: 0 0 var(--dn-mobile-page-end);
     }

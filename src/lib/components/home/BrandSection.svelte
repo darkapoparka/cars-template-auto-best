@@ -76,7 +76,7 @@
   .dn-brand-card strong { display: block; margin: 0; color: #24272c; font-size: var(--dn-text-body); font-weight: var(--dn-weight-semibold); line-height: var(--dn-leading-heading); }
   .dn-brand-card:hover, .dn-brand-card:focus-visible { box-shadow: var(--dn-card-hover-shadow); }
   .dn-brand-hero__cta:hover { background: var(--dn-surface-hover); }
-  a:focus-visible { outline: 3px solid var(--dn-line-emphasis); outline-offset: 3px; }
+  a:focus-visible { outline: 3px solid var(--dn-focus); outline-offset: 3px; }
 
   @media (min-width: 768px) and (max-width: 1199px) {
     .dn-brand-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }

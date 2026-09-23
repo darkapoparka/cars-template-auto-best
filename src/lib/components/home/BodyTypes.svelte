@@ -143,7 +143,7 @@
   }
 
   .dn-body-type:focus-visible {
-    outline: 3px solid rgb(var(--dn-theme-accent-rgb) / 28%);
+    outline: 3px solid var(--dn-focus);
     outline-offset: 2px;
   }
 
@@ -377,4 +377,3 @@
     .dn-body-type--secondary { display: none; }
   }
 </style>
-

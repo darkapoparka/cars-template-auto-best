@@ -212,10 +212,10 @@
   .dn-vehicle-card__identity { min-width: 0; }
 
   .dn-vehicle-card__make {
-    margin: 0 0 var(--dn-space-1);
-    color: var(--dn-muted);
+    margin: 0 0 var(--dn-space-half);
+    color: var(--dn-ink-hover);
     font-size: var(--dn-text-meta);
-    font-weight: var(--dn-weight-medium);
+    font-weight: var(--dn-weight-regular);
     line-height: var(--dn-leading-meta);
     letter-spacing: var(--dn-tracking-normal);
   }
