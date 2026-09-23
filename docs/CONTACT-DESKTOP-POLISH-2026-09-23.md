@@ -1,36 +1,23 @@
 # Contact desktop polish — 23 September 2026
 
-Baseline: `4370007`, saved master checkout on `main`. Scope is desktop Contact and its topic variants; existing mobile rules and unrelated working changes are preserved.
+## Current implementation
 
-## Changes
+General Contact follows the centered About hero composition. `ContactActions.svelte` renders a compact call/directions row, the address and social links. The two cards and repeated card headings are removed. Actions start at the shared 320px baseline; their content stays in document flow within the shared 540px hero.
 
-- General Contact uses separate campaign-red call and charcoal location cards with a 24px gap. Their 16px corners, shared palette and white directions action follow the homepage campaign pattern. The heading and cards retain the shared route baselines; decorative desktop cars are hidden.
-- The phone number has clearer hierarchy, social links have 44px hit areas, and directions align with the social row. Keyboard focus uses the shared focus color; transitions respect reduced motion.
-- The contact panel remains in document flow, allowing longer dealer details to increase its height without overlapping the map.
-- Eleven competing general-contact desktop CSS blocks are consolidated. The map heading is centered and its container uses the existing rounded surface pattern.
-- The viewing/leasing sidebar retains its directions action without a redundant, clipped call button. Phone links remain in the main panel and contact row.
-- Sell/Trade-in exposes one desktop page heading. Its mobile form heading remains visible.
-- Removed an unused ContactHero import.
+The component owns its presentation and reads actual dealer contacts and localized address data. It uses existing typography, color and button tokens, with 48px primary actions, 44px social targets, visible keyboard focus and reduced-motion support. No new artwork, dependencies or translation strings were added.
 
-## Checks
+`ContactIntent.svelte` retains the existing mobile Contact layout and other enquiry journeys. General desktop Contact hides that mobile presentation. Obsolete desktop card markup and styles were removed. The route owns component assembly and spacing to the map.
 
-- `npm run validate` passed, including architecture, CSS, token, typography, asset, domain, locale checks, Svelte diagnostics (zero errors/warnings), and production build.
-- After the final duplicate-control/title fixes, CSS policy and production build passed again.
-- General Contact inspected at 1024px and 1440px in Bulgarian, and 1920px in English. No horizontal overflow; all five panel links measured 44px high. Keyboard Tab reached Instagram with a visible 2px focus outline.
-- All four Contact topic routes checked at 1024px. Sell/Trade-in now has one visible page heading. The viewing layout was inspected before and after removing its duplicate call action.
-- Home, inventory, About, blog and locale settings checked at 1440px: one visible page heading and no horizontal overflow. This is a layout smoke check, not renewed end-to-end certification of every interaction or detail route.
-- General Contact and Sell/Trade-in checked at 390px. Existing mobile hero/form heading behavior remains and neither page overflows horizontally.
+Earlier fixes to the duplicate desktop Sell heading and clipped duplicate viewing call action remain in place. Unrelated working changes are preserved.
 
-Matching 1440×900 Contact screenshots are saved locally in `artifacts/contact-desktop-polish/before-desktop.png` and `after-desktop.png`. Supplemental topic and mobile screenshots are in the same ignored directory.
+## Verification
 
-The Google Maps iframe remained blank in the test browser, before and after the changes. Directions URLs were inspected but external map rendering was not verified. No calls, enquiries or external social actions were submitted. This is working-checkout QA, not exact-commit template-release or dealer-deployment evidence.
+- `npm run validate`: architecture, CSS policy, tokens, typography, assets, domain, locale checks, Svelte diagnostics and production build passed; zero Svelte errors/warnings.
+- Bulgarian desktop at 1440px and English at 1024px: no horizontal overflow; primary actions remain at the shared baseline.
+- Keyboard Tab proceeds from the phone button to Directions and then social links, with a visible focus ring.
+- At 390px, desktop actions are hidden and the existing mobile Contact grid and 248px hero remain; no horizontal overflow.
+- Matching 1440×900 before/after screenshots: `artifacts/contact-centered-actions/before.png` and `after.png`. Earlier Contact artifact directories document superseded designs.
 
-## Visual correction after owner feedback
+## Limits
 
-The joined white panel was rejected. The desktop cards now render independently, retaining their 320px top baseline and equal heights. Verified Bulgarian at 1440px, English at 1024px, and mobile preservation at 390px with no horizontal overflow. CSS policy, typography and diff checks passed for this CSS-only correction. Matching screenshots are in `artifacts/contact-separate-cards/before.png` and `after.png`; earlier screenshots document the superseded joined panel.
-
-## Campaign styling and component ownership
-
-The plain white cards were replaced with the site's existing red/charcoal campaign treatment. The call card has a larger phone link and outlined social controls; the location card has a white directions action. Small phone/location icons identify each card. The card styling now lives in `ContactIntent.svelte`; 102 lines of competing route-level card rules and the obsolete panel class were removed. Route CSS retains hero/map composition. No new assets, dependencies, dealer values or translation strings were introduced.
-
-Verified Bulgarian desktop at 1440px and English at 1024px with no horizontal overflow. All five contact links are 44px high; keyboard navigation shows a contrasting focus ring. At 390px, the existing white mobile card, 248px hero and hidden desktop icons remain unchanged. `npm run validate` passed with zero Svelte errors/warnings and a successful production build. Current before/after screenshots are in `artifacts/contact-branded-cards/`.
+Google Maps remained blank in the test browser before and after the change. External map rendering and real enquiry delivery are not verified. No calls or enquiries were submitted. These are working-checkout checks, not template-release or dealer-deployment evidence. Only Contact component, route and report changes belong to this pass.

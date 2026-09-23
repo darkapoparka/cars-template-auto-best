@@ -672,8 +672,7 @@
   }
 }
 
-/* General Contact: shared hero baseline, separate contact cards, then the map.
-   Keep the cards in document flow so longer dealer details can grow safely. */
+/* General Contact actions occupy the remaining shared hero height in normal flow. */
 @media (min-width: 992px) {
   .dn-app-shell .dn-contact-hero--general.dn-route-hero {
     align-items: flex-start;
@@ -704,7 +703,7 @@
   }
 
   .dn-app-shell .dn-contact-section--general .dn-contact-location--general {
-    margin: 88px auto 0;
+    margin: 56px auto 0;
   }
 
   .dn-app-shell .dn-contact-section--general .dn-contact-location__card {
