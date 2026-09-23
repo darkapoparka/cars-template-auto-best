@@ -78,6 +78,7 @@
       align-self: center;
       align-items: center;
       justify-content: center;
+      gap: var(--dn-space-2);
       padding: 0 var(--dn-space-5);
       border: 1px solid transparent;
       border-radius: var(--dn-radius-button);
@@ -89,6 +90,12 @@
       margin-top: var(--dn-home-copy-gap);
       box-shadow: none;
       transition: background-color 180ms ease, color 180ms ease;
+    }
+
+    .dn-home-page :global(.dn-home-action-label) {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--dn-space-2);
     }
 
     .dn-home-page :global(.dn-body-types__all),

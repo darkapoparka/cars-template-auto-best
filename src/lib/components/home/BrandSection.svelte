@@ -5,6 +5,7 @@
   const i18n = getI18n();
 
   import { resolve } from '$app/paths';
+  import Icon from '$components/ui/Icon.svelte';
   import { brands } from '$data/home';
   const mobileBrands = new Set(
     [...brands.filter((brand) => brand.count > 0), ...brands.filter((brand) => brand.count <= 0)]
@@ -28,7 +29,7 @@
           <span class="dn-heading-desktop">{i18n.t("m_9eb6d7e50e27")}</span>
           <span class="dn-heading-mobile">{i18n.t("m_5216bd5728f8")}</span>
         </h2>
-        <a class="dn-brand-hero__cta dn-home-section-action" href={i18n.href(resolve('/listing-grid'))} aria-label={i18n.t("m_7d6647b063a2")}><span class="dn-heading-desktop">{i18n.t("m_7d6647b063a2")}</span><span class="dn-heading-mobile" aria-hidden="true">{i18n.t("m_a52ace420f21")}</span></a>
+        <a class="dn-brand-hero__cta dn-home-section-action" href={i18n.href(resolve('/listing-grid'))} aria-label={i18n.t("m_7d6647b063a2")}><span class="dn-heading-desktop dn-home-action-label">{i18n.t("m_30a64216eaea")} <Icon name="arrow-right" size={18} /></span><span class="dn-heading-mobile" aria-hidden="true">{i18n.t("m_a52ace420f21")}</span></a>
       </div>
     </div>
     <div class="dn-brand-panel dn-home-section-panel">

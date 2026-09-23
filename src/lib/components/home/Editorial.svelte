@@ -4,6 +4,7 @@
 
   import BrowseAllCard from './BrowseAllCard.svelte';
   import { resolve } from '$app/paths';
+  import Icon from '$components/ui/Icon.svelte';
   import { editorial } from '$data/home';
   import { leadSite } from '$config/lead-site';
 </script>
@@ -17,7 +18,7 @@
           <span class="dn-heading-mobile">{i18n.t("m_5062eeb4b9d4")}</span>
         </h2>
         
-        <a class="dn-editorial__cta dn-home-section-action" href={i18n.href(resolve('/blog'))}>{i18n.t("m_e74ad5f53e46")}</a>
+        <a class="dn-editorial__cta dn-home-section-action" href={i18n.href(resolve('/blog'))} aria-label={i18n.t("m_e74ad5f53e46")}>{i18n.t("m_30a64216eaea")} <Icon name="arrow-right" size={18} /></a>
       </div>
     </div>
   </div>

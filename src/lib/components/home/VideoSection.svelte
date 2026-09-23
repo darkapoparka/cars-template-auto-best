@@ -32,9 +32,9 @@
       <div class="dn-videos__heading dn-home-section-heading dn-home-section-heading--banner dn-home-banner-frame dn-home-banner-copy">
         <h2 id="videos-title" class="dn-home-section-title"><span class="dn-videos__wordmark"><span class="dn-videos__brand-mark"><SocialBrandIcon name="youtube" size={40} /></span>{i18n.t("m_fb7accfff8c6")}</span></h2>
         
-        <a class="dn-videos__channel dn-home-section-action" href={i18n.href(brand.youtubeUrl)} target="_blank" rel="noopener noreferrer">
-          <span class="dn-videos__channel-label">{i18n.t("m_19f3fcdf5d1c")}</span>
-          <Icon name="arrow-right" size={16} />
+        <a class="dn-videos__channel dn-home-section-action" href={i18n.href(brand.youtubeUrl)} target="_blank" rel="noopener noreferrer" aria-label={`${i18n.t("m_19f3fcdf5d1c")} ${i18n.t("m_fd19f28ff04b")}`}>
+          <span class="dn-videos__channel-label">{i18n.t("m_30a64216eaea")}</span>
+          <Icon name="arrow-right" size={18} />
           <span class="dn-sr-only"> {i18n.t("m_fd19f28ff04b")}</span>
         </a>
       </div>

@@ -11,8 +11,8 @@ overlap, cutout cars and the shared 540px route hero height are retained.
   other route subtitle positions. It reports applied results, including zero;
   search and sticky controls do not repeat the count. This supersedes the earlier
   search-count placement experiment.
-- The Home inventory banner uses “View all” plus an arrow because its heading
-  supplies the vehicle context. Its accessible label retains “View all cars”.
+- All five Home section banners use “View all” plus an arrow because their headings
+  supply the context. Accessible labels retain the specific destination.
 - About and Contact share desktop social-link styling: 56px white circles, 28px
   brand icons and 16px gaps, with contextual keyboard focus. Mobile social controls
   retain their original sizes.

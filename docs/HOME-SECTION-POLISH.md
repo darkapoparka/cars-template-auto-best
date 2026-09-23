@@ -14,6 +14,10 @@ The route heroes, mobile layout, existing vehicle artwork and destinations stay 
 - Light banners use red actions; dark banners use white actions. Buttons have flat
   surfaces and no vertical hover movement. Focus outlines are white on charcoal
   and blue on light surfaces.
+- All five section banners (Inventory, Body Types, Brands, Editorial and Videos)
+  use the same concise “View all” label with an 18px right arrow and shared spacing.
+  Accessible labels retain the destination context; video links announce the new
+  tab. Selling/importing campaign actions retain their specific wording.
 - All five section headers retain the shared 176px minimum height and typography.
   Vertical padding compensates for the overlapping panel so copy stays centred
   in the visible banner area. Campaign cards retain a 234px minimum height,

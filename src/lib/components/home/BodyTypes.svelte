@@ -4,6 +4,7 @@
   const i18n = getI18n();
 
   import { resolve } from '$app/paths';
+  import Icon from '$components/ui/Icon.svelte';
   import { bodyTypes } from '$data/home';
 
   const mobileBodyTypes = new Set<string>(
@@ -26,8 +27,8 @@
         <span class="dn-heading-desktop">{i18n.t("m_555a44ad25a6")}</span>
         <span class="dn-heading-mobile">{i18n.t("m_ef0ecd6a2ade")}</span>
       </h2>
-      <a class="dn-body-types__all dn-home-section-action" href={i18n.href(resolve('/listing-grid'))}>
-        <span class="dn-heading-desktop">{i18n.t("m_7d6647b063a2")}</span>
+      <a class="dn-body-types__all dn-home-section-action" href={i18n.href(resolve('/listing-grid'))} aria-label={i18n.t("m_7d6647b063a2")}>
+        <span class="dn-heading-desktop dn-home-action-label">{i18n.t("m_30a64216eaea")} <Icon name="arrow-right" size={18} /></span>
       </a>
     </div>
 
