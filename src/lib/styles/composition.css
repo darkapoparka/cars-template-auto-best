@@ -332,17 +332,19 @@
 
 /* Discovery titles have their own full-width lane above the vehicle artwork. */
 @media (min-width: 992px) {
-  .dn-app-shell .dn-route-hero:is(.dn-hero, .dn-listing-hero) .dn-route-hero__copy {
+  :root { --dn-hero-center-width: min(1040px, max(880px, calc(100vw - 560px))); }
+  .dn-discovery-hero .dn-route-hero__copy {
     width: min(1120px, calc(100% - 64px));
   }
-  .dn-app-shell .dn-route-hero:is(.dn-hero, .dn-listing-hero) .dn-route-hero__copy h1 {
+  .dn-discovery-hero .dn-route-hero__copy h1 {
     font-size: var(--dn-text-hero);
-    white-space: nowrap;
-    text-wrap: nowrap;
+    line-height: var(--dn-leading-section);
+    letter-spacing: var(--dn-tracking-heading);
+    text-wrap: balance;
   }
 }
 @media (min-width: 992px) and (max-width: 1199px) {
-  .dn-app-shell .dn-route-hero:is(.dn-hero, .dn-listing-hero) .dn-route-hero__copy h1 {
+  .dn-discovery-hero .dn-route-hero__copy h1 {
     font-size: var(--dn-text-section);
   }
 }
@@ -367,9 +369,6 @@
 
 /* One center lane for all desktop heroes; artwork uses the same lower baseline. */
 @media (min-width: 1440px) {
-  :root {
-    --dn-hero-center-width: min(1040px, calc(100vw - 560px));
-  }
   .dn-blog-hero.dn-route-hero--studio .dn-blog-toolbar {
     left: 50%;
     width: var(--dn-hero-center-width);

@@ -6,7 +6,7 @@
   import HeroVehicles from '$components/ui/HeroVehicles.svelte';
 </script>
 
-<section class="dn-hero dn-route-hero" aria-labelledby="home-hero-title">
+<section class="dn-hero dn-route-hero dn-discovery-hero" aria-labelledby="home-hero-title">
   <HeroVehicles pair="home" mobile mobileLeft="gclass" mobileRight="urus" />
   <div class="container dn-hero__inner dn-route-hero__layout">
     <div class="dn-hero__copy dn-route-hero__copy">
@@ -29,8 +29,7 @@
   @media (min-width: 992px) {
     .dn-hero { background: var(--dn-ink-deep); }
     .dn-hero__inner { height: 360px; padding-top: 0; }
-    .dn-hero .dn-hero__copy { position: absolute; bottom: 24px; width: min(800px, calc(100% - 480px)); display: block; }
-    .dn-hero__copy h1 { color: var(--dn-white); font-size: var(--dn-text-fluid-hero); line-height: var(--dn-leading-section); letter-spacing: var(--dn-tracking-heading); text-wrap: balance; }
+    .dn-hero .dn-hero__copy { position: absolute; bottom: 24px; display: block; }
     .dn-hero__copy .dn-hero__location { display: block; margin: var(--dn-space-3) auto 0; color: var(--dn-text-on-ink); font-size: var(--dn-text-body); line-height: var(--dn-leading-body); text-wrap: balance; }
   }
 
