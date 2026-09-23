@@ -19,6 +19,11 @@
   }
 
   let { vehicle, returnTo, showPrice = false, priority = false, layout = 'default' }: Props = $props();
+
+  // The make has its own label; retain titles that use a different model family.
+  const modelTitle = $derived(vehicle.title.startsWith(`${vehicle.make} `)
+    ? vehicle.title.slice(vehicle.make.length + 1)
+    : vehicle.title);
 </script>
 
 <article id={`vehicle-${vehicle.id}`} data-variant={layout} class:dn-vehicle-card--listing={layout === 'listing'} class:dn-vehicle-card--showcase={layout === 'showcase'} class="dn-vehicle-card">
@@ -45,12 +50,14 @@
     </div>
 
     <div class="dn-vehicle-card__content">
-      {#if layout !== 'showcase'}<div class="dn-vehicle-card__category"><p>{specificationLabel(vehicle.category, i18n.locale)}</p></div>{/if}
-      {#if layout === 'listing'}
-        <h2 class="dn-vehicle-card__name" title={vehicle.title}>{vehicle.title}</h2>
-      {:else}
-        <h3 class="dn-vehicle-card__name" title={vehicle.title}>{vehicle.title}</h3>
-      {/if}
+      <div class="dn-vehicle-card__identity">
+        <p class="dn-vehicle-card__make">{vehicle.make}</p>
+        {#if layout === 'listing'}
+          <h2 class="dn-vehicle-card__name" title={vehicle.title}>{modelTitle}</h2>
+        {:else}
+          <h3 class="dn-vehicle-card__name" title={vehicle.title}>{modelTitle}</h3>
+        {/if}
+      </div>
       {#if layout === 'showcase'}
         <p class="dn-vehicle-card__summary">{vehicle.year} · {specificationLabel(vehicle.fuel, i18n.locale)}</p>
       {/if}
@@ -202,17 +209,15 @@
     background: transparent;
   }
 
-  .dn-vehicle-card__category {
-    margin: 0 0 6px;
-  }
+  .dn-vehicle-card__identity { min-width: 0; }
 
-  .dn-vehicle-card__category p {
-    margin: 0;
-    color: #6b7280;
-    font-size: var(--dn-text-body);
-    font-weight: var(--dn-weight-regular);
-    line-height: var(--dn-leading-heading);
-    letter-spacing: var(--dn-tracking-label);
+  .dn-vehicle-card__make {
+    margin: 0 0 var(--dn-space-1);
+    color: var(--dn-muted);
+    font-size: var(--dn-text-meta);
+    font-weight: var(--dn-weight-medium);
+    line-height: var(--dn-leading-meta);
+    letter-spacing: var(--dn-tracking-normal);
   }
 
   .dn-vehicle-card__name {
@@ -292,7 +297,6 @@
 
     .dn-vehicle-card__content { padding: var(--dn-space-5); }
     .dn-vehicle-card--showcase .dn-vehicle-card__content { padding: var(--dn-space-3) var(--dn-space-4); }
-    .dn-vehicle-card__category p { font-size: var(--dn-text-meta); letter-spacing: var(--dn-tracking-normal); }
     .dn-vehicle-card__name { line-height: var(--dn-leading-card); }
     .dn-vehicle-card__badges { inset: 12px 12px auto; }
     .dn-vehicle-card__badge { padding: 5px 10px; font-size: var(--dn-text-meta); font-variant-numeric: tabular-nums; }
@@ -363,10 +367,6 @@
       padding: var(--dn-space-3);
     }
 
-    .dn-vehicle-card--listing .dn-vehicle-card__category {
-      display: none;
-    }
-
     .dn-vehicle-card--listing .dn-vehicle-card__mobile-meta {
       display: flex;
       flex-wrap: nowrap;
@@ -381,10 +381,7 @@
       display: inline-flex;
       min-height: 20px;
       align-items: center;
-      padding: 0 4px;
-      border: 1px solid #e7e8eb;
-      border-radius: 6px;
-      background: #f5f6f7;
+      gap: var(--dn-space-1);
       color: #626873;
       font-size: var(--dn-text-meta);
       font-weight: var(--dn-weight-regular);
@@ -392,18 +389,17 @@
       white-space: nowrap;
     }
 
-    .dn-vehicle-card--listing .dn-vehicle-card__category p {
-      font-size: var(--dn-text-body);
-      line-height: var(--dn-leading-heading);
-    }
+    .dn-vehicle-card--listing .dn-vehicle-card__mobile-meta > span + span::before { content: '·'; }
 
     .dn-vehicle-card--listing .dn-vehicle-card__name {
-      display: block;
+      display: -webkit-box;
       min-width: 0;
       font-size: var(--dn-text-lead);
       font-weight: var(--dn-weight-medium);
       line-height: var(--dn-leading-control);
-      white-space: nowrap;
+      white-space: normal;
+      line-clamp: 2;
+      -webkit-line-clamp: 2;
       overflow: hidden;
       text-overflow: ellipsis;
     }
