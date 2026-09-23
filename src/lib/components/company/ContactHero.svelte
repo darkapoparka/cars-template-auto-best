@@ -9,7 +9,6 @@
   import ContactVehicle from './ContactVehicle.svelte';
   import Icon from '$components/ui/Icon.svelte';
   import HeroVehicles from '$components/ui/HeroVehicles.svelte';
-  import { brand } from '$config/brand';
   import { leadSite } from '$config/lead-site';
   import type { ContactTopic } from '$data/company';
 
