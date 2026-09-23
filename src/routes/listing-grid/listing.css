@@ -27,6 +27,18 @@
 }
 
 @media (min-width: 992px) {
+  .dn-app-shell .dn-listing-stage {
+    --dn-hero-center-width: min(1040px, max(960px, calc(100vw - 560px)));
+  }
+
+  .dn-app-shell .dn-listing-stage .dn-listing-hero.dn-route-hero--studio {
+    background:
+      radial-gradient(ellipse at 50% -24%, color-mix(in srgb, var(--dn-workflow-canvas) 86%, white), transparent 64%),
+      linear-gradient(125deg, var(--dn-workflow-canvas), color-mix(in srgb, var(--dn-workflow-canvas) 76%, var(--dn-ink-deep)));
+  }
+}
+
+@media (min-width: 992px) {
   .dn-listing-stage[data-layout='hero-discovery'] {
     --dn-studio-background: var(--dn-workflow-canvas);
     --dn-studio-heading: #fff;

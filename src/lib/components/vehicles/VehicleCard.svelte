@@ -117,7 +117,7 @@
     border-radius: 16px;
     background: #fff;
     box-shadow: var(--dn-vehicle-card-shadow, none);
-    transition: background-color 160ms ease-out, box-shadow 180ms ease-out;
+    transition: background-color 160ms ease-out, box-shadow 180ms ease-out, transform 180ms ease-out;
   }
 
   .dn-vehicle-card__link {
@@ -199,6 +199,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 220ms ease-out;
   }
 
   .dn-vehicle-card__content {
@@ -292,7 +293,14 @@
   @media (min-width: 992px) {
     .dn-vehicle-card {
       box-shadow: 0 0 0 1px rgb(32 35 41 / 6%);
-      transition: box-shadow 120ms ease-out;
+      transition: box-shadow 120ms ease-out, transform 180ms ease-out;
+    }
+
+    .dn-vehicle-card--listing { border-radius: var(--dn-radius-lg); }
+
+    @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+      .dn-vehicle-card--listing:hover { transform: translateY(-2px); }
+      .dn-vehicle-card--listing:hover .dn-vehicle-card__image img { transform: scale(1.025); }
     }
 
     .dn-vehicle-card__content { padding: var(--dn-space-5); }

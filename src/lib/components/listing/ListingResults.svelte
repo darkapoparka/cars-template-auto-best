@@ -4,6 +4,7 @@
 
   import { page } from '$app/state';
   import { resolve } from '$app/paths';
+  import { vehicleCount } from '$lib/locale/messages';
   import VehicleCard from '$components/vehicles/VehicleCard.svelte';
   import Icon from '$components/ui/Icon.svelte';
   import { activeFilterCount, listingHiddenFields, listingFilterOptions, type ListingFilters } from '$data/listing';
@@ -37,6 +38,7 @@
   <div class="container">
     <h1 id="listing-results-title" class="dn-sr-only dn-listing-results__title">{i18n.t("m_065a8285dddf")}</h1>
     <div class="dn-listing-results__heading">
+      <p class="dn-listing-results__count" role="status">{vehicleCount(i18n.locale, vehicles.length)}</p>
       <div class="dn-listing-results__tools">
         <button class="dn-listing-results__filters" type="button" aria-haspopup="dialog" aria-controls="dn-listing-filter-dialog" aria-expanded={filtersOpen} onclick={openFilters}>
           <Icon name="adjustments" size={18} /><span>{i18n.t("m_546ebb8eb993")}</span>
@@ -92,6 +94,7 @@
   .dn-listing-results__filters:hover { background: #343941; }
   .dn-listing-results__filters:focus-visible { outline: 2px solid var(--dn-red); outline-offset: 2px; }
   .dn-listing-results__filter-count { display: grid; place-items: center; min-width: 20px; height: 20px; padding: 0 4px; border-radius: var(--dn-pill); background: #fff; color: #202329; font-size: var(--dn-control-size); }
+  .dn-listing-results__count { margin: 0; color: var(--dn-muted); font-size: var(--dn-text-meta); font-weight: var(--dn-weight-medium); line-height: var(--dn-leading-meta); }
 
   .dn-listing-results {
     padding: 20px 0 72px;
@@ -101,8 +104,9 @@
   .dn-listing-results__heading {
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin: 0 0 20px;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 0 0 16px;
   }
 
   .dn-listing-sort__mobile-value {
@@ -112,11 +116,11 @@
   .dn-listing-sort {
     position: relative;
     display: inline-flex;
-    width: 280px;
-    min-width: 280px;
+    width: 248px;
+    min-width: 248px;
     height: 44px;
     min-height: 44px;
-    flex: 0 0 280px;
+    flex: 0 0 248px;
     align-items: center;
     padding: 0;
     border: 0;
@@ -164,14 +168,17 @@
     z-index: 1;
     width: 100%;
     height: 44px;
-    padding: 0 40px 0 44px;
+    padding: 0 38px 0 42px;
     border: 0;
     border-radius: inherit;
     outline: 0;
     background: transparent;
     color: #202329;
-    font-size: var(--dn-control-size);
-    font-weight: var(--dn-weight-regular);
+    overflow: hidden;
+    font-size: var(--dn-text-meta);
+    font-weight: var(--dn-weight-medium);
+    text-overflow: ellipsis;
+    white-space: nowrap;
     appearance: none;
     cursor: pointer;
   }
