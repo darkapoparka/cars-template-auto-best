@@ -4,7 +4,7 @@ Baseline: `4370007`, saved master checkout on `main`. Scope is desktop Contact a
 
 ## Changes
 
-- General Contact uses two separate white cards with a 24px gap on the established charcoal hero. Each card owns its padding, rounded corners and shadow; the shared grid has no surface. Decorative desktop cars are hidden. The heading and cards retain the shared route baselines.
+- General Contact uses separate campaign-red call and charcoal location cards with a 24px gap. Their 16px corners, shared palette and white directions action follow the homepage campaign pattern. The heading and cards retain the shared route baselines; decorative desktop cars are hidden.
 - The phone number has clearer hierarchy, social links have 44px hit areas, and directions align with the social row. Keyboard focus uses the shared focus color; transitions respect reduced motion.
 - The contact panel remains in document flow, allowing longer dealer details to increase its height without overlapping the map.
 - Eleven competing general-contact desktop CSS blocks are consolidated. The map heading is centered and its container uses the existing rounded surface pattern.
@@ -28,3 +28,9 @@ The Google Maps iframe remained blank in the test browser, before and after the 
 ## Visual correction after owner feedback
 
 The joined white panel was rejected. The desktop cards now render independently, retaining their 320px top baseline and equal heights. Verified Bulgarian at 1440px, English at 1024px, and mobile preservation at 390px with no horizontal overflow. CSS policy, typography and diff checks passed for this CSS-only correction. Matching screenshots are in `artifacts/contact-separate-cards/before.png` and `after.png`; earlier screenshots document the superseded joined panel.
+
+## Campaign styling and component ownership
+
+The plain white cards were replaced with the site's existing red/charcoal campaign treatment. The call card has a larger phone link and outlined social controls; the location card has a white directions action. Small phone/location icons identify each card. The card styling now lives in `ContactIntent.svelte`; 102 lines of competing route-level card rules and the obsolete panel class were removed. Route CSS retains hero/map composition. No new assets, dependencies, dealer values or translation strings were introduced.
+
+Verified Bulgarian desktop at 1440px and English at 1024px with no horizontal overflow. All five contact links are 44px high; keyboard navigation shows a contrasting focus ring. At 390px, the existing white mobile card, 248px hero and hidden desktop icons remain unchanged. `npm run validate` passed with zero Svelte errors/warnings and a successful production build. Current before/after screenshots are in `artifacts/contact-branded-cards/`.

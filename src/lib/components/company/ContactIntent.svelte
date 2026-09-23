@@ -25,7 +25,7 @@
   ] as const;
 </script>
 
-<div class="dn-contact-intent" class:dn-contact-intent--general={topic.id === 'general'} class:dn-contact-hero-panel={topic.id === 'general'} class:dn-contact-intent--workflow={topic.id === 'trade-in' || topic.id === 'import'} class:dn-contact-intent--tradein={topic.id === 'trade-in'} class:dn-contact-intent--import={topic.id === 'import'}>
+<div class="dn-contact-intent" class:dn-contact-intent--general={topic.id === 'general'} class:dn-contact-intent--workflow={topic.id === 'trade-in' || topic.id === 'import'} class:dn-contact-intent--tradein={topic.id === 'trade-in'} class:dn-contact-intent--import={topic.id === 'import'}>
   <div class="dn-contact-intent__main">
     {#if topic.id === 'trade-in' || topic.id === 'import'}
       <h1 class="dn-contact-workflow-title">{topic.id === 'trade-in' ? i18n.t("m_cd386206fba4") : i18n.text(topic.title)}</h1>
@@ -33,6 +33,9 @@
     {/if}
     <div class="dn-contact-intent__heading">
       <h2><span class:dn-contact-mobile-copy={topic.id === 'general'}>{i18n.t("m_d7def4b82f7c")}</span>{#if topic.id === 'general'}<span class="dn-contact-desktop-copy">{i18n.t("m_5c9190347136")}</span>{/if}</h2>
+      {#if topic.id === 'general'}
+        <span class="dn-contact-card-mark" aria-hidden="true"><Icon name="phone" size={24} strokeWidth={1.6} /></span>
+      {/if}
     </div>
 
     {#if vehicle && topic.id !== 'leasing'}
@@ -94,6 +97,9 @@
   <aside class="dn-contact-card" aria-label={i18n.t("m_58f68d16d074")}>
     <div class="dn-contact-card__heading">
       <h2><span class:dn-contact-mobile-copy={topic.id === 'general'}>{i18n.t("m_2b5c3d26721a")}</span>{#if topic.id === 'general'}<span class="dn-contact-desktop-copy">{i18n.t("m_931269cbffaa")}</span>{/if}</h2>
+      {#if topic.id === 'general'}
+        <span class="dn-contact-card-mark" aria-hidden="true"><Icon name="map-pin" size={24} strokeWidth={1.6} /></span>
+      {/if}
       <p class:dn-contact-mobile-copy={topic.id === 'general'}>{i18n.t("m_bfe8e24333da")}</p>
     </div>
 
@@ -176,7 +182,7 @@
   @media (max-width: 767px) { .dn-contact-workflow-hint { display: block; } }
   .dn-contact-intent--workflow { row-gap: 0; }
   .dn-contact-description--mobile { display: none; }
-  .dn-contact-desktop-copy, .dn-contact-visit { display: none; }
+  .dn-contact-desktop-copy, .dn-contact-visit, .dn-contact-card-mark { display: none; }
   .dn-contact-intent--tradein { grid-template-columns: 1fr; width: min(920px, 100%); }
   .dn-contact-intent--tradein .dn-contact-intent__main { position: relative; z-index: 1; width: 100%; }
   .dn-contact-intent--import { grid-template-columns: 1fr; width: min(760px, 100%); }
@@ -185,17 +191,80 @@
   @media (min-width: 992px) {
     .dn-contact-desktop-copy { display: inline; }
     .dn-contact-mobile-copy { display: none; }
-    .dn-contact-intent--general { width: 100%; align-items: stretch; }
-    .dn-contact-intent--general .dn-contact-intent__main,
-    .dn-contact-intent--general .dn-contact-card { padding: 32px; }
+    .dn-contact-intent--general {
+      width: min(1040px, 100%);
+      align-items: stretch;
+      gap: var(--dn-space-6);
+    }
+    .dn-contact-intent--general :is(.dn-contact-intent__main, .dn-contact-card) {
+      min-height: 196px;
+      padding: var(--dn-space-6) var(--dn-space-7);
+      border: 1px solid transparent;
+      border-radius: 16px;
+      color: var(--dn-white);
+      text-align: left;
+    }
+    .dn-contact-intent--general .dn-contact-intent__main { background: var(--dn-theme-campaign-accent); }
+    .dn-contact-intent--general .dn-contact-card {
+      background: var(--dn-theme-campaign-surface);
+      border-color: var(--dn-line-on-ink);
+    }
+    .dn-contact-intent--general :is(.dn-contact-intent__heading, .dn-contact-card__heading) {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--dn-space-4);
+    }
+    .dn-contact-intent--general h2 {
+      color: inherit;
+      font-size: var(--dn-text-lead);
+      line-height: var(--dn-leading-heading);
+    }
+    .dn-contact-card-mark { display: flex; flex-shrink: 0; color: var(--dn-white); }
+    .dn-contact-intent--general :is(.dn-contact-selected, .dn-contact-call-label, .dn-contact-social > span) { display: none; }
+    .dn-contact-intent--general .dn-contact-button--call {
+      align-self: flex-start;
+      min-height: 44px;
+      margin-top: var(--dn-space-2);
+      padding: 0;
+      border-radius: 4px;
+      background: transparent;
+      color: var(--dn-white);
+      font-size: var(--dn-text-section-compact);
+      font-weight: var(--dn-weight-medium);
+      letter-spacing: var(--dn-tracking-heading);
+    }
+    .dn-contact-intent--general .dn-contact-button--call:is(:hover, :focus-visible) {
+      background: transparent;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 6px;
+    }
+    .dn-contact-intent--general .dn-contact-social { margin-top: auto; padding-top: var(--dn-space-4); }
+    .dn-contact-intent--general .dn-contact-social a {
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgb(255 255 255 / 40%);
+      background: transparent;
+      color: var(--dn-white);
+      transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+    }
+    .dn-contact-intent--general .dn-contact-social a:is(:hover, :focus-visible) {
+      border-color: var(--dn-white);
+      background: var(--dn-white);
+      color: var(--dn-theme-campaign-accent);
+    }
     .dn-contact-intent--general .dn-contact-card__links,
     .dn-contact-intent--general .dn-contact-card__actions { display: none; }
-    .dn-contact-visit { display: grid; gap: 18px; margin-top: 24px; }
-    .dn-contact-visit p { display: flex; align-items: flex-start; gap: 14px; margin: 0; color: #525a66; font-size: var(--dn-text-body); line-height: var(--dn-leading-body); }
-    .dn-contact-visit :global(svg) { flex-shrink: 0; color: var(--dn-red); }
-    .dn-contact-visit > a { justify-self: start; gap: 10px; min-height: 52px; background: #eef0f2; color: #202329; }
-    .dn-contact-visit > a:hover { background: #e3e6ea; }
-    .dn-contact-visit > a:focus-visible { outline: 2px solid #202329; outline-offset: 3px; }
+    .dn-contact-visit { display: grid; flex: 1; grid-template-rows: 1fr auto; gap: var(--dn-space-4); margin-top: var(--dn-space-2); }
+    .dn-contact-visit p { display: flex; max-width: 38ch; margin: 0; color: var(--dn-muted-on-ink); font-size: var(--dn-text-body); line-height: var(--dn-leading-body); }
+    .dn-contact-visit p > :global(svg), .dn-contact-visit .dn-contact-visit__appointment { display: none; }
+    .dn-contact-visit > a { justify-self: start; gap: 10px; min-height: 44px; padding: 0 20px; background: var(--dn-white); color: var(--dn-ink); }
+    .dn-contact-visit > a:is(:hover, :focus-visible) { background: var(--dn-surface-hover); }
+    .dn-contact-intent--general a:focus-visible { outline: 2px solid var(--dn-white); outline-offset: 4px; }
+  }
+  @media (min-width: 992px) and (prefers-reduced-motion: reduce) {
+    .dn-contact-intent--general .dn-contact-social a { transition: none; }
   }
   @media (max-width: 767px) {
     .dn-contact-description--wide { display: none; }

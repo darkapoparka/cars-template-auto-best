@@ -703,104 +703,6 @@
     padding-inline: 24px;
   }
 
-  .dn-app-shell .dn-contact-section--general .dn-contact-hero-panel {
-    width: min(960px, 100%);
-    align-items: stretch;
-    gap: 24px;
-    padding: 0;
-    background: transparent;
-  }
-
-  .dn-app-shell .dn-contact-section--general .dn-contact-hero-panel :is(.dn-contact-intent__main, .dn-contact-card) {
-    padding: 28px 32px;
-    border-radius: 20px;
-    background: var(--dn-white);
-    box-shadow: var(--dn-card-hover-shadow);
-    text-align: left;
-  }
-
-  .dn-app-shell .dn-contact-hero-panel :is(.dn-contact-intent__heading h2, .dn-contact-card h2) {
-    color: var(--dn-ink);
-    font-size: var(--dn-text-lead);
-    line-height: var(--dn-leading-heading);
-  }
-
-  .dn-app-shell .dn-contact-hero-panel :is(.dn-contact-selected, .dn-contact-call-label, .dn-contact-social > span) {
-    display: none;
-  }
-
-  .dn-app-shell .dn-contact-hero-panel .dn-contact-intent__main > .dn-contact-button {
-    align-self: flex-start;
-    min-height: 44px;
-    margin-top: 4px;
-    padding: 0;
-    background: transparent;
-    color: var(--dn-ink);
-    font-size: var(--dn-text-heading);
-    font-weight: var(--dn-weight-medium);
-    letter-spacing: var(--dn-tracking-heading);
-  }
-
-  .dn-app-shell .dn-contact-hero-panel .dn-contact-intent__main > .dn-contact-button:is(:hover, :focus-visible) {
-    background: transparent;
-    color: var(--dn-red);
-  }
-
-  .dn-app-shell .dn-contact-hero-panel .dn-contact-social {
-    margin-top: 12px;
-  }
-
-  .dn-app-shell .dn-contact-hero-panel .dn-contact-social > div { gap: 8px; }
-
-  .dn-app-shell .dn-contact-hero-panel .dn-contact-social a {
-    width: 44px;
-    height: 44px;
-    background: var(--dn-surface-canvas);
-    color: var(--dn-ink);
-    transition: background-color 150ms ease, color 150ms ease;
-  }
-
-  .dn-app-shell .dn-contact-hero-panel .dn-contact-social a:is(:hover, :focus-visible) {
-    background: var(--dn-ink);
-    color: var(--dn-white);
-  }
-
-  .dn-app-shell .dn-contact-section--general .dn-contact-visit {
-    flex: 1;
-    grid-template-rows: 1fr auto;
-    gap: 12px;
-    margin-top: 8px;
-  }
-
-  .dn-app-shell .dn-contact-section--general .dn-contact-visit p {
-    color: var(--dn-muted);
-    font-size: var(--dn-text-body);
-    line-height: var(--dn-leading-body);
-  }
-
-  .dn-app-shell .dn-contact-hero-panel .dn-contact-visit :is(p > .dn-icon, .dn-contact-visit__appointment) {
-    display: none;
-  }
-
-  .dn-app-shell .dn-contact-section--general .dn-contact-visit > a {
-    min-height: 44px;
-    padding: 0 20px;
-    background: var(--dn-ink);
-    color: var(--dn-white);
-    font-size: var(--dn-cta-size);
-  }
-
-  .dn-app-shell .dn-contact-section--general .dn-contact-visit > a:is(:hover, :focus-visible) {
-    background: var(--dn-ink-hover);
-  }
-
-  .dn-app-shell .dn-contact-hero-panel .dn-contact-visit > a .dn-icon { color: inherit; }
-
-  .dn-app-shell .dn-contact-hero-panel a:focus-visible {
-    outline: 2px solid var(--dn-focus);
-    outline-offset: 4px;
-  }
-
   .dn-app-shell .dn-contact-section--general .dn-contact-location--general {
     margin: 88px auto 0;
   }
@@ -838,10 +740,6 @@
     border-radius: 0;
     box-shadow: none;
   }
-}
-
-@media (min-width: 992px) and (prefers-reduced-motion: reduce) {
-  .dn-app-shell .dn-contact-hero-panel .dn-contact-social a { transition: none; }
 }
 
 /* Topic journeys share the studio banner and readable white panels. */
