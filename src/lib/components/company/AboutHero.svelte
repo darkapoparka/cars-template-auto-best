@@ -6,7 +6,7 @@
   import { resolve } from '$app/paths';
   import { brand } from '$config/brand';
   import Icon from '$components/ui/Icon.svelte';
-  import HeroVehicles from '$components/ui/HeroVehicles.svelte';
+  import DesktopHeroScene from '$components/ui/DesktopHeroScene.svelte';
   import SocialBrandIcon from './SocialBrandIcon.svelte';
 
   const socialProfiles = [
@@ -16,8 +16,8 @@
   ] as const;
 </script>
 
-<section class="dn-about-hero dn-route-hero dn-route-hero--studio dn-route-hero--charcoal" aria-labelledby="about-title">
-  <HeroVehicles pair="about" />
+<section class="dn-about-hero dn-route-hero dn-route-hero--studio dn-route-hero--light" aria-labelledby="about-title">
+  <DesktopHeroScene scene="about" />
   <div class="container dn-about-hero__content dn-route-hero__layout">
     <div class="dn-about-hero__copy dn-route-hero__copy">
       <h1 id="about-title">{i18n.t("m_b4b580a9ad8c")}</h1>
@@ -51,6 +51,9 @@
   .dn-about-socials a:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
   @media (min-width: 992px) {
     .dn-about-socials { position: absolute; top: calc(var(--dn-route-hero-control-top) + 68px); left: 0; width: 100%; gap: 12px; }
-    .dn-about-socials a { width: 56px; height: 56px; }
+    .dn-about-socials > span { color: var(--dn-ink); }
+    .dn-about-socials a { width: 56px; height: 56px; background: var(--dn-white); border-color: transparent; color: var(--dn-ink); }
+    .dn-about-socials a:hover { background: var(--dn-ink); color: var(--dn-white); }
+    .dn-about-socials a:focus-visible { outline-color: var(--dn-focus); }
   }
 </style>

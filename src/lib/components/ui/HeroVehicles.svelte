@@ -4,8 +4,8 @@
   import { heroVehiclePairs, vehicleArtwork, mobileHeroArtwork, type HeroVehiclePair, type Vehicle, type MobileHeroScene } from '$data/vehicle-artwork';
   import { mobileHeroRegions } from '$data/vehicle-artwork';
 
-  let { pair = 'home', mobile = false, mobileScene = 'car', mobileLeft = 'silver', mobileRight = 'urus' }: {
-    pair?: HeroVehiclePair; mobile?: boolean; mobileScene?: MobileHeroScene; mobileLeft?: Vehicle; mobileRight?: Vehicle;
+  let { pair = 'home', mobile = false, desktop = true, mobileScene = 'car', mobileLeft = 'silver', mobileRight = 'urus' }: {
+    pair?: HeroVehiclePair; mobile?: boolean; desktop?: boolean; mobileScene?: MobileHeroScene; mobileLeft?: Vehicle; mobileRight?: Vehicle;
   } = $props();
   const sides = ['left', 'right'] as const;
   let vehicles = $derived(heroVehiclePairs[pair]);
@@ -27,6 +27,7 @@
       {/if}
     {/if}
   {/if}
+  {#if desktop}
   {#each sides as side (side)}
     {@const vehicle = vehicles[side === 'left' ? 0 : 1]}
     {@const artwork = vehicleArtwork[vehicle]}
@@ -42,6 +43,7 @@
       <VehicleCutout media="(min-width: 1440px)" {vehicle} mobileVehicle={mobile ? mobileVehicle : undefined} eager />
     </div>
   {/each}
+  {/if}
 </div>
 
 <style>

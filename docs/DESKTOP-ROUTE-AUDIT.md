@@ -4,7 +4,52 @@ Scope: Home, `/listing-grid`, `/about-us`, `/blog`, and general `/contact` in th
 standalone Auto Best master. Local review uses `http://127.0.0.1:5174` and Node
 22.23.2. Both Bulgarian and English are covered.
 
-## Findings and changes
+## Owner-directed visual revision
+
+The owner accepted Blog and requested more character in the other banners after
+the initial audit. This revision supersedes the solid-only palette below. Home
+now uses an ivory automotive studio, Inventory a graphite studio, About warm
+architectural materials, and Contact a slate-blue evening showroom scene. Blog
+retains its approved neutral treatment. Red remains the primary-action accent.
+
+`DesktopHeroScene.svelte` renders the selected scene from
+`leadSite.artwork.desktopHeroScenes`. Responsive picture sources load only at
+992px and above; phones retain their existing artwork. Each scene fills the
+shared 540px banner, with a crop below the navigation at 992–1199px to keep the
+architecture and vehicles in view. Home and About use dark text; Inventory and Contact retain
+light text. About's primary action is red and its social controls use light circles
+with dark icons. The old desktop cutouts are omitted where a scene is rendered.
+
+The four 2172×724 WebP assets total approximately 505 KiB (only one loads per
+route). They were generated with the built-in image tool and encoded at quality
+88 without resizing or compositing. Exact prompts and conceptual-image limits
+are in [the generation record](../provenance/desktop-hero-scenes-2026-09-23.json).
+Saved assets are `static/assets/images/lead/auto-best-desktop-{home,inventory,about,contact}-v1.webp`.
+
+Verification retains the title/control geometry, Onest, overflow, image and focus
+checks; it now also verifies the correct scene is requested on each desktop route
+and none is requested on mobile. Tests wait for actual fonts and images rather
+than external map/video network idleness.
+
+### Revision verification
+
+- `npm run validate`: passed, including production build and zero Svelte errors/warnings.
+- Desktop route audit: all 50 BG/EN cases passed at 390, 992, 1024, 1440 and 1920px.
+- Desktop discovery: all six route/width cases passed.
+- Journey regression: all eight cases passed, including responsive media requests.
+- Hero title/lead contrast sampled against the rendered image crops at 992, 1024,
+  1440 and 1920px: minimum 3.96:1 for large titles and 5.02:1 for supporting text.
+  This is a targeted hero check, not a whole-site accessibility certification.
+- Reviewed rendered scenes at laptop and wide desktop sizes. No horizontal overflow,
+  broken visible images, or runtime errors were found in the route audit.
+- `git diff --check` passed; all 23 pre-existing dirty paths match the saved diff
+  byte-for-byte and are excluded from the revision commit.
+
+Revision logs and crop/contrast evidence are under `artifacts/desktop-route-audit/`
+(`scenes-*-final.log`, `scene-contrast.json`, `scene-*-{width}.png`). These checks
+apply to the local working preview with the preserved existing work present.
+
+## Initial audit findings
 
 | Area | Finding | Result |
 | --- | --- | --- |
@@ -16,7 +61,7 @@ standalone Auto Best master. Local review uses `http://127.0.0.1:5174` and Node
 | Loading/code | About, Blog and Contact eagerly requested hero photos hidden at every breakpoint. | Removed those image elements and obsolete media/overlay rules. Retained original assets and provenance; tablet Inventory artwork remains. |
 | Regression test | The journey test clicked at 5px/5px, outside the rounded desktop card. | Click at 12px/12px checks the visible card surface without bypassing browser hit testing. |
 
-## Visual review
+## Initial visual review
 
 Reviewed the complete pages: navigation and hero, Home campaign/vehicle/body/brand/
 editorial/video sections, Inventory cards and controls, About service cards and map,
@@ -30,7 +75,7 @@ Typography values still come from `src/lib/styles/tokens.css`. No new global the
 duplicate hero component, package dependency, lockfile or locale copy was introduced.
 Phone layouts retain their existing palette and geometry.
 
-## Verification
+## Initial verification
 
 - `npm run validate`: architecture, CSS policy, token graph, typography, assets,
   domain checks, Svelte/TypeScript diagnostics, locale prebuild checks and production build.

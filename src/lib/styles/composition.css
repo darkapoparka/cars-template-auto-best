@@ -69,9 +69,9 @@
 
 @media (min-width: 992px) {
   .dn-listing-stage {
-    --dn-studio-background: var(--dn-workflow-canvas);
+    --dn-studio-background: var(--dn-theme-hero-surface-deep);
     --dn-studio-heading: #fff;
-    --dn-studio-description: #f5dadd;
+    --dn-studio-description: var(--dn-white);
   }
 
   .dn-route-hero--charcoal {
@@ -189,6 +189,24 @@
     --dn-studio-heading: var(--dn-ink);
     --dn-studio-description: var(--dn-muted);
   }
+
+  .dn-route-hero--light {
+    --dn-studio-background: var(--dn-surface-panel);
+    --dn-studio-heading: var(--dn-ink);
+    --dn-studio-description: var(--dn-ink);
+  }
+
+  .dn-route-hero--light .dn-about-button {
+    background: var(--dn-red);
+    color: var(--dn-white);
+  }
+
+  .dn-route-hero--light .dn-about-button:is(:hover, :focus-visible) {
+    background: var(--dn-red-hover);
+    color: var(--dn-white);
+  }
+
+  .dn-route-hero--light .dn-about-button:focus-visible { outline-color: var(--dn-focus); }
 
 }
 

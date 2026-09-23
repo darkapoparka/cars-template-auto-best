@@ -17,10 +17,14 @@ try {
       for (const route of routes) {
         await suite.check(`${locale}/${route || 'home'} at ${width}`, async () => {
           const errors = [];
+          const sceneRequests = [];
           const onError = error => errors.push(error.message);
+          const onRequest = request => { if (/auto-best-desktop-.+-v1\.webp/.test(request.url())) sceneRequests.push(request.url()); };
           page.on('pageerror', onError);
+          page.on('request', onRequest);
           try {
-            const response = await page.goto(`${base}/${locale}/${route}`, { waitUntil: 'networkidle' });
+            // Wait for the page's actual fonts/images below, not idle third-party map/video traffic.
+            const response = await page.goto(`${base}/${locale}/${route}`, { waitUntil: 'domcontentloaded' });
             assert.equal(response.status(), 200);
             await page.evaluate(() => document.fonts.ready);
             // Scroll before screenshots so native lazy images are actually requested.
@@ -37,12 +41,14 @@ try {
               const copy = hero.querySelector('.dn-route-hero__copy');
               const heading = hero.querySelector('h1');
               const lead = copy.querySelector('p');
+              const scene = hero.querySelector('.dn-desktop-hero-scene img');
               const rect = e => e?.getBoundingClientRect().toJSON();
               const controls = document.querySelector('.dn-search__desktop-form, .dn-listing-desktop-discovery, .dn-blog-toolbar, .dn-about-hero .dn-about-button, .dn-contact-actions');
               return {
                 hero: rect(hero), copy: rect(copy), heading: rect(heading), lead: rect(lead), controls: rect(controls),
                 header: rect(document.querySelector('.dn-header-fixed')),
                 backgroundImage: getComputedStyle(hero).backgroundImage,
+                scene: scene ? { src: scene.currentSrc, ...rect(scene) } : null,
                 font: getComputedStyle(heading).fontFamily,
                 headingSize: getComputedStyle(heading).fontSize,
                 leadSize: getComputedStyle(lead).fontSize,
@@ -53,9 +59,17 @@ try {
             assert(geometry.overflow <= 1, 'Horizontal page overflow');
             assert.deepEqual(geometry.broken, [], 'Broken visible images');
             assert.deepEqual(errors, [], 'Browser runtime errors');
+            const hasScene = route !== 'blog' && width >= 992;
+            assert.equal(sceneRequests.length, hasScene ? 1 : 0, 'Only the visible route scene is requested; phones load none');
+            if (hasScene) {
+              const sceneName = route === 'listing-grid' ? 'inventory' : route === 'about-us' ? 'about' : route || 'home';
+              assert(geometry.scene.src.endsWith(`auto-best-desktop-${sceneName}-v1.webp`), 'Correct scene for route');
+              assert.equal(geometry.scene.height, geometry.hero.height - (width < 1200 ? 140 : 0), 'Laptop crop keeps scene edges below navigation');
+              assert.equal(geometry.scene.bottom, geometry.hero.bottom, 'Scene meets the banner baseline');
+            }
             if (width >= 992) {
               assert.equal(geometry.hero.height, 540, 'Shared desktop hero height');
-              assert.equal(geometry.backgroundImage, 'none', 'Solid desktop hero surface');
+              if (route === 'blog') assert.equal(geometry.backgroundImage, 'none', 'Blog retains its approved solid surface');
               assert.equal(geometry.headingSize, width < 1200 ? '42px' : '48px');
               assert.equal(geometry.leadSize, '18px');
               assert(geometry.copy.y >= geometry.header.bottom + 8, 'Hero text clears navigation');
@@ -87,6 +101,7 @@ try {
             return geometry;
           } finally {
             page.off('pageerror', onError);
+            page.off('request', onRequest);
           }
         });
       }

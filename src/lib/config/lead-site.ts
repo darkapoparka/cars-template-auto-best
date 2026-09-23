@@ -29,6 +29,7 @@ type LeadSiteConfig = {
     };
   };
   artwork: {
+    desktopHeroScenes: Record<'home' | 'inventory' | 'about' | 'contact', SiteAssetPath>;
     contactHero: { desktop: SiteAssetPath; sellMobile: SiteAssetPath; importMobile: SiteAssetPath; support: SiteAssetPath };
     blogHero: SiteAssetPath;
     editorialBanner: SiteAssetPath;
@@ -91,6 +92,12 @@ export const leadSite = {
     }
   },
   artwork: {
+    desktopHeroScenes: {
+      home: '/assets/images/lead/auto-best-desktop-home-v1.webp',
+      inventory: '/assets/images/lead/auto-best-desktop-inventory-v1.webp',
+      about: '/assets/images/lead/auto-best-desktop-about-v1.webp',
+      contact: '/assets/images/lead/auto-best-desktop-contact-v1.webp'
+    },
     contactHero: {
       desktop: '/assets/images/lead/day-night-contact-hero-v2.webp',
       sellMobile: '/assets/images/lead/day-night-sell-banner-v1.webp',

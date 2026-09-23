@@ -109,9 +109,11 @@ try {
         assert(!media.some(url => url.includes('urus-front-v1')), 'Home uses the refreshed two-car artwork');
         const homeArtwork = await page.locator('.dn-hero-vehicles__pair img').evaluate(image => image.currentSrc);
         assert(width < 768 ? homeArtwork.includes('collection-banner-v2') : homeArtwork.startsWith('data:'));
-        const sources = await page.locator('.dn-hero-vehicles__car img').evaluateAll(images => images.map(image => image.currentSrc));
-        assert(sources.every(src => width >= 1440 ? src.startsWith('http') : src.startsWith('data:')));
-        evidence.push({ width, heroSources: sources, homeArtwork });
+        assert.equal(await page.locator('.dn-hero-vehicles__car img').count(), 0, 'Home scene replaces the old desktop cutouts');
+        const desktopScene = await page.locator('.dn-desktop-hero-scene img').evaluate(image => image.currentSrc);
+        assert(width >= 992 ? desktopScene.includes('auto-best-desktop-home-v1.webp') : desktopScene.startsWith('data:'));
+        assert.equal(media.filter(url => url.includes('auto-best-desktop-home-v1.webp')).length, width >= 992 ? 1 : 0);
+        evidence.push({ width, desktopScene, homeArtwork });
         for (const [topic, scene] of [['trade-in', 'sell'], ['import', 'import']]) {
           await page.goto(`${base}/contact?topic=${topic}`, { waitUntil: 'networkidle' });
           const support = await page.locator('.dn-hero-vehicles__support img').evaluateAll(images => images.map(image => image.currentSrc));
