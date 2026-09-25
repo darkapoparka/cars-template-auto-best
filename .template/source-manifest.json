@@ -3,12 +3,12 @@
   "key": "auto-best",
   "source": {
     "repository": "darkapoparka/cars",
-    "commit": "b7462812d29ba5a4758ddd069049ee50282b79f4",
+    "commit": "eb71de5330f8408754984c04e1ec0a79089ab859",
     "path": "templates/auto-best",
     "tree": "44d9fc532b332e8c4cb5fd7abfc585e28d978539",
     "digest": "a78d2cfe451551cbb4636e1e64d386d45a13db2b710f8fa8b0dc444929e61be3",
     "exportPolicy": "cars-source-v1"
   },
-  "mirroredAt": "2026-09-25T21:01:15+03:00",
+  "mirroredAt": "2026-09-25T23:55:24+03:00",
   "files": 389
 }
