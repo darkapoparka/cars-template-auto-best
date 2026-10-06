@@ -68,7 +68,9 @@
   background: #e9ebee;
 }
 
-.dn-detail-gallery > img { width: 100%; height: 100%; object-fit: cover; }
+@media (min-width: 992px) {
+  .dn-detail-gallery { aspect-ratio: 16 / 10; }
+}
 
 .dn-detail-mobile-back { display: none; }
 
@@ -303,6 +305,9 @@
   flex: 0 0 auto;
 }
 
+.dn-detail-location-card__address-pin { display: flex; flex: 0 0 auto; }
+.dn-detail-location-card__address--mobile { display: none; }
+
 .dn-detail-sidebar {
   display: grid;
   gap: 20px;
@@ -510,6 +515,19 @@
   .dn-detail-finance-card { grid-row: 5; }
   .dn-detail-dealer { grid-row: 6; }
   #location { grid-row: 7; }
+  .dn-detail-location-card { padding: 0; overflow: hidden; }
+  .dn-detail-location-card .dn-showroom-map { border: 0; border-radius: inherit; }
+  .dn-detail-location-card__header {
+    display: none;
+  }
+  .dn-detail-location-card__header h2 {
+    font-size: var(--dn-text-card);
+    text-align: left;
+  }
+  .dn-detail-location-card__address-pin { display: none; }
+  .dn-detail-location-card__address--wide { display: none; }
+  .dn-detail-location-card__address--mobile { display: inline; }
+  .dn-detail-location-card__header p { text-align: left; }
   .dn-detail-sidebar { position: static; }
   .dn-detail-summary { position: static; min-height: 0; }
   .dn-detail-related__list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -597,10 +615,6 @@
     background: linear-gradient(180deg, rgba(7, 10, 15, .36), transparent);
     content: '';
     pointer-events: none;
-  }
-
-  .dn-detail-gallery > img {
-    object-position: center center;
   }
 
   .dn-detail-mobile-back,
@@ -768,7 +782,7 @@
   }
 
   .dn-detail-location-card {
-    padding: 16px;
+    padding: 0;
     background: #fff;
   }
 
@@ -802,16 +816,6 @@
 
   .dn-detail-dealer h2 { font-size: var(--dn-text-lead); }
   .dn-detail-dealer__details { margin-top: 14px; gap: 10px; }
-
-  .dn-detail-location-card__header {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 7px;
-    margin-bottom: 12px;
-  }
-
-  .dn-detail-location-card__header h2 { font-size: var(--dn-text-card); }
-  .dn-detail-location-card__header p { text-align: left; }
 
   .dn-detail-related {
     margin: 12px 12px 0;

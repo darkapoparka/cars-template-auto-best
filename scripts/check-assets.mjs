@@ -5,14 +5,46 @@ import process from 'node:process';
 const root = process.cwd();
 const sourceRoot = path.join(root, 'src');
 const staticRoot = path.join(root, 'static');
-const guardedMediaCount = 158;
+// Includes the reviewed 960px/480px banners and the two cleaned desktop scenes.
+// Rejected Home section textures remain archived for provenance.
+// The mobile Audi chrome mark is a separate responsive source.
+// The mobile Volkswagen badge is a curated Home shortcut.
+// The Home advice banner has a separate editorial plate.
+// The mobile BMW vector replaces the low-resolution bitmap at phone widths.
+// Superseded advice illustrations remain retained for provenance.
+// One shared graphite-dot background replaces the separate Home section materials.
+// Matching desktop Import/Leasing cutouts retain their full transparent canvases.
+// Four transparent desktop service illustrations complement the retained mobile icons.
+// The rejected generated dock trial remains archived for provenance.
+// Home adds a silver collection pair and the reviewed services-overview cutout.
+// The shared silver family replaces older service cars with three versioned assets.
+// The wagon now has a transparent v2 cutout; its opaque original remains retained.
+const guardedMediaCount = 200;
 // Preserve the two earlier local Home scene options for provenance.
 const homeScenePrototypes = ['/assets/images/template/home-sell-handover-v1.webp', '/assets/images/template/home-finance-scene-v1.webp'];
 // Preserve source identity/artwork for provenance; the default logo and icon are Auto Best.
 const retainedSourceAssets = new Set(['/assets/images/template/service-sell-key-v1.png', '/assets/images/icon-box/car-list4.png', '/assets/images/icon-box/car-list7.png', '/assets/images/lead/day-night-guide-import.webp', '/assets/images/lead/day-night-guide-inspection.webp', '/assets/images/lead/day-night-guide-leasing.webp', '/assets/images/lead/day-night-home-hero-v3.webp', '/assets/images/lead/day-night-home-black-v1.webp', '/assets/images/lead/day-night-logo.png', '/favicon.ico', '/assets/images/section/car-slide1.png', '/assets/images/section/car-slide2.png', '/assets/images/section/car-slide3.png']);
+// Earlier Home section and advice artwork is retained without runtime requests.
+retainedSourceAssets.add('/assets/images/template/home-section-guides-editorial-v2.webp');
+retainedSourceAssets.add('/assets/images/template/home-section-guides-notebook-cutout-v3.webp');
+retainedSourceAssets.add('/assets/images/template/home-section-guides-checklist-cutout-v3.webp');
+retainedSourceAssets.add('/assets/images/template/home-section-inventory-backdrop-v1.webp');
+for (const name of ['body', 'brands', 'guides']) retainedSourceAssets.add(`/assets/images/template/home-section-${name}-backdrop-v1.webp`);
+retainedSourceAssets.add('/assets/images/template/home-section-inventory-backdrop-v2.webp');
 // The solid About banner no longer requests this photograph; retain its source provenance.
 retainedSourceAssets.add('/assets/images/section/bg-12.jpg');
+// Preserve the previous editorial hero photograph as source history.
+retainedSourceAssets.add('/assets/images/lead/day-night-blog-hero-v2.webp');
+// Earlier desktop showroom proposals remain archived for provenance.
+for (const name of ['home', 'inventory', 'contact']) retainedSourceAssets.add(`/assets/images/lead/auto-best-desktop-${name}-v1.webp`);
+// These proposals were rejected for warm colour or distorted props. Reuse reviewed cutouts instead.
+retainedSourceAssets.add('/assets/images/lead/auto-best-desktop-about-v1.webp');
+for (const name of ['blog', 'contact']) retainedSourceAssets.add(`/assets/images/lead/auto-best-desktop-${name}-v2.webp`);
+// Keep the original red-curve scenes; the runtime uses their cleaned v3 editions.
+for (const name of ['home', 'inventory']) retainedSourceAssets.add(`/assets/images/lead/auto-best-desktop-${name}-v2.webp`);
 for (const asset of homeScenePrototypes) retainedSourceAssets.add(asset);
+// Rejected desktop section images remain available as source history, without runtime requests.
+for (const name of ['inventory', 'body', 'brands', 'guides']) retainedSourceAssets.add(`/assets/images/template/home-section-${name}-v1.webp`);
 for (const name of ['sell', 'import', 'finance']) retainedSourceAssets.add(`/assets/images/template/home-action-${name}-v2.webp`);
 // Previous identity and the untouched generated source remain available for provenance.
 retainedSourceAssets.add('/assets/images/template/auto-best-logo.svg');
@@ -22,6 +54,7 @@ retainedSourceAssets.add('/assets/images/template/auto-best-logo-v2-source.png')
 retainedSourceAssets.add('/assets/images/template/auto-best-logo-v2.svg');
 retainedSourceAssets.add('/assets/images/template/auto-best-logo-v2-light.svg');
 retainedSourceAssets.add('/assets/images/template/body-wagon-v1.png');
+retainedSourceAssets.add('/assets/images/template/body-wagon-v1.webp');
 // Previous campaign art is retained for provenance; active cards use front-facing compositions.
 for (const name of ['day-night-mobile-sell-v1.webp', 'day-night-mobile-import-v1.webp', 'day-night-sell-banner-v2.webp']) retainedSourceAssets.add('/assets/images/lead/' + name);
 retainedSourceAssets.add('/assets/images/template/service-sell-euros-v1.webp');
@@ -32,6 +65,12 @@ retainedSourceAssets.add('/assets/images/template/service-import-v2.webp');
 retainedSourceAssets.add('/assets/images/template/pdp-finance-studio-v1.jpg');
 // Original low-resolution body illustrations remain available as source references.
 for (const number of [1, 2, 3, 8]) retainedSourceAssets.add(`/assets/images/icon-box/car-list${number}.png`);
+retainedSourceAssets.add('/assets/images/template/generated-bottom-nav-v3.png');
+// Earlier showroom, cargo-ship and left-facing leasing concepts remain available for provenance.
+for (const name of ['inspection', 'import', 'leasing']) retainedSourceAssets.add(`/assets/images/template/desktop-service-${name}-v1.webp`);
+// Retain superseded car/service illustrations without requesting them in active cards.
+for (const name of ['desktop-service-leasing-v2', 'desktop-service-trade-in-v1', 'menu-showroom-v2', 'menu-import-v2', 'menu-leasing-v2', 'mobile-leasing-card-v4', 'service-car-v1', 'service-leasing-v1', 'home-action-finance-v3', 'home-import-front-v4', 'home-finance-front-v4', 'service-sell-banner-v1', 'service-import-banner-v1']) retainedSourceAssets.add(`/assets/images/template/${name}.webp`);
+for (const name of ['day-night-sell-banner-v1', 'day-night-import-banner-v1']) retainedSourceAssets.add(`/assets/images/lead/${name}.webp`);
 const sourceExtension = /\.(?:css|html|js|svelte|ts)$/i;
 const mediaExtension = /\.(?:avif|eot|gif|ico|jpe?g|mp4|png|svg|ttf|webm|webp|woff2?)$/i;
 const publicAssetReference = /\/(?:assets\/[A-Za-z0-9._@%+~/-]+\.(?:avif|eot|gif|ico|jpe?g|mp4|png|svg|ttf|webm|webp|woff2?)|favicon\.ico|auto-best-icon\.svg)/gi;

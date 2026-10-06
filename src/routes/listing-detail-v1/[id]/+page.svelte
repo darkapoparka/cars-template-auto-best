@@ -14,6 +14,7 @@
   import ShowroomMap from '$components/company/ShowroomMap.svelte';
   import Icon from '$components/ui/Icon.svelte';
   import VehicleFinanceCalculator from '$components/vehicles/VehicleFinanceCalculator.svelte';
+  import VehiclePhoto from '$components/vehicles/VehiclePhoto.svelte';
   import { brand } from '$config/brand';
   import { formatVehiclePrice, formatVehiclePriceLabel, type Vehicle } from '$data/inventory';
   import { imageSrcset } from '$data/responsive-images';
@@ -120,16 +121,7 @@
                     <Icon name="share" size={20} strokeWidth={1.9} />
                   </button>
                 </div>
-                <img
-                  src={data.vehicle.image}
-                  srcset={imageSrcset(data.vehicle.image)}
-                  sizes="(max-width: 991px) 100vw, (max-width: 1199px) 65vw, 850px"
-                  alt={data.vehicle.title}
-                  width="1245"
-                  height="988"
-                  fetchpriority="high"
-                  decoding="async"
-                />
+                <VehiclePhoto image={data.vehicle.image} title={data.vehicle.title} id={`vehicle-photo-${data.vehicle.id}`} />
               </figure>
             </div>
 
@@ -198,7 +190,11 @@
             <section class="dn-detail-card dn-detail-location-card" id="location" aria-labelledby="location-title">
               <div class="dn-detail-location-card__header">
                 <h2 id="location-title">{i18n.t("m_15b61974b270")}</h2>
-                <p><Icon name="map-pin" size={20} strokeWidth={1.7} />{i18n.dealer('address')}</p>
+                <p>
+                  <span class="dn-detail-location-card__address-pin"><Icon name="map-pin" size={20} strokeWidth={1.7} /></span>
+                  <span class="dn-detail-location-card__address--wide">{i18n.dealer('address')}</span>
+                  <span class="dn-detail-location-card__address--mobile">{i18n.dealer('address', true)}</span>
+                </p>
               </div>
               <ShowroomMap />
             </section>

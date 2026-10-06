@@ -29,6 +29,7 @@ try {
         viewport: { width, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce'
       });
       const errors = [];
+      page.setDefaultNavigationTimeout(60000);
       page.on('pageerror', error => errors.push(error.message));
       await page.context().addCookies([
         { name: 'cars_locale', value: locale, url: base },
@@ -43,47 +44,76 @@ try {
           await page.locator('.dn-quick-search__trigger').click();
           await frame(page.locator('.dn-quick-search__input-wrap'), 44, 18);
           assert.equal(await page.locator('#quick-search-input').evaluate(el => getComputedStyle(el).fontSize), '18px');
-          await frame(page.locator('.dn-quick-search__filter-row').first(), 52, 16);
+          await frame(page.locator('.dn-quick-search__filter-row').first(), 48, 16);
           assert.equal(await page.locator('.dn-quick-search__filter-row > span').first().evaluate(el => getComputedStyle(el).fontSize), '14px');
-          await frame(page.locator('.dn-quick-search__mobile-footer button'), 50, 18);
+          await frame(page.locator('.dn-quick-search__mobile-footer button'), 44, 16);
           await page.screenshot({ path: `${output}/${locale}-${width}-home.png` });
+          const clear = page.locator('.dn-quick-search__reset');
+          await frame(clear, 44, 16);
+          assert.equal(await clear.isDisabled(), true);
+          assert.notEqual(await clear.evaluate(el => getComputedStyle(el).backgroundColor), 'rgba(0, 0, 0, 0)', 'Clear retains a visible button surface');
+          assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).overflowY), 'hidden');
+          await page.locator('#quick-search-input').fill('Audi');
+          assert.equal(await clear.isEnabled(), true);
+          await clear.click();
+          assert.equal(await page.locator('#quick-search-input').inputValue(), '');
+          assert.equal(await clear.isDisabled(), true);
+          const labelWeight = await page.locator('.dn-quick-search__filter-row strong').first().evaluate(el => getComputedStyle(el).fontWeight);
+          assert.equal(labelWeight, '500');
           await page.locator('.dn-quick-search__filter-row').first().click();
-          await frame(page.locator('.dn-quick-search__option').first(), 52, 14, true);
+          await frame(page.locator('.dn-quick-search__option').first(), 48, 16, true);
           await page.keyboard.press('Escape');
           await page.keyboard.press('Escape');
         } else if (flow === 'listing') {
           await page.locator('.dn-listing-filter__toggle').click();
-          await frame(page.locator('.dn-listing-filter__dialog-search'), 44);
-          assert.equal(await page.locator('.dn-listing-filter__dialog-search input').evaluate(el => getComputedStyle(el).fontSize), '18px');
-          await frame(page.locator('.dn-mobile-filter-fields button').first(), 44, 16);
-          await frame(page.locator('.dn-listing-filter__dialog-submit'), 44, 18);
+          await frame(page.locator('#dn-listing-filter-dialog .search-field'), 44);
+          assert.equal(await page.locator('#dn-listing-dialog-query').evaluate(el => getComputedStyle(el).fontSize), '18px');
+          await frame(page.locator('.dn-mobile-filter-fields button').first(), 48, 16);
+          await frame(page.locator('.dn-listing-filter__dialog-submit'), 44, 16);
           await page.screenshot({ path: `${output}/${locale}-${width}-listing.png` });
-          await page.locator('.dn-mobile-filter-fields button').first().click();
-          const picker = page.locator('#dn-dialog-choice');
+          await page.locator('.dn-mobile-filter-fields button[data-field=make]').click();
+          const picker = page.locator('.dn-mobile-filter-editor');
           await frame(picker.locator('.search-field'), 44);
           await frame(picker.locator('.search-field input'), 44, 18);
-          await frame(picker.locator('.choice:visible').first(), 44, 16);
-          await frame(picker.locator('.clear'), 44, 16);
-          await frame(picker.locator('.apply'), 44, 18);
+          await frame(picker.locator('.choice:visible').first(), 48, 16);
+          await frame(page.locator('#dn-listing-filter-dialog .dn-mobile-filter-editor-footer button[type=submit]'), 44, 16);
           await page.screenshot({ path: `${output}/${locale}-${width}-picker.png` });
           await page.keyboard.press('Escape');
           await page.keyboard.press('Escape');
+          await page.locator('.dn-listing-filter__quick button').filter({ hasText: locale === 'bg' ? /^Марка$/ : /^Make$/ }).click();
+          const quick = page.locator('#dn-quick-filter');
+          await frame(quick.locator('.choice:visible').first(), 48, 16);
+          await frame(quick.locator('.clear'), 44, 16);
+          await frame(quick.locator('.apply'), 44, 16);
+          await page.keyboard.press('Escape');
         } else {
-          await frame(page.locator('.dn-service-entry input').first(), 48, 16);
-          await frame(page.locator('.dn-service-entry__submit'), 48, 16);
+          const entry = page.locator('#import-service-field');
+          await frame(entry, 48, 18);
+          await frame(page.locator('.dn-service-entry__submit:visible'), 44, 16);
+          await entry.click();
+          const editor = page.locator('.dn-service-editor[open]');
+          await frame(editor.locator('input'), 44, 18);
+          await frame(editor.locator('.dn-service-editor__save'), 44, 16);
+          await frame(editor.locator('.dn-service-editor__cancel'), 44, 16);
           await page.screenshot({ path: output + '/' + locale + '-' + width + '-entry.png' });
           await page.setViewportSize({ width, height: 420 });
-          await page.locator('.dn-service-entry__submit').scrollIntoViewIfNeeded();
-          const save = await page.locator('.dn-service-entry__submit').boundingBox();
-          assert(save.y >= 0 && save.y + save.height <= 420 - 64);
+          await page.waitForFunction(() => {
+            const save = document.querySelector('.dn-service-editor[open] .dn-service-editor__save');
+            if (!save) return false;
+            const box = save.getBoundingClientRect();
+            return box.top >= 0 && box.bottom <= innerHeight;
+          });
+          const save = await editor.locator('.dn-service-editor__save').boundingBox();
+          assert(save.y >= 0 && save.y + save.height <= 420);
+          await page.keyboard.press('Escape');
 
         }
         assert.equal(await page.locator('dialog[open]').count(), 0);
         assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
         assert.deepEqual(errors, []);
         return {
-          locale, width, flow, fieldFrame: 44, overviewRow: flow === 'home' ? 52 : 44,
-          fieldFont: 18, optionFont: 16, compactOptionFont: 14, actionFont: 18
+          locale, width, flow, fieldFrame: flow === 'service' ? 48 : 44, overviewRow: 48,
+          fieldFont: 18, optionFont: 16, compactOptionFont: 16, actionFont: 16
         };
       } finally { await page.close(); }
     });

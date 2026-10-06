@@ -2,7 +2,7 @@
 
 Tests cover different layers: source/type checks, domain logic, runtime media, build output and real browser behavior. This document explains the available commands; it is not a claim that every suite currently passes.
 
-Mobile listing badges use four equal cells and compact localized labels; accessible text and detail views retain full values and units. Sell/Import replace the mobile process disclosure with a configured photo banner and telephone action. The desktop process disclosure stays intact. `mobile-polish-smoke.mjs` checks these contracts and `mobile-reflow-smoke.mjs` includes both service routes at normal and enlarged text sizes.
+Mobile listing badges use four equal cells and compact localized labels on one text line; carousel specifications share one badge row. Model titles stop at two lines while accessible labels and detail views retain complete values. Sell/Import show a compact white How it works card beneath the mobile form, with a centered arrow and complete single-line supporting copy at 320px. The card opens the retained bottom drawer with preparation advice and three service steps. Their mobile form titles are visually hidden but remain accessible; the centered segmented choices use Home's compact sizing. Import uses a charcoal mobile hero while Sell keeps its red hero and both retain the brand accent on their primary actions. The lower mobile page uses a faint configured texture; desktop retains its visible title and process disclosure. `mobile-polish-smoke.mjs` checks these contracts, including long Tesla and petrol/LPG layout fixtures, pale borderless entry fields with one leading glyph and readable muted prompts, pointer/keyboard focus, balanced 22px header icons within 44px targets, guide dismissal/focus return and enquiry preservation. `service-entry-overlay-smoke.mjs` also checks card/arrow geometry and explanation copy after waiting for hydration. `mobile-reflow-smoke.mjs` includes both service routes and their guide drawers at normal/enlarged text sizes and in short viewports.
 
 ## Package commands
 
@@ -15,7 +15,7 @@ Mobile listing badges use four equal cells and compact localized labels; accessi
 | <code>npm run check:architecture</code> | Native source architecture checks |
 | <code>npm run check:css-policy</code> | Reject fragile selectors, invalid standalone-CSS <code>:global(...)</code>, and dealer artwork/palette leakage |
 | `npm run check:tokens` | Validate token aliases, reference cycles, source usage and shared control-height overrides |
-| `npm run check:typography` | Reject local typography values outside the shared token owner |
+| `npm run check:typography` | Reject local typography values outside the shared token owner and verify pinned Inter / Fluent sources, including the dock; preserve the archived generated trial |
 | `npm run smoke:typography` | Current Sell/Import flows, entry tabs, action hierarchy and clipped controls at 320/390/768/1440px |
 | `npm run smoke:phase4` | Phase 4 discovery-draft, shell/navigation, focus, return-state and breakpoint contracts |
 | `npm run check:assets` | Static media and source-reference checks |
@@ -64,13 +64,14 @@ For the built preview, use that preview URL instead. `scripts/browser.mjs` contr
 | --- | --- |
 | `scripts/sveltekit-smoke.mjs` | Entry point for native route and journey coverage |
 | `scripts/route-smoke.mjs` | Routes/status codes, images, page errors, overflow and responsive layout |
-| `scripts/journey-smoke.mjs` | Listing/article returns, vehicle contact context, discovery and menu interaction |
+| `scripts/journey-smoke.mjs` | Listing/article returns, full-photo dialog keyboard/close/backdrop behavior and focus/scroll restoration, vehicle contact context, discovery and menu interaction |
 | `scripts/enquiry-smoke.mjs` | Enquiry entry, steps, review, local photos and sharing/copy behavior |
-| `scripts/service-entry-overlay-smoke.mjs` | Mobile Sell/Import single-field entry, immediate criteria editor, full-screen geometry, shared close target, Save/Cancel/Escape, draft persistence, invalid URLs, contact/review continuation, 200% text and text spacing |
+| `scripts/service-entry-overlay-smoke.mjs` | Mobile Sell/Import single-field entry, immediate criteria editor, full-screen geometry, shared close target, Save/Cancel/Escape, draft persistence, invalid URLs, contact/review continuation, 200% text and text spacing; white guide cards with centered arrows, compact entry tabs, accessible titles, 22px header glyphs, focus containment/return, backdrop/drag/keyboard dismissal and release at the desktop breakpoint |
 | `scripts/mobile-filter-smoke.mjs` | Bulgarian returning-visitor filter draft, nested choices, application, empty results and result-label containment |
-| `scripts/mobile-polish-smoke.mjs` | Bulgarian/English mobile actions, full-height photographs loaded when browsed, subtle make and complete wrapping models, plain price hierarchy, equal card heights and right-column two-by-two badges, inventory search and quick filters matching Home pill size with 44px targets, flat white dock with official Hugeicons Stroke Rounded icons and baselines across main routes, matching Sort/Filter targets and rightmost Filters, filter footer, detail touch targets, short-viewport editors and configured settings title |
+| `scripts/mobile-polish-smoke.mjs` | Bulgarian/English mobile actions, full-height photographs loaded when browsed, subtle make and two-line models with complete accessible labels, plain price hierarchy, equal card heights and right-column two-by-two badges with one text line, long Tesla/electric/petrol-LPG layout fixtures, 48px pale borderless entry fields, inset 40px selected pills inside 44px selector frames, compact 40px action surfaces with 44px targets, and pointer/keyboard focus, 22px header glyphs, inventory search and quick filters matching Home pill size with 44px targets, inset rounded white dock with separate 44px targets and official Fluent Regular SVG geometry, destination colors, selected states and baselines across main routes, matching Sort/Filter targets and rightmost Filters, filter footer, detail touch targets, short-viewport editors and configured settings title, white service guide cards and drawer focus/dismissal |
 | `scripts/mobile-reflow-smoke.mjs` | English/Bulgarian pages and dialogs at 320/390/430px, 200% root text, WCAG text-spacing overrides and short viewports; rejects clipped actions and enlarged card copy, and checks equal inventory card heights |
-| `scripts/desktop-discovery-smoke.mjs` | Desktop discovery and sticky-control behavior |
+| `scripts/desktop-discovery-smoke.mjs` | Home native facets and seven inventory shortcuts into the shared desktop Command dialog; direct make/model search, stable keyboard selection, equipment multi-selection, range validation, cancellation/focus, applied URL state, dependent model reset and sticky-control behavior |
+| `scripts/desktop-routes-smoke.mjs` | Localized route geometry, individual campaign artwork within a shared frame, compact search-title spacing, plain About subtitle, unified Blog search/category panel and native GET filtering, About panels, discovery-tile hover, showroom actions and desktop-only map mounting |
 | `scripts/phase4-smoke.mjs` | URL/filter preservation, nested and outer draft ownership, pending desktop values, shell transitions, menu focus, duplicate IDs and 767/768/991/992 boundaries |
 | `scripts/typography-smoke.mjs` | Entry/segment/CTA hierarchy, keyboard tab switching, link/VIN/description editor save and discard, stable card height, sell/import validation and review, reference edits and clearing, manual fallback, copied text, Escape/focus return, control reflow and screenshots |
 
@@ -79,6 +80,8 @@ Additional mobile/accessibility/resilience and visual-comparison tools exist in 
 ## Focused mobile polish checks
 
 With `BASE_URL` set to the current build, run `node scripts/mobile-polish-smoke.mjs`. It covers 320, 390, 430 and 1440px in Bulgarian and English. The filter suite and this focused suite set explicit returning-visitor preferences; first-visit prompt behavior belongs to `scripts/qa-locale-preferences.mjs`. The mobile checks inspect control geometry as well as document overflow, because clipped labels and shrinking icons can occur without widening the page. Generated screenshots and results are saved under `artifacts/mobile-polish-smoke/`.
+
+For a focused reflow rerun, `REFLOW_CASE` accepts a regular expression matching the case names printed by `scripts/mobile-reflow-smoke.mjs`. For example, `$env:REFLOW_CASE='^en 320 / reflow$'` selects the narrow English Home case. Leave it unset for the full route/dialog matrix. `REFLOW_ENGINE=webkit` selects the installed WebKit engine; the default uses Chromium.
 
 ## Phase 4 regression contract
 
@@ -95,19 +98,87 @@ Reports/screenshots generated by the active scripts are written under `artifacts
 ## Practical browser scenarios
 
 `node scripts/desktop-routes-smoke.mjs` checks Home, Inventory, About, Blog and
-general Contact in Bulgarian and English at 992, 1024, 1440 and 1920px, plus a
-390px regression pass. Set `BASE_URL` first. It verifies equal 540px desktop
-heroes, About-only scene requests, responsive cutout loading and search clearance,
-title/description/control separation, real Onest
+general Contact in Bulgarian and English at 992, 1024, 1440 and 1920px, plus
+320px and 390px regression passes. Set `BASE_URL` first. It verifies the shared
+540px desktop hero, at least 60px below the header, and introduction/control
+control anchors of 340px on Home, Inventory, Blog and service entries. Home,
+Inventory and Blog omit their supplementary desktop line and place the title
+28px above the search panel; compact desktop uses the 32px section role so the
+title clears the side cars. Service titles retain their 200px anchor. About and
+general Contact start their page labels at 200px, with a two-line headline below
+and actions flowing 24px after the complete copy. About puts its
+plain city/address subtitle 8px below the title, with a localized accessible
+directions label, hover title and visible focus ring.
+Actual header navigation in both
+languages checks these positions through Home, Inventory, About, Contact and Blog;
+the import, trade-in and leasing routes
+use the same frame. Header, logo and navigation bounds remain unchanged through
+those page transitions. Artwork framing remains identical through header
+navigation while the image or car pair changes for each main destination. The initial Home
+load waits for hydration before testing the hover disclosure and title click.
+Home and Inventory keep identical search-panel bounds.
+Blog uses the same panel width and alignment, containing search and category
+pills together on one white surface. Its index has four columns from 1200px and
+two at compact desktop widths, with no extra empty margin below the hero.
+Its explicit search button and Enter key
+submit the native GET form; localized title filtering, empty results, category
+and query preservation, and clearing search are checked in both languages.
+Below 1200px, the painted vehicle bounds must clear the search panel on Home,
+Inventory and Blog, keeping the cars visible above its outer corners.
+Desktop DOM order places Guides before About, including the keyboard Tab order.
+It also verifies
+single-line desktop card titles with complete accessible labels and compact
+title-to-specifications spacing, one selected raster scene request on About and
+Contact, and distinct original car pairs on Home, Inventory and Blog. Mobile
+requests none of these desktop scenes. Home's four desktop section banners
+use one common graphite-dot background with no object overlays; mobile does not
+request this background. Home, Inventory and Advice also reuse this background behind
+their original vehicle pairs, without native dots or red-curve decorations.
+Check unchanged car and discovery-control geometry, the title-to-panel gap and background decoding.
+Home's Import/Leasing banners use red/graphite surfaces, white copy/actions and
+the matching desktop front-facing cutouts. Check equal main-car visible areas,
+tyre baselines, clear separation from copy and unchanged Import/Leasing destinations.
+Their desktop-only picture sources must not request the new assets on mobile.
+The suite also checks
+title/description/control separation, real Inter
 glyph rendering (including Cyrillic), visible images, page overflow and runtime
-errors. Desktop content canvases are light grey with white cards; Home/Blog heroes
-are white and About keeps a neutral architectural hero and white map panel.
-Inventory shows its concise count below the hero title,
-with applied and zero-result cases checked in BG/EN. About/Contact social controls
-share desktop geometry. It warms lazy images before saving full-page 1440px/390px captures under
+errors. Desktop content canvases are light grey with white cards;
+all heroes use white headings on dark campaign artwork. About shares the black
+palette and no longer uses the warm architectural photograph.
+Contact keeps its call action and keyboard-accessible directions anchor. Its
+visit panel follows the hero without overlap. Its contact column is capped at
+360px on both About and Contact; the framed map fills the remaining width, and both share the same top and
+bottom edges inside 32px panel padding. Address and appointment values must wrap
+without clipping, and the stacked phone/directions actions stay at the bottom.
+Check both actions' destinations and keyboard focus. Address and visit rows use
+plain labels and values without icons. About's desktop service heading shows the
+configured light-surface logo with its business name as the accessible heading;
+verify proportion, image decoding and the unchanged service destinations.
+Home omits its desktop location badge; the header retains the business address.
+About uses a plain location subtitle. About/Contact share one white visit
+panel with a real map and call/directions
+actions. The map mounts after desktop hydration and is absent from mobile DOM;
+the suite waits for that mount. Live provider rendering needs separate visual
+inspection and is not established by the iframe URL assertion.
+Inventory omits the secondary count line in its desktop hero,
+with applied and zero-result cases checked in BG/EN. Hero and map social controls
+render only configured profiles. General Contact replaces the desktop footer's
+service cards with one white Facebook, YouTube and Instagram panel below the
+visit card. Its title sits above three bordered profile cards, with round brand
+icons and labels underneath. Cards keep a 16px gap and equal heights;
+check that it shares the visit card's width, radius and 32px spacing. Preview-only empty
+profiles are labelled samples and have no link or keyboard action; published
+pages omit missing profiles and omit the section if none are configured.
+Check the row at 992px and 1440px, with normal and enlarged text, in BG/EN;
+configured links need platform labels, keyboard focus and safe external targets.
+It warms lazy images before saving full-page 1440px/390px captures under
 `artifacts/desktop-routes-smoke/`. Search, filter drafts, sticky controls, keyboard
 focus and article return behavior remain covered by desktop-discovery and journey
 suites. See [desktop route audit](DESKTOP-ROUTE-AUDIT.md) for the styling contract.
+
+For a focused rerun, set `DESKTOP_ROUTE_CASE` to a regular expression matching the
+case names. Focused evidence is saved separately under
+`artifacts/desktop-routes-smoke-focused/`; leave it unset for the complete matrix.
 
 Use 390px and 1440px as the primary mobile/desktop pair. Add 320px and 430px for narrow mobile behavior, 768px/991px/992px for layout transitions, and a wide viewport for hero artwork. Use the same viewport, browser, loaded fonts and scroll position for visual comparisons.
 
@@ -146,6 +217,22 @@ The existing discovery/enquiry suites use `locale-smoke-fixture.mjs` to seed a r
 
 ## Overlay control regression checks
 
+Mobile facet pickers use `QuickFilterSheet.svelte`: their panel fits its content on
+opening, expands once when Search receives focus, and stays expanded until closed.
+Both direct and nested pickers use `dialogViewport` for the visible viewport;
+`VehicleSearchDialog.svelte` uses the same attachment for its mobile filter form,
+and `VehicleQuickSearch.svelte` uses it for Home search.
+Check short/long lists, empty searches, clear/reopen, nested Apply/Cancel, backdrop
+dismissal and focus return at 320/390px. The result list scrolls independently;
+the header and footer remain visible when the viewport shrinks. Desktop geometry
+is unchanged. `scripts/check-overlay.mjs` also checks viewport resize/panning,
+nested ownership, listener cleanup and the missing-API fallback. Real Android and
+iPhone keyboards remain a separate device check.
+
+Matched 320x844 captures show the [previous fixed-height panel](mobile-drawer-2026-10-04/before-idle-320.jpg),
+the [content-sized panel](mobile-drawer-2026-10-04/after-idle-320.jpg), and the
+[expanded search state](mobile-drawer-2026-10-04/after-search-320.jpg).
+
 Run `node scripts/check-overlay.mjs` for scroll-lock release order, duplicate cleanup and exact scroll restoration. With `BASE_URL` set to the intended local preview, run `node scripts/overlay-controls-smoke.mjs`; run again with `OVERLAY_ENGINE=webkit` for the installed WebKit engine. Missing browsers are errors, not silent skips.
 
 The matrix covers BG/EN at 320, 390, 430, 768 and 1440px, with short 420px viewports for form/filter controls. It checks the token-derived 44px interaction shell and 40px visible circle, SVG centering within 0.5 CSS pixels, native appearance, icon size, reachable Close/Save actions, nested dialog dismissal, focus return and discarded editor drafts. Existing route, discovery, enquiry, phase4, typography and localization suites remain separate. Desktop Chrome and Windows WebKit emulation do not replace physical iOS/Android keyboard and safe-area testing.
@@ -158,4 +245,4 @@ Run `node scripts/mobile-reflow-smoke.mjs` against the same preview for seven pa
 
 ### Shared entry controls
 
-With `BASE_URL` set, run `node scripts/shared-entry-smoke.mjs`. It compares Home, Sell and Import card and control styles in EN/BG at 320/390px, and Sell/Import at 768/1440px. It checks 44px segment, input and action targets, keyboard selection, overflow, invalid home import links and valid-link prefill. Screenshots and results go to `artifacts/shared-entry-smoke/`. Run `scripts/enquiry-smoke.mjs` for draft, validation, review, photo, sharing and focus behavior; `TYPOGRAPHY_SCOPE=services node scripts/typography-smoke.mjs` covers service typography and short viewports.
+With `BASE_URL` set, run `node scripts/shared-entry-smoke.mjs`. It compares shared control roles in Home, Sell and Import in EN/BG at 320/390px, and Sell/Import at 768/1440px, while retaining each card's composition. Mobile entry fields are 48px tall. Selectors keep their 44px gray frame and inset 40px selected pill, with equal-width segments that stay stable when selection changes. Primary actions retain 44px touch targets with 40px visible surfaces. Desktop fields stay 44px. The suite checks both selected states, label fit, keyboard selection, overflow, invalid home import links and valid-link prefill. Screenshots and results go to `artifacts/shared-entry-smoke/`. Run `scripts/enquiry-smoke.mjs` for draft, validation, review, photo, sharing and focus behavior; `TYPOGRAPHY_SCOPE=services node scripts/typography-smoke.mjs` covers service typography and short viewports.

@@ -9,10 +9,12 @@
   import BodyTypes from '$components/home/BodyTypes.svelte';
   import InventorySection from '$components/home/InventorySection.svelte';
   import BrandSection from '$components/home/BrandSection.svelte';
+  import MobileServicesOverview from '$components/home/MobileServicesOverview.svelte';
   import Editorial from '$components/home/Editorial.svelte';
   import TrustActions from '$components/home/TrustActions.svelte';
   import VideoSection from '$components/home/VideoSection.svelte';
   import { brand } from '$config/brand';
+  import { leadSite } from '$config/lead-site';
 
 </script>
 
@@ -21,7 +23,7 @@
   <meta name="description" content={i18n.t("m_ed2d6b74bc69", { p0: i18n.dealer('city') })} />
 </svelte:head>
 
-<div class="dn-home-page">
+<div class="dn-home-page" style:--dn-home-section-background={`url("${leadSite.artwork.discoveryBackground}")`}>
   <div class="dn-home-slot dn-home-slot--hero"><Hero /></div>
   <div class="dn-home-slot dn-home-slot--search"><SearchBox /></div>
   <div class="dn-home-slot dn-home-slot--mobile-actions"><MobileCoreActions /></div>
@@ -29,6 +31,7 @@
   <div class="dn-home-slot dn-home-slot--inventory"><InventorySection /></div>
   <div class="dn-home-slot dn-home-slot--body"><BodyTypes /></div>
   <div class="dn-home-slot dn-home-slot--brands"><BrandSection /></div>
+  <div class="dn-home-slot dn-home-slot--services"><MobileServicesOverview /></div>
   <div class="dn-home-slot dn-home-slot--ownership-actions"><TrustActions group="ownership" mobileArtwork={false} /></div>
   <div class="dn-home-slot dn-home-slot--editorial"><Editorial /></div>
   <div class="dn-home-slot dn-home-slot--videos"><VideoSection /></div>
@@ -48,7 +51,10 @@
   }
 
   @media (min-width: 992px) {
+    .dn-home-page { --dn-home-heading-banner-height: 164px; }
+
     .dn-home-page :global(.dn-home-content-section) {
+      padding-block: var(--dn-home-section-space);
       background: var(--dn-surface-canvas);
     }
     .dn-home-page :global(.dn-home-section-heading) {
@@ -56,7 +62,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: var(--dn-home-copy-gap);
+      gap: var(--dn-space-4);
       min-height: var(--dn-control-height-default);
       text-align: center;
     }
@@ -94,10 +100,10 @@
       border-radius: var(--dn-radius-button);
       background: var(--dn-surface-raised);
       color: var(--dn-ink);
-      font: var(--dn-cta-font);
+      font: var(--dn-control-font);
       letter-spacing: var(--dn-cta-tracking);
       white-space: nowrap;
-      margin-top: var(--dn-home-copy-gap);
+      margin-top: 0;
       box-shadow: none;
       transition: background-color 180ms ease, color 180ms ease;
     }
@@ -113,16 +119,12 @@
       border-color: transparent;
     }
 
-    .dn-home-page :global(.dn-home-section-heading--banner > .dn-home-section-action) {
-      grid-row: 3;
-    }
-
     .dn-home-page :global(:is(.dn-home-section-heading--branded, .dn-home-section-heading--banner)) {
       position: relative;
       isolation: isolate;
       overflow: hidden;
       margin-bottom: 0;
-      border-radius: var(--dn-radius-lg);
+      border-radius: var(--dn-radius-lg) var(--dn-radius-lg) 0 0;
       background: var(--dn-theme-hero-surface-deep);
       box-shadow: none;
       text-align: center;
@@ -130,12 +132,19 @@
 
     .dn-home-page :global(:is(.dn-home-section-heading--branded, .dn-home-section-heading--banner) > :is(h2, p, a)) { position: relative; z-index: 1; }
 
-    .dn-home-page :global(.dn-home-section-heading--branded > h2) { color: var(--dn-white); }
-    .dn-home-page :global(.dn-home-section-heading--branded > p) { color: var(--dn-text-on-ink); }
-    .dn-home-page :global(.dn-home-section-heading--light) {
-      background: var(--dn-surface-subtle);
+    .dn-home-page :global(:is(.dn-home-section-heading--branded, .dn-home-section-heading--banner) > h2) { color: var(--dn-white); }
+    .dn-home-page :global(:is(.dn-home-section-heading--branded, .dn-home-section-heading--banner) > p) { color: var(--dn-text-on-ink); }
+
+    .dn-home-page :global(:is(.dn-body-types__heading, .dn-brand-hero__copy, .dn-inventory__heading, .dn-editorial__heading)) {
+      background-image: var(--dn-home-section-background);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
-    .dn-home-page :global(.dn-home-section-heading--ice) { background: var(--dn-theme-action-ice-start); }
+
+    .dn-home-page :global(.dn-home-section-heading--light) {
+      background: var(--dn-surface-raised);
+    }
     .dn-home-page :global(.dn-home-section-heading--light > h2) { color: var(--dn-ink); }
     .dn-home-page :global(.dn-home-section-heading--light > p) { color: var(--dn-muted); }
     .dn-home-page :global(.dn-home-section-heading--light > .dn-home-section-action) { background: var(--dn-red); color: var(--dn-white); }
@@ -161,11 +170,11 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: var(--dn-home-copy-gap);
+      gap: var(--dn-space-4);
       text-align: center;
     }
     .dn-home-page :global(.dn-home-banner-copy > .dn-home-section-action) {
-      margin-top: calc(var(--dn-home-cta-gap) - var(--dn-home-copy-gap));
+      margin-top: 0;
       align-self: center;
     }
 
@@ -205,6 +214,25 @@
     .dn-home-slot--browse-actions,
     .dn-home-slot--ownership-actions {
       display: none;
+    }
+
+    .dn-home-page :global(.dn-home-section-title) {
+      font-weight: var(--dn-weight-medium);
+    }
+
+    .dn-home-page :global(:is(.dn-vehicle-card, .dn-body-type, .dn-brand-card, .dn-discovery-toggle, .dn-editorial-item, .dn-browse-all)) {
+      border: 1px solid var(--dn-line);
+      border-radius: var(--dn-space-6);
+      box-shadow: var(--dn-card-shadow-subtle);
+    }
+
+    .dn-home-page :global(:is(.dn-body-type__title, .dn-brand-card strong, .dn-discovery-toggle strong)) {
+      font-weight: var(--dn-weight-medium);
+    }
+
+    .dn-home-page :global(.dn-browse-all .action) {
+      background: var(--dn-ink-deep);
+      color: var(--dn-white);
     }
   }
 </style>

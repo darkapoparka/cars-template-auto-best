@@ -4,19 +4,17 @@
 
   import { resolve } from '$app/paths';
   import Icon from '$components/ui/Icon.svelte';
-  import VehicleCutout from '$components/ui/VehicleCutout.svelte';
+  import { getVehicleArtworkRatios } from '$data/vehicle-artwork';
   import ArtworkRegion from '$components/ui/ArtworkRegion.svelte';
   import { serviceArtwork } from '$data/service-artwork';
-  import { featureArtwork } from '$data/feature-artwork';
-  import { leadSite } from '$config/lead-site';
+  import { featureArtwork, homeActionArtwork, illustrationVehicleArtwork } from '$data/feature-artwork';
   import OriginalActionIcon from '$components/ui/icons/OriginalActionIcon.svelte';
   let { group, variant = 'banners', mobileArtwork = true }: { group: 'browse' | 'ownership' | 'all'; variant?: 'banners' | 'cards'; mobileArtwork?: boolean } = $props();
 
   const actions = [
     {
       title: 'Вижте колекцията',
-      artwork: { src: leadSite.artwork.home.collection, width: 1200, height: 668, bounds: [21, 122, 1172, 552], view: 'front-pair' },
-      vehicle: 'urus',
+      artwork: illustrationVehicleArtwork(homeActionArtwork.collection, 'front-pair'),
       tone: 'black',
       mobileTitle: 'Автомобили',
       mobileCta: 'Разгледай',
@@ -28,8 +26,7 @@
     },
     {
       title: 'Продажба или бартер',
-      artwork: { src: leadSite.artwork.home.sellCompact, width: 1200, height: 400, bounds: [0, 0, 1200, 400], view: 'front-service' },
-      vehicle: 'gclass',
+      artwork: illustrationVehicleArtwork(homeActionArtwork.sell, 'front-service'),
       tone: 'red',
       mobileTitle: 'Продай/Бартер',
       mobileCta: 'Заяви оценка',
@@ -41,7 +38,7 @@
     },
     {
       title: 'Внос по заявка',
-      vehicle: 'gclass',
+      artwork: illustrationVehicleArtwork(homeActionArtwork.import, 'front-service'),
       tone: 'red',
       mobileTitle: 'Внос по заявка',
       mobileCta: 'Заяви внос',
@@ -53,7 +50,7 @@
     },
     {
       title: 'Собствен лизинг',
-      vehicle: 'urus',
+      artwork: illustrationVehicleArtwork(homeActionArtwork.finance, 'front-service'),
       tone: 'black',
       mobileTitle: 'Лизинг',
       mobileCta: 'Виж условия',
@@ -65,6 +62,7 @@
     }
   ] as const;
   const visibleActions = $derived(group === 'all' ? actions : group === 'browse' ? actions.slice(0, 2) : actions.slice(2));
+  const artworkFrameWidth = $derived(Math.max(...visibleActions.map(action => getVehicleArtworkRatios(action.artwork).width)));
 </script>
 
 <section class="dn-home-content-section" class:dn-trust-actions={variant === 'banners'} class:dn-home-services={variant === 'cards'} data-banner-group={variant === 'banners' ? group : undefined} aria-label={variant === 'cards' ? i18n.t("m_5dfe5d699973") : group === 'browse' ? i18n.t("m_d064a1978f8f") : i18n.t("m_5526464e7543")}>
@@ -80,21 +78,21 @@
       {/if}
       <div class="dn-trust-actions__grid">
         {#each visibleActions as action (action.href)}
-          <article class={variant === 'cards' ? 'dn-service-card' : 'dn-trust-card'} class:dn-trust-card--ownership={variant === 'banners' && group === 'ownership'} class:dn-trust-card--illustrated={variant === 'banners' && group === 'browse'} class:dn-trust-card--red={variant === 'banners' && action.tone === 'red'} class:dn-trust-card--campaign={variant === 'banners' && 'artwork' in action}>
+          <article class={variant === 'cards' ? 'dn-service-card' : 'dn-trust-card'} class:dn-trust-card--ownership={variant === 'banners' && group === 'ownership'} class:dn-trust-card--illustrated={variant === 'banners' && group === 'browse'} class:dn-trust-card--red={variant === 'banners' && action.tone === 'red'} class:dn-trust-card--campaign={variant === 'banners'}>
             {#if variant === 'banners'}
-              {#if 'artwork' in action}
-                {@const art = action.artwork}
-                {@const bodyHeight = art.bounds[3] - art.bounds[1]}
-                <div class="dn-trust-card__vehicle dn-trust-card__vehicle--campaign"
-                  style:--art-width={art.width / bodyHeight}
-                  style:--art-height={art.height / bodyHeight}
-                  style:--art-bottom={art.bounds[3] / bodyHeight}
-                  style:--art-right={(art.width - art.bounds[2]) / bodyHeight}>
-                  <img class="dn-trust-card__lineup" data-view={art.view} src={art.src} alt="" width={art.width} height={art.height} loading="lazy" decoding="async" />
-                </div>
-              {:else}
-                <div class="dn-trust-card__vehicle"><VehicleCutout vehicle={action.vehicle} framing="banner" /></div>
-              {/if}
+              {@const art = action.artwork}
+              {@const ratios = getVehicleArtworkRatios(art)}
+              <div class="dn-trust-card__vehicle dn-trust-card__vehicle--campaign"
+                style:--art-width={ratios.width}
+                style:--art-height={ratios.height}
+                style:--art-bottom={ratios.bottom}
+                style:--art-right={ratios.right}
+                style:--art-frame-width={artworkFrameWidth}>
+                <picture>
+                  <source media="(min-width: 992px)" srcset={art.src} />
+                  <img class="dn-trust-card__lineup" data-view={art.view} src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" width={art.width} height={art.height} loading="lazy" decoding="async" />
+                </picture>
+              </div>
             {/if}
             {#if mobileArtwork && variant === 'banners' && group === 'browse'}
               <div class="dn-trust-card__mobile-art" aria-hidden="true">
@@ -151,27 +149,31 @@
   @media (min-width: 992px) {
     .dn-trust-card { min-height: var(--dn-home-banner-height); padding: var(--dn-home-banner-padding); border-radius: var(--dn-radius-lg); background: var(--dn-theme-hero-surface-deep); }
     .dn-trust-card--red { background: var(--dn-surface-raised); color: var(--dn-ink); }
-    .dn-trust-actions[data-banner-group='ownership'] .dn-trust-card--red { background: var(--dn-theme-action-ice-start); color: var(--dn-theme-action-ice-ink); }
+    .dn-trust-actions[data-banner-group='ownership'] .dn-trust-card--red { background: var(--dn-theme-campaign-accent); color: var(--dn-white); }
+    .dn-trust-actions[data-banner-group='ownership'] .dn-trust-card--red p { color: var(--dn-text-on-ink); }
+    .dn-trust-actions[data-banner-group='ownership'] .dn-trust-card--red .dn-trust-card__action { background: var(--dn-white); color: var(--dn-ink); }
+    .dn-trust-actions[data-banner-group='ownership'] .dn-trust-card--red .dn-trust-card__action:hover { background: var(--dn-surface-hover); }
+    .dn-trust-actions[data-banner-group='ownership'] .dn-trust-card--red a:focus-visible { outline-color: var(--dn-white); }
     .dn-trust-card--red p { color: var(--dn-muted); }
     .dn-trust-card--red .dn-trust-card__action { background: var(--dn-red); color: var(--dn-white); }
     .dn-trust-card--red .dn-trust-card__action:hover { background: var(--dn-red-hover); }
     .dn-trust-card.dn-trust-card--red a:focus-visible { outline-color: var(--dn-focus); }
     .dn-trust-card h3 a { display: inline-flex; min-height: 44px; align-items: center; }
-    .dn-trust-card__content { justify-content: flex-start; }
+    .dn-trust-card__content { justify-content: flex-start; gap: var(--dn-home-copy-gap); }
     .dn-trust-card h3 { margin: 0; }
-    .dn-trust-card p { margin: var(--dn-home-copy-gap) 0 0; }
-    .dn-trust-card .dn-trust-card__action { width: max-content; margin-top: var(--dn-home-cta-gap); white-space: nowrap; }
-    .dn-trust-card--ownership .dn-trust-card__vehicle { width: min(340px, 42%); right: -24px; }
+    .dn-trust-card p { margin: 0; }
+    .dn-trust-card__description-line { display: inline; }
+    .dn-trust-card .dn-trust-card__action { width: max-content; max-width: 100%; margin-top: auto; white-space: normal; }
     .dn-trust-card--campaign { container-type: inline-size; }
-    .dn-trust-card--campaign .dn-trust-card__content { width: 100%; }
-    .dn-trust-card--campaign p { width: 50%; }
+    .dn-trust-card--campaign .dn-trust-card__content { width: max(52%, 240px); }
+    .dn-trust-card--campaign p { width: 100%; max-width: 28ch; }
     .dn-trust-card__vehicle--campaign {
-      --car-height: min(144px, calc(min(55cqw, 100cqw - 244px) / var(--art-width)));
-      top: calc(206px - var(--car-height) * var(--art-bottom));
-      right: calc(16px - var(--car-height) * var(--art-right));
-      bottom: auto;
-      width: calc(var(--car-height) * var(--art-width));
-      height: calc(var(--car-height) * var(--art-height));
+      --car-size: min(188px, calc(min(46cqw, 100cqw - 244px) / var(--art-frame-width)));
+      top: auto;
+      right: calc(var(--dn-space-6) - var(--car-size) * var(--art-right));
+      bottom: calc(var(--dn-space-8) - var(--car-size) * (var(--art-height) - var(--art-bottom)));
+      width: calc(var(--car-size) * var(--art-width));
+      height: calc(var(--car-size) * var(--art-height));
     }
   }
   .dn-trust-card__action { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; gap: 9px; align-self: flex-start; margin-top: auto; padding: 10px 14px; border-radius: var(--dn-radius-button); background: #fff; color: #202329; font: var(--dn-cta-font); letter-spacing: var(--dn-cta-tracking); }

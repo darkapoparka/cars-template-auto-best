@@ -18,7 +18,7 @@
   import BottomNavIcon from './BottomNavIcon.svelte';
   import { vehicleContactHref } from '$data/journeys';
   import { brand } from '$config/brand';
-  import { navigation, type InternalNavigationHref, type MegaMenu, type NavigationHref, type NavigationItem } from '$data/navigation';
+  import { desktopNavigation, type InternalNavigationHref, type MegaMenu, type NavigationHref, type NavigationItem } from '$data/navigation';
   import type { HeaderPresentation } from '$data/shell';
 
   let { presentation, mobileFooterVisible = false }: { presentation: HeaderPresentation; mobileFooterVisible?: boolean } = $props();
@@ -40,6 +40,7 @@
   const listingHeader = $derived(presentation.listingHeader);
   const homeOverlayHeader = $derived(presentation.homeOverlayHeader);
   const contactOverlayHeader = $derived(presentation.contactOverlayHeader);
+  const informationOverlayHeader = $derived(presentation.informationOverlayHeader);
 
   const isInternalHref = (href: NavigationHref): href is InternalNavigationHref => href.startsWith('/');
   const phoneLinkAttributes = { href: brand.phoneHref } as const;
@@ -79,7 +80,7 @@
       });
     };
     const handlePointerLeave = (event: PointerEvent) => {
-      if (event.pointerType === 'mouse') closeMega();
+      if (event.pointerType === 'mouse' && !megaPanel?.contains(document.activeElement)) closeMega();
     };
     const handleFocusOut = (event: FocusEvent) => {
       if (!(event.relatedTarget instanceof Node) || !node.contains(event.relatedTarget)) queueDismiss();
@@ -203,6 +204,8 @@
   class:dn-header-fixed--mobile-surface={mobileSurfaceHeader}
   class:dn-header-fixed--home-overlay={homeOverlayHeader}
   class:dn-header-fixed--contact-overlay={contactOverlayHeader}
+  class:dn-header-fixed--information-overlay={Boolean(informationOverlayHeader)}
+  class:dn-header-fixed--information-light={informationOverlayHeader === 'light'}
   class:dn-header-fixed--listing={listingHeader}
 >
   <header
@@ -228,7 +231,7 @@
           <div class="dn-logo-box">
             <a class="dn-logo" href={i18n.href(resolve('/'))} aria-label={i18n.t("m_d007ba60d7c9", { p0: brand.name })}>
               <picture>
-                {#if mobileSurfaceHeader || contactOverlayHeader}
+                {#if mobileSurfaceHeader || contactOverlayHeader || informationOverlayHeader === 'dark'}
                   <source media="(max-width: 991px)" srcset={brand.logoOnDark} />
                 {/if}
                 <img src={brand.logo} alt={brand.name} width="220" height="58" fetchpriority="high" />
@@ -238,7 +241,7 @@
 
           <nav class="dn-nav" aria-label={i18n.t("m_123e2803c10b")}>
             <ul class="dn-nav__list">
-              {#each navigation as item (item.id)}
+              {#each desktopNavigation as item (item.id)}
                 <li class:dn-nav__item--current={isActive(item)}>
                   <a
                     class:dn-nav__link--disclosure={Boolean(item.menu)}
@@ -314,7 +317,7 @@
               {...phoneLinkAttributes}
               aria-label={i18n.t("m_772c70f449af", { p0: brand.phone })}
             >
-              <MobileNavIcon name="phone" size={22} />
+              <MobileNavIcon name="phoneCall" size={22} />
             </a>
             {#if vehicleDetailHeader}
             <button
@@ -322,6 +325,7 @@
               type="button"
               {@attach attachMobileToggle}
               aria-expanded={mobileOpen}
+              aria-haspopup="dialog"
               {@attach i18n.registerFocusTarget} aria-controls="dn-mobile-menu"
               aria-label={mobileOpen ? i18n.t("m_434b5049f81b") : i18n.t("m_adeff71e51a4")}
               onclick={openMobile}
@@ -342,8 +346,8 @@
   <div hidden={mobileOpen}>
     {#if vehicleDetailHeader}
       <nav class="dn-mobile-detail-bar" aria-label={i18n.t("m_4c09f960cece")}>
-        <a class="dn-mobile-detail-bar__secondary" href={i18n.href(resolve(detailVehicle ? vehicleContactHref(detailVehicle.id) : '/contact?topic=inspection'))} title={i18n.t("m_be4b2e6f02d6")}>{i18n.t("action.viewingShort")}</a>
-        <a class="dn-mobile-detail-bar__primary" {...phoneLinkAttributes} aria-label={`${i18n.t("action.callShort")} — ${brand.phone}`}>
+        <a class="dn-mobile-detail-bar__secondary dn-compact-control" href={i18n.href(resolve(detailVehicle ? vehicleContactHref(detailVehicle.id) : '/contact?topic=inspection'))} title={i18n.t("m_be4b2e6f02d6")}>{i18n.t("action.viewingShort")}</a>
+        <a class="dn-mobile-detail-bar__primary dn-compact-control dn-compact-primary" {...phoneLinkAttributes} aria-label={`${i18n.t("action.callShort")} — ${brand.phone}`}>
           <MobileNavIcon name="phone" size={22} />
           {i18n.t("action.callShort")}
         </a>
@@ -355,7 +359,7 @@
           href={i18n.href(resolve('/'))}
           aria-current={presentation.mobileNavigation.home ? 'page' : undefined}
         >
-          <span class="dn-mobile-bottom-nav__icon"><BottomNavIcon name="home" /></span>
+          <span class="dn-mobile-bottom-nav__icon"><BottomNavIcon name="home" active={presentation.mobileNavigation.home} /></span>
           <span class="dn-mobile-bottom-nav__label">{i18n.t("m_3a78695388b3")}</span>
         </a>
         <a
@@ -363,7 +367,7 @@
           href={i18n.href(resolve('/listing-grid'))}
           aria-current={presentation.mobileNavigation.listing ? 'page' : undefined}
         >
-          <span class="dn-mobile-bottom-nav__icon"><BottomNavIcon name="cars" /></span>
+          <span class="dn-mobile-bottom-nav__icon"><BottomNavIcon name="cars" active={presentation.mobileNavigation.listing} /></span>
           <span class="dn-mobile-bottom-nav__label">{i18n.t("nav.carsCompact")}</span>
         </a>
         <a
@@ -371,7 +375,7 @@
           href={i18n.href(resolve('/contact?topic=trade-in'))}
           aria-current={presentation.mobileNavigation.tradeIn ? 'page' : undefined}
         >
-          <span class="dn-mobile-bottom-nav__icon"><BottomNavIcon name="sell" /></span>
+          <span class="dn-mobile-bottom-nav__icon"><BottomNavIcon name="sell" active={presentation.mobileNavigation.tradeIn} /></span>
           <span class="dn-mobile-bottom-nav__label">{i18n.t("nav.sellCompact")}</span>
         </a>
         <a
@@ -379,7 +383,7 @@
           href={i18n.href(resolve('/contact?topic=import'))}
           aria-current={presentation.mobileNavigation.import ? 'page' : undefined}
         >
-          <span class="dn-mobile-bottom-nav__icon"><BottomNavIcon name="import" /></span>
+          <span class="dn-mobile-bottom-nav__icon"><BottomNavIcon name="import" active={presentation.mobileNavigation.import} /></span>
           <span class="dn-mobile-bottom-nav__label">{i18n.t("m_2cff9baabf56")}</span>
         </a>
         <button
@@ -387,9 +391,10 @@
           type="button"
           {@attach i18n.registerFocusTarget} aria-controls="dn-mobile-menu"
           aria-expanded={mobileOpen}
+          aria-haspopup="dialog"
           onclick={openMobile}
         >
-          <span class="dn-mobile-bottom-nav__icon"><BottomNavIcon name="menu" /></span>
+          <span class="dn-mobile-bottom-nav__icon"><BottomNavIcon name="menu" active={mobileOpen || presentation.mobileNavigation.menu} /></span>
           <span class="dn-mobile-bottom-nav__label">{i18n.t("m_99af6606ff9d")}</span>
         </button>
       </nav>
@@ -428,18 +433,27 @@
 
   .dn-mega-backdrop { position: fixed; inset: 0; z-index: 999; border: 0; padding: 0; background: var(--dn-menu-backdrop); cursor: default; }
   .dn-header .dn-mega { position: absolute; top: 100%; left: 0; right: 0; z-index: 30; display: grid; min-height: var(--dn-menu-panel-height); grid-template-columns: minmax(0,2.25fr) minmax(300px,.95fr); gap: 32px; padding: 16px max(32px, calc((100% - var(--dn-menu-content)) / 2)) 24px; border-radius: 0 0 16px 16px; background: var(--dn-white); }
-  .dn-mega__feature-panel { min-width: 0; }
+  .dn-mega__feature-panel { min-width: 0; container-type: inline-size; }
   .dn-mega__features { display: grid; height: 100%; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
-  .dn-mega__side { min-width: 0; display: flex; flex-direction: column; }
+  .dn-mega__side { min-width: 0; display: flex; flex-direction: column; container-type: inline-size; }
   .dn-nav__list > li > a:focus-visible,
   .dn-header :global(.dn-mega a:focus-visible) { outline: 2px solid var(--dn-focus); outline-offset: 3px; }
   .dn-nav__list > li > a[aria-expanded='true'] { background: var(--dn-surface); }
   .dn-mega__groups { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px 24px; }
-  .dn-mega__group strong { display: block; margin-bottom: 8px; font-size: var(--dn-text-lead); font-weight: var(--dn-menu-heading-weight); }
-  .dn-mega__group a { display: block; padding: 4px 0; color: var(--dn-muted); font-size: var(--dn-text-body); line-height: var(--dn-leading-body); }
+  .dn-mega__group strong { display: block; margin-bottom: 8px; font-size: var(--dn-text-lead); font-weight: var(--dn-menu-heading-weight); overflow-wrap: anywhere; }
+  .dn-mega__group a { display: block; padding: 4px 0; color: var(--dn-muted); font-size: var(--dn-text-body); line-height: var(--dn-leading-body); overflow-wrap: anywhere; }
   .dn-mega__group a:hover { color: var(--dn-red); }
   .dn-mega__side-action { margin-top: auto; padding-top: 12px; }
   .dn-mega__side-action > :global(.dn-mega__cta) { width: 100%; min-height: 42px; display: inline-flex; align-items: center; justify-content: center; padding: 11px 16px; border-radius: var(--dn-radius-button); background: var(--dn-red); color: #fff; }
+
+  @container (max-width: 30rem) {
+    .dn-mega__features { display: flex; flex-wrap: wrap; }
+    .dn-mega__features > :global(.dn-mega__feature) { flex: 1 1 calc(50% - var(--dn-space-2)); }
+  }
+
+  @container (max-width: 12rem) {
+    .dn-mega__groups { grid-template-columns: 1fr; }
+  }
 
   @media (min-width: 992px) {
     .dn-header__lower { container-type: inline-size; }
@@ -452,6 +466,9 @@
 
     /* Let enlarged action labels fit their column without covering navigation. */
     @container (max-width: 60rem) {
+      .dn-header__inner { grid-template-columns: auto minmax(0, 1fr) auto; }
+      .dn-nav { min-width: 0; }
+      .dn-nav__list { flex-wrap: wrap; justify-content: center; }
       .dn-header-actions { flex-direction: column; align-items: stretch; }
     }
   }
@@ -620,10 +637,16 @@
     .dn-mobile-bottom-nav {
       container-type: inline-size;
       display: grid;
-      min-height: calc(var(--dn-mobile-nav-bar-height) + env(safe-area-inset-bottom));
+      right: max(var(--dn-mobile-nav-gutter), env(safe-area-inset-right));
+      bottom: calc(var(--dn-mobile-nav-offset) + env(safe-area-inset-bottom));
+      left: max(var(--dn-mobile-nav-gutter), env(safe-area-inset-left));
+      min-height: var(--dn-mobile-nav-bar-height);
       grid-template-columns: repeat(5, minmax(0, 1fr));
-      padding: var(--dn-space-1) max(var(--dn-space-3), env(safe-area-inset-right)) calc(var(--dn-space-1) + env(safe-area-inset-bottom)) max(var(--dn-space-3), env(safe-area-inset-left));
-      border-top-color: var(--dn-line);
+      padding: var(--dn-space-half) var(--dn-space-2);
+      border: 1px solid var(--dn-line);
+      border-radius: var(--dn-radius);
+      background: var(--dn-mobile-surface);
+      box-shadow: var(--dn-card-shadow);
       transition: transform 180ms ease, opacity 150ms ease;
     }
 
@@ -631,7 +654,7 @@
       visibility: hidden;
       opacity: 0;
       pointer-events: none;
-      transform: translateY(100%);
+      transform: translateY(calc(100% + var(--dn-mobile-nav-offset) + env(safe-area-inset-bottom)));
     }
 
     .dn-mobile-bottom-nav a,
@@ -642,13 +665,13 @@
       min-height: var(--dn-control-height-default);
       place-items: center;
       align-content: center;
-      grid-template-rows: 24px auto;
+      grid-template-rows: var(--dn-space-6) auto;
       gap: var(--dn-space-half);
-      padding: 3px 0;
+      padding: 0;
       border: 0;
       border-radius: var(--dn-radius);
       background: transparent;
-      color: var(--dn-ink);
+      color: var(--dn-muted);
       font: inherit;
       font-size: var(--dn-text-caption);
       font-weight: var(--dn-weight-medium);
@@ -661,18 +684,27 @@
     .dn-mobile-bottom-nav a.active,
     .dn-mobile-bottom-nav button.active {
       background: transparent;
-      color: var(--dn-red);
+      color: var(--dn-ink-deep);
       font-weight: var(--dn-weight-semibold);
     }
 
-    .dn-mobile-bottom-nav :is(a.active, button.active) .dn-mobile-bottom-nav__icon {
-      color: inherit;
+    .dn-mobile-bottom-nav :is(a.active, button.active) .dn-mobile-bottom-nav__icon::after {
+      position: absolute;
+      right: 0;
+      bottom: calc(0px - var(--dn-space-half));
+      left: 0;
+      width: var(--dn-space-3);
+      height: var(--dn-space-half);
+      margin-inline: auto;
+      background: currentColor;
+      content: '';
     }
 
     .dn-mobile-bottom-nav__icon {
+      position: relative;
       display: grid;
-      width: 24px;
-      height: 24px;
+      width: var(--dn-space-6);
+      height: var(--dn-space-6);
       place-items: center;
     }
 
@@ -683,7 +715,7 @@
 
     .dn-mobile-bottom-nav a:not(.active):active,
     .dn-mobile-bottom-nav button:not(.active):active {
-      color: var(--dn-red);
+      color: var(--dn-ink-deep);
     }
 
     .dn-mobile-bottom-nav a:focus-visible,
@@ -707,7 +739,7 @@
 
       .dn-mobile-bottom-nav a,
       .dn-mobile-bottom-nav button {
-        grid-template-rows: 24px;
+        grid-template-rows: var(--dn-space-6);
         gap: 0;
       }
     }
@@ -716,34 +748,24 @@
       display: grid;
       height: calc(var(--dn-mobile-detail-bar-height) + env(safe-area-inset-bottom));
       grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-      gap: 8px;
-      padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+      gap: var(--dn-space-2);
+      padding: var(--dn-space-2) var(--dn-space-3) calc(var(--dn-space-2) + env(safe-area-inset-bottom));
     }
 
     .dn-mobile-detail-bar a {
-      display: inline-flex;
       min-width: 0;
-      min-height: 44px;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      border-radius: var(--dn-radius-button);
-      font-size: var(--dn-text-body);
-      font-weight: var(--dn-control-weight);
-      line-height: var(--dn-leading-control);
       text-align: center;
+      white-space: normal;
     }
 
     .dn-mobile-detail-bar :global(svg) { flex-shrink: 0; }
 
     .dn-mobile-detail-bar__secondary {
-      background: var(--dn-red);
-      color: #fff;
+      --dn-compact-control-surface: var(--dn-home-panel);
     }
 
-    .dn-mobile-detail-bar__primary {
-      background: var(--dn-ink);
-      color: #fff;
+    .dn-mobile-detail-bar__secondary:is(:hover, :focus-visible) {
+      --dn-compact-control-surface: var(--dn-surface-hover);
     }
   }
 
@@ -834,6 +856,17 @@
   }
 
   @media (max-width: 991px) {
+    .dn-mobile-control { position: relative; isolation: isolate; }
+    .dn-mobile-control::before {
+      position: absolute;
+      z-index: -1;
+      inset: 2px;
+      border: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+      border-radius: 50%;
+      background: color-mix(in srgb, currentColor 6%, transparent);
+      content: '';
+      pointer-events: none;
+    }
     .dn-header-fixed .dn-header .dn-mobile-controls :is(.dn-mobile-control, .dn-mobile-toggle) {
       border: 0;
       background: transparent;
@@ -854,6 +887,15 @@
   @media (max-width: 359px) {
     .dn-header .dn-logo img { width: 148px; max-width: 148px; height: 40px; }
     .dn-mobile-controls { gap: 6px; }
+  }
+
+  @media (max-width: 991px) {
+    .dn-header-fixed--information-overlay { position: absolute; inset: 0 0 auto; background: transparent; }
+    .dn-header-fixed--information-overlay .dn-header,
+    .dn-header-fixed--information-overlay .dn-header__lower { background: transparent; border: 0; }
+    .dn-header-fixed--information-overlay .dn-header__inner { min-height: 66px; }
+    .dn-header-fixed--information-overlay .dn-header .dn-mobile-controls :is(.dn-mobile-control, .dn-mobile-toggle) { color: var(--dn-white); }
+    .dn-header-fixed--information-light .dn-header .dn-mobile-controls :is(.dn-mobile-control, .dn-mobile-toggle) { color: var(--dn-ink); }
   }
 
   @media (min-width: 992px) {

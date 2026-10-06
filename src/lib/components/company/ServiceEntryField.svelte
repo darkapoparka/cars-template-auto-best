@@ -56,7 +56,7 @@
   onDestroy(() => { if (dialog?.open) dialog.close(); restore(); });
 </script>
 
-<button {id} class="dn-service-entry__field dn-entry-field" bind:this={trigger} type="button" onclick={() => edit()} aria-haspopup="dialog" aria-controls={`${id}-dialog`} aria-label={`${placeholder}${summary ? `: ${summary}` : ''}`} title={summary || placeholder}>
+<button {id} class="dn-service-entry__field dn-entry-field dn-entry-field--prominent" bind:this={trigger} type="button" onclick={() => edit()} aria-haspopup="dialog" aria-controls={`${id}-dialog`} aria-label={`${placeholder}${summary ? `: ${summary}` : ''}`} title={summary || placeholder}>
   <MobileActionIcon name={mode === 'listing' ? 'article' : 'search'} size={22} />
   <span class:placeholder={!summary}>{summary || placeholder}</span>
 </button>
@@ -85,9 +85,9 @@
 </dialog>
 
 <style>
-  .dn-service-entry__field { display: flex; align-items: center; gap: var(--dn-space-3); width: 100%; min-height: var(--dn-control-hit-height); padding: var(--dn-space-2) var(--dn-space-4); color: var(--dn-ink); font: var(--dn-entry-font); text-align: left; cursor: pointer; }
-  .dn-service-entry__field span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .placeholder { color: var(--dn-muted); }
+  .dn-service-entry__field { display: flex; align-items: center; gap: var(--dn-space-2); width: 100%; min-height: var(--dn-entry-height); padding: var(--dn-space-2) var(--dn-space-3); color: var(--dn-entry-prominent-ink); font: var(--dn-entry-prominent-font); text-align: left; cursor: pointer; }
+  .dn-service-entry__field > span { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dn-service-entry__field > :global(svg), .placeholder { color: var(--dn-entry-prominent-muted); }
   :global(body:has(.dn-service-editor[open])) { position: fixed; top: var(--dn-service-editor-scroll, 0); width: 100%; overflow: hidden; }
   .dn-service-editor { position: fixed; inset: 0; width: 100%; max-width: none; height: 100dvh; max-height: 100dvh; margin: 0; padding: 0; border: 0; border-radius: 0; background: var(--dn-white); color: var(--dn-ink); overflow: hidden; }
   .dn-service-editor[open] { display: flex; flex-direction: column; }
@@ -98,13 +98,13 @@
   form { display: flex; flex: 1; min-height: 0; flex-direction: column; }
   .dn-service-editor__fields { display: grid; gap: var(--dn-space-4); flex: 1; min-height: 0; align-content: start; padding: var(--dn-space-5) var(--dn-space-4); overflow-y: auto; overscroll-behavior: contain; }
   label { display: grid; min-width: 0; gap: var(--dn-space-2); font-size: var(--dn-text-meta); font-weight: var(--dn-weight-medium); line-height: var(--dn-leading-meta); }
-  input, textarea { width: 100%; min-width: 0; min-height: var(--dn-control-height-editor); padding: var(--dn-space-2) var(--dn-space-3); border: 1px solid var(--dn-entry-line); border-radius: var(--dn-radius-control); background: var(--dn-entry-surface); color: var(--dn-ink); font: var(--dn-overlay-field-font); }
+  input, textarea { width: 100%; min-width: 0; min-height: var(--dn-control-height-editor); padding: var(--dn-space-2) var(--dn-space-3); border: 0; border-radius: var(--dn-radius-control); background: var(--dn-entry-surface); color: var(--dn-ink); font: var(--dn-overlay-field-font); }
   textarea { resize: vertical; }
   .dn-service-editor__pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--dn-space-3); }
   p { margin: 0; color: var(--dn-red); font-size: var(--dn-text-meta); line-height: var(--dn-leading-body); }
   footer { display: flex; flex-shrink: 0; justify-content: space-between; gap: var(--dn-space-3); padding: var(--dn-space-3) var(--dn-space-4) max(var(--dn-space-3), env(safe-area-inset-bottom)); border-top: 1px solid var(--dn-line); }
   footer button { min-width: 0; min-height: var(--dn-overlay-control-height); padding: var(--dn-space-2) var(--dn-space-5); border: 0; border-radius: var(--dn-radius-button); overflow-wrap: anywhere; cursor: pointer; }
   .dn-service-editor__cancel { background: var(--dn-home-panel); color: var(--dn-ink); font: var(--dn-overlay-option-font); }
-  .dn-service-editor__save { background: var(--dn-red); color: var(--dn-white); font: var(--dn-overlay-action-font); }
+  .dn-service-editor__save { background: var(--dn-primary-action-surface); color: var(--dn-white); font: var(--dn-overlay-action-font); }
   .dn-service-editor :is(button,input,textarea):focus-visible, .dn-service-entry__field:focus-visible { outline: 3px solid var(--dn-focus); outline-offset: 2px; }
 </style>

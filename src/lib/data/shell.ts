@@ -20,6 +20,7 @@ export type HeaderPresentation = {
   listingHeader: boolean;
   homeOverlayHeader: boolean;
   contactOverlayHeader: boolean;
+  informationOverlayHeader: 'light' | 'dark' | null;
   mobileMenuSection: boolean;
   contactTopic: ContactTopicId | null;
   detailVehicle: Vehicle | null;
@@ -35,6 +36,7 @@ export type HeaderPresentation = {
     listing: boolean;
     blog: boolean;
     about: boolean;
+    contact: boolean;
   };
 };
 
@@ -105,6 +107,7 @@ export function resolveShellPresentation(url: URL, status = 200): ShellPresentat
       listingHeader: route === 'listing',
       homeOverlayHeader: route === 'home',
       contactOverlayHeader: route === 'contact',
+      informationOverlayHeader: route === 'blog' ? 'light' : route === 'about' ? 'dark' : null,
       mobileMenuSection,
       contactTopic,
       detailVehicle,
@@ -119,7 +122,8 @@ export function resolveShellPresentation(url: URL, status = 200): ShellPresentat
       mobileMenu: {
         listing: route === 'listing',
         blog: pathname.startsWith('/blog'),
-        about: route === 'about'
+        about: route === 'about',
+        contact: route === 'contact' && !workflowJourney
       }
     }
   };
