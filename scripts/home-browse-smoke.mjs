@@ -9,9 +9,13 @@ export async function verifyHomeBrowse(page, locale = 'bg') {
   const form = page.locator('.dn-home-browse');
   const field = name => form.locator(`[data-field="${name}"]`);
   const menu = page.locator('.dn-home-browse-picker[data-state=open]');
-  const save = () => menu.getByRole('button', { name: locale === 'bg' ? 'Запазете' : 'Save', exact: true }).click();
+  const save = () => menu.locator('.dn-home-browse-picker__save').click();
   const clear = () => menu.getByRole('button', { name: locale === 'bg' ? 'Изчисти' : 'Clear', exact: true }).click();
   const choice = value => menu.getByRole('checkbox', { name: value, exact: true });
+  const chooseModel = async value => {
+    if (page.viewportSize().width >= 992) await menu.getByRole('searchbox').fill(value);
+    await choice(value).check();
+  };
   const values = name => form.locator(`input[type=hidden][name="${name}"]`).evaluateAll(inputs => inputs.map(input => input.value));
   const open = async name => {
     await field(name).click();
@@ -27,6 +31,31 @@ export async function verifyHomeBrowse(page, locale = 'bg') {
     const frame = await menu.boundingBox();
     const viewport = page.viewportSize();
     assert(frame.x >= 15 && frame.y >= 15 && frame.x + frame.width <= viewport.width - 15 && frame.y + frame.height <= viewport.height - 15, 'A selector and its footer must fit inside the viewport');
+    if (viewport.width >= 992) {
+      const bar = await form.boundingBox();
+      const gap = (await menu.getAttribute('data-side')) === 'top'
+        ? bar.y - frame.y - frame.height : frame.y - bar.y - bar.height;
+      assert(Math.abs(gap - 8) <= 1, 'Desktop selectors have an 8px visible gap from the complete search bar, including collision flips');
+      assert.equal(frame.width, name === 'make' ? bar.width : name === 'model' ? 640 : 480, 'Make follows the full Buy bar; selected-brand models and other facets retain their compact widths');
+      assert.equal(await menu.getAttribute('data-desktop-panel'), 'true');
+      assert(await menu.locator('.dn-home-browse-picker__count').isVisible(), 'Every selector shows the pending result count');
+      const tiles = await menu.locator('.dn-desktop-choice').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().width));
+      assert(tiles.every(width => width <= frame.width / 2), 'All and filtered choices retain compact tiles');
+      if (name === 'make') {
+        const logoTiles = await menu.locator('.dn-desktop-choice--portrait').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().toJSON()));
+        assert.equal(logoTiles.length, tiles.length, 'Every make, including All makes, uses the logo grid');
+        assert(logoTiles.every(box => box.width <= frame.width / 6 && box.height >= 112), 'Six-column brand tiles retain room for logos, labels and stock counts');
+        await page.waitForFunction(() => [...document.querySelectorAll('.dn-home-browse-picker[data-state=open] .dn-make-logo img')].every(img => img.complete && img.naturalWidth > 0));
+      }
+      if (await menu.getByRole('searchbox').count()) {
+        const heading = await menu.getByRole('heading').boundingBox();
+        const search = await menu.getByRole('searchbox').boundingBox();
+        const close = await menu.locator('.dn-picker-close').boundingBox();
+        assert(heading.width <= 1 || heading.width === 44 && await menu.locator('.back').count() === 1, 'Only the Back icon can occupy the title area beside search');
+        assert(search.width >= (name === 'make' ? 680 : name === 'model' ? 480 : 340), 'Search retains room without a competing visible title');
+        assert(Math.abs(search.y + search.height / 2 - close.y - close.height / 2) < 1, 'Search and close are vertically aligned');
+      }
+    }
   };
   const dismiss = async name => {
     await menu.getByRole('searchbox').press('Escape');
@@ -57,7 +86,8 @@ export async function verifyHomeBrowse(page, locale = 'bg') {
   assert.equal(await menu.evaluate(node => node === document.activeElement), true, 'Pointer switching keeps the new input neutral');
   assert.deepEqual(await values('price_max'), [], 'Switching fields discards the previous editor draft');
   assert.equal(await choice('X6 M Sport').count(), 0, 'Models follow the saved makes');
-  await choice('RS 6 Avant').check();
+  await chooseModel('RS 6 Avant');
+  if (page.viewportSize().width >= 992) assert.equal((await menu.locator('.dn-home-browse-picker__save').innerText()).replace(/\s+/g, ' ').trim(), locale === 'bg' ? 'Запазете (1)' : 'Save (1)', 'The compact Home label follows the pending model before Save');
   await save();
   assert.deepEqual(await values('model'), ['RS 6 Avant']);
   await open('make');
@@ -70,7 +100,7 @@ export async function verifyHomeBrowse(page, locale = 'bg') {
   await choice('Audi').check();
   await save();
   await open('model');
-  await choice('RS 6 Avant').check();
+  await chooseModel('RS 6 Avant');
   await save();
 
   await open('body');
@@ -101,7 +131,7 @@ export async function verifyHomeBrowse(page, locale = 'bg') {
   await open('price');
   await minimum.fill('90000');
   await maximum.fill('80000');
-  assert.equal(await menu.getByRole('button', { name: locale === 'bg' ? 'Запазете' : 'Save', exact: true }).isEnabled(), false);
+  assert.equal(await menu.locator('.dn-home-browse-picker__save').isEnabled(), false);
   assert.equal(await menu.getByRole('alert').count(), 1, 'An invalid range is explained before it can be saved');
   await clear();
   await maximum.fill('80000');

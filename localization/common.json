@@ -7,6 +7,10 @@
     "en": "Search…",
     "bg": "Търси…"
   },
+  "inventory.search.context": {
+    "en": "Search {context}…",
+    "bg": "Търси {context}…"
+  },
   "inventory.search.addFilter": {
     "en": "Add filter",
     "bg": "Добави филтър"
@@ -545,12 +549,16 @@
     "bg": "Демо оценка"
   },
   "action.showCount": {
-    "en": "Show {count}",
-    "bg": "Покажете {count}"
+    "en": "Show ({count})",
+    "bg": "Покажи ({count})"
   },
   "action.clearShort": {
     "en": "Clear",
     "bg": "Изчисти"
+  },
+  "action.applyShort": {
+    "en": "Apply",
+    "bg": "Приложи"
   },
   "enquiry.purpose.sell": {
     "en": "Sell",

@@ -1,13 +1,15 @@
 <script lang="ts">
   import { Popover } from 'bits-ui';
-  import { tick } from 'svelte';
+  import { tick, type Snippet } from 'svelte';
   import { MediaQuery } from 'svelte/reactivity';
   import type { Attachment } from 'svelte/attachments';
   import { focusPopover } from '$lib/ui/focus';
+  import { continuesIdentityPicker } from '$lib/ui/identity-picker';
+  import { searchPickerAnchor, searchPickerSpacing } from '$lib/ui/search-picker';
   import { resolve } from '$app/paths';
   import { getI18n } from '$lib/locale/context';
   import { currencySymbol } from '$lib/locale/core';
-  import { listingBudgetCaps, listingHiddenFields } from '$data/listing';
+  import { filterListingVehicles, listingBudgetCaps, listingHiddenFields, listingVehicles } from '$data/listing';
   import {
     cleanListingFormData, emptyListingDraft, formatListingNumber,
     listingDraftFromFilters, listingFacetSummary, listingFacetTitle,
@@ -15,7 +17,7 @@
     type ListingDraft
   } from '$data/listing-draft';
   import ListingFacetEditor from '$components/listing/ListingFacetEditor.svelte';
-  import FilterPopoverHeader from '$components/listing/FilterPopoverHeader.svelte';
+  import FilterPopoverHeader, { type PickerNavigation } from '$components/listing/FilterPopoverHeader.svelte';
   import Icon from '$components/ui/Icon.svelte';
 
   type Field = 'make' | 'model' | 'body' | 'price';
@@ -23,25 +25,34 @@
   const i18n = getI18n();
   const id = $props.id();
   const mobile = new MediaQuery('(max-width: 767px)', false);
+  const desktop = new MediaQuery('(min-width: 992px)', false);
   const budgetPresets = listingBudgetCaps().map(String);
   let draft = $state<ListingDraft>(emptyListingDraft());
   let pending = $state<ListingDraft>(emptyListingDraft());
   let openField = $state<Field>();
+  let wideModels = $state(false);
   let keyboardOpen = false;
+  let browseBox = $state<HTMLFormElement>();
   let portalTarget = $state<HTMLElement>();
   let pickers = $state<Record<Field, HTMLDivElement | null>>({ make: null, model: null, body: null, price: null });
   let triggers = $state<Record<Field, HTMLButtonElement | null>>({ make: null, model: null, body: null, price: null });
   const hiddenFields = $derived(listingHiddenFields(listingFiltersFromDraft(draft)));
+  const matching = $derived(filterListingVehicles(listingVehicles, listingFiltersFromDraft(pending), i18n.locale).length);
   const invalidRange = $derived(Boolean(pending.priceMin && pending.priceMax && Number(pending.priceMin) > Number(pending.priceMax)));
-  const attachRoot: Attachment<HTMLFormElement> = node => { portalTarget = node.closest<HTMLElement>('.dn-app-shell') ?? undefined; };
+  const attachRoot: Attachment<HTMLFormElement> = node => {
+    browseBox = node;
+    portalTarget = node.closest<HTMLElement>('.dn-app-shell') ?? undefined;
+    return () => { browseBox = undefined; };
+  };
 
   $effect(() => { if (mobile.current) openField = undefined; });
 
   const title = (field: Field) => field === 'body' ? i18n.t('m_191c24bf12d5') : listingFacetTitle(field, i18n.locale);
 
   function summary(field: Field) {
-    if (field === 'make') return draft.make.join(', ') || i18n.t('inventory.search.allMakes');
-    if (field === 'model') return draft.model.join(', ') || i18n.t('inventory.search.allModels');
+    const identity = desktop.current && (openField === 'make' || openField === 'model') ? pending : draft;
+    if (field === 'make') return identity.make.join(', ') || i18n.t('inventory.search.allMakes');
+    if (field === 'model') return identity.model.join(', ') || i18n.t('inventory.search.allModels');
     if (field === 'price' && draft.priceMax && !draft.priceMin) return i18n.t('inventory.search.upTo', {
       value: formatListingNumber(draft.priceMax, i18n.locale), currency: currencySymbol(i18n.locale)
     });
@@ -50,10 +61,20 @@
 
   function setOpen(field: Field, open: boolean) {
     if (open) {
-      // Each selector owns a temporary draft; only Save changes the Home bar.
-      pending = listingDraftFromFilters(listingFiltersFromDraft(draft));
+      // Make and Model continue one pending selection; other fields start a fresh draft.
+      if (!desktop.current || !continuesIdentityPicker(openField, field)) {
+        pending = listingDraftFromFilters(listingFiltersFromDraft(draft));
+      }
       openField = field;
+      // Keep the opening frame stable while browsing from brands into their models.
+      if (field === 'model') wideModels = pending.make.length !== 1;
     } else if (openField === field) openField = undefined;
+  }
+
+  function interactOutside(event: PointerEvent, field: Field) {
+    const trigger = event.target instanceof Element ? event.target.closest<HTMLButtonElement>('.dn-home-browse__field') : null;
+    const next = fields.find(candidate => triggers[candidate] === trigger);
+    if (desktop.current && continuesIdentityPicker(field, next)) event.preventDefault();
   }
 
   function clear(field: Field) {
@@ -85,6 +106,9 @@
 <form class="dn-home-browse" aria-label={i18n.t('m_0ae7a3ecbc83')} method="GET" action={i18n.href(resolve('/listing-grid'))}
   {@attach attachRoot} onformdata={event => cleanListingFormData(event.formData)}>
   {#each fields as field (field)}
+    {#snippet facetHeader(search: Snippet | undefined, navigation: PickerNavigation | undefined)}
+      <FilterPopoverHeader id={`${id}-${field}-title`} title={title(field)} {search} {navigation} />
+    {/snippet}
     <Popover.Root open={openField === field} onOpenChange={open => setOpen(field, open)}>
       <Popover.Trigger bind:ref={triggers[field]} type="button" class="dn-home-browse__field" data-field={field}
         aria-labelledby={`${id}-${field}-label ${id}-${field}-value`} title={summary(field)}
@@ -97,14 +121,17 @@
       </Popover.Trigger>
       <Popover.Portal to={portalTarget}>
         <Popover.Content bind:ref={pickers[field]} class="dn-home-browse-picker" role="dialog" aria-labelledby={`${id}-${field}-title`}
-          sideOffset={8} align="start" collisionPadding={16}
+          data-desktop-panel={desktop.current} data-wide-choices={field === 'make' || field === 'model'} data-make-grid={field === 'make' || field === 'model' && wideModels}
+          customAnchor={desktop.current ? searchPickerAnchor(triggers[field], browseBox, field === 'make' || field === 'model' && wideModels) : undefined}
+          {...searchPickerSpacing} align={desktop.current && field === 'price' ? 'end' : 'start'} trapFocus={!desktop.current}
           onOpenAutoFocus={event => { event.preventDefault(); void tick().then(() => { if (openField === field) focusPopover(pickers[field], pickers[field]?.querySelector<HTMLInputElement>('input[type=search], input[type=number], input:checked') ?? null, keyboardOpen); }); }}
           onCloseAutoFocus={event => restoreFocus(event, field)}
+          onInteractOutside={event => interactOutside(event, field)}
           onkeydown={event => { if (event.key === 'Enter' && event.target instanceof HTMLInputElement && event.target.type === 'number') { event.preventDefault(); save(); } }}>
-          <FilterPopoverHeader id={`${id}-${field}-title`} title={title(field)} />
+          {#if !desktop.current}<FilterPopoverHeader id={`${id}-${field}-title`} title={title(field)} />{/if}
           <div class="dn-home-browse-picker__editor" class:dn-home-browse-picker__editor--price={field === 'price'}>
-            <ListingFacetEditor {field} bind:draft={pending} desktopChoices />
-            {#if field === 'price'}
+            <ListingFacetEditor {field} bind:draft={pending} desktopChoices widePanel={desktop.current} header={desktop.current ? facetHeader : undefined} />
+            {#if field === 'price' && !desktop.current}
               <div class="dn-home-browse-picker__presets">
                 {#each budgetPresets as value (value)}
                   <button type="button" aria-pressed={pending.priceMax === value} onclick={() => pending.priceMax = value}>{i18n.t('inventory.search.upTo', { value: formatListingNumber(value, i18n.locale), currency: currencySymbol(i18n.locale) })}</button>
@@ -112,9 +139,9 @@
               </div>
             {/if}
           </div>
-          <footer class="dn-home-browse-picker__footer">
-            <button class="dn-home-browse-picker__clear" type="button" onclick={() => clear(field)}>{i18n.t('action.clearShort')}</button>
-            <button class="dn-home-browse-picker__save" type="button" disabled={invalidRange} onclick={save}>{i18n.t('m_1509f561f241')}</button>
+          <footer class="dn-home-browse-picker__footer dn-overlay-footer">
+            <button class="dn-home-browse-picker__clear dn-overlay-secondary" type="button" onclick={() => clear(field)}>{i18n.t('action.clearShort')}</button>
+            <button class="dn-home-browse-picker__save dn-overlay-primary" type="button" disabled={invalidRange} onclick={save} aria-live={desktop.current ? 'polite' : undefined}>{i18n.t('m_1509f561f241')}{#if desktop.current} <span class="dn-home-browse-picker__count">({formatListingNumber(matching, i18n.locale)})</span>{/if}</button>
           </footer>
         </Popover.Content>
       </Popover.Portal>
@@ -126,7 +153,7 @@
 
 <style>
   .dn-home-browse { --dn-home-browse-field-height: calc(var(--dn-control-height-default) + var(--dn-space-3)); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) auto; gap: var(--dn-space-1); align-items: stretch; min-width: 0; padding: var(--dn-space-2); border-radius: var(--dn-pill); background: var(--dn-white); box-shadow: var(--dn-card-shadow); }
-  :global(.dn-home-browse__field) { position: relative; display: flex; gap: var(--dn-space-3); align-items: center; justify-content: space-between; min-width: 0; min-height: var(--dn-home-browse-field-height); margin: 0; padding: var(--dn-space-2) var(--dn-space-4); border: 0; border-radius: var(--dn-pill); background: transparent; color: var(--dn-ink); cursor: pointer; transition: background-color 160ms ease; }
+  :global(.dn-home-browse__field) { position: relative; display: flex; gap: var(--dn-space-3); align-items: center; justify-content: space-between; min-width: 0; min-height: var(--dn-home-browse-field-height); margin: 0; padding: var(--dn-space-1) var(--dn-space-4); border: 0; border-radius: var(--dn-pill); background: transparent; color: var(--dn-ink); cursor: pointer; transition: background-color 160ms ease; }
   :global(.dn-home-browse__field:not([data-field=price])::after) { content: ''; position: absolute; top: 50%; inset-inline-end: calc(var(--dn-space-half) * -1); width: 1px; height: var(--dn-space-8); transform: translateY(-50%); background: var(--dn-line); pointer-events: none; }
   .dn-home-browse__copy { display: grid; gap: var(--dn-space-half); min-width: 0; text-align: left; }
   .dn-home-browse__label { color: var(--dn-muted); font: var(--dn-field-label-font); }
@@ -147,11 +174,20 @@
   .dn-home-browse-picker__footer { display: flex; flex-shrink: 0; justify-content: space-between; gap: var(--dn-space-3); padding: var(--dn-space-3) var(--dn-space-4); border-top: 1px solid var(--dn-line); }
   .dn-home-browse-picker__footer button { min-height: var(--dn-control-height-default); padding: var(--dn-space-2) var(--dn-space-5); border: 0; border-radius: var(--dn-pill); font: var(--dn-control-font); cursor: pointer; }
   .dn-home-browse-picker__clear { background: var(--dn-surface-subtle); color: var(--dn-ink); }
-  .dn-home-browse-picker__save { background: var(--dn-ink-deep); color: var(--dn-white); }
+  .dn-home-browse-picker__save { --dn-primary-action-surface: var(--dn-ink-deep); --dn-primary-action-surface-hover: var(--dn-ink-hover); --dn-overlay-action-gap: var(--dn-space-1); background: var(--dn-ink-deep); color: var(--dn-white); }
   .dn-home-browse-picker__save:disabled { opacity: 0.45; cursor: default; }
   .dn-home-browse-picker__clear:hover, .dn-home-browse-picker__presets button:hover { background: var(--dn-surface-hover); }
   .dn-home-browse-picker__save:enabled:hover { background: var(--dn-ink-hover); }
   .dn-home-browse-picker__footer button:focus-visible, .dn-home-browse-picker__presets button:focus-visible { outline: 2px solid var(--dn-focus); outline-offset: 2px; }
+  @media (min-width: 992px) {
+    :global(.dn-home-browse-picker[data-desktop-panel='true']) { width: min(480px, calc(100vw - 32px)); }
+    :global(.dn-home-browse-picker[data-desktop-panel='true'][data-wide-choices='true']) { width: min(640px, calc(100vw - 32px)); }
+    :global(.dn-home-browse-picker[data-desktop-panel='true'][data-make-grid='true']) { width: min(var(--bits-popover-anchor-width, 840px), calc(100vw - 32px)); }
+    .dn-home-browse-picker__editor { overflow: hidden; }
+    .dn-home-browse-picker__editor--price :global(.dn-facet-editor) { flex: 1; }
+    .dn-home-browse-picker__save:has(.dn-home-browse-picker__count) { display: flex; align-items: center; gap: var(--dn-space-1); }
+    .dn-home-browse-picker__count { white-space: nowrap; }
+  }
   @media (min-width: 768px) and (max-width: 991px) { :global(.dn-home-browse__field) { gap: var(--dn-space-2); padding-inline: var(--dn-space-3); } }
   @media (prefers-reduced-motion: reduce) { :global(.dn-home-browse__field), .dn-home-browse__search { transition: none; } }
 </style>

@@ -40,14 +40,41 @@ try {
    const choiceFrame=await dialog.boundingBox();
    const choiceFooter=await dialog.locator('.dn-search-footer').boundingBox();
    const anchor=await shortcut.boundingBox();
-   assert.equal(choiceFrame.width,380);
+   const surface=await page.locator('.dn-listing-filter').boundingBox();
+   const brandScreen=field==='make' || field==='model' && await dialog.locator('[data-model-make]').count()>0;
+   assert.equal(choiceFrame.width,brandScreen ? surface.width : field === 'model' ? 640 : 480,'Brand menus follow the search surface while focused editors remain compact');
+   assert.equal(await dialog.getAttribute('data-desktop-panel'),'true');
+   const tiles=await dialog.locator('.dn-desktop-choice').evaluateAll(nodes=>nodes.map(node=>node.getBoundingClientRect().width));
+   assert(tiles.every(width=>width<=choiceFrame.width/2),'All and filtered choices retain compact tiles');
+   if (field === 'make') {
+    const logoTiles=await dialog.locator('.dn-desktop-choice--portrait').evaluateAll(nodes=>nodes.map(node=>node.getBoundingClientRect().toJSON()));
+    assert.equal(logoTiles.length,tiles.length,'Every make, including All makes, uses the logo grid');
+    const columns=Math.floor((choiceFrame.width-34+8)/(136+8));
+    assert(logoTiles.every(box=>box.width<=choiceFrame.width/columns && box.height>=112),'Adaptive brand tiles retain room for logos, labels and stock counts');
+    await page.waitForFunction(()=>[...document.querySelectorAll('#dn-listing-filter-dialog .dn-make-logo img')].every(img=>img.complete && img.naturalWidth>0));
+   }
    assert(choiceFrame.x>=15 && choiceFrame.y>=15 && choiceFrame.y+choiceFrame.height<=height-15);
    assert(choiceFrame.x<=anchor.x+anchor.width && choiceFrame.x+choiceFrame.width>=anchor.x,'The menu stays attached to its shortcut');
-   const anchorGap=Math.min(Math.abs(choiceFrame.y-anchor.y-anchor.height),Math.abs(anchor.y-choiceFrame.y-choiceFrame.height));
-   assert(anchorGap<=10,'A direct selector opens beside its control, including collision flips');
+   const placementAnchor=surface;
+   const anchorGap=Math.min(Math.abs(choiceFrame.y-placementAnchor.y-placementAnchor.height),Math.abs(placementAnchor.y-choiceFrame.y-choiceFrame.height));
+   assert(Math.abs(anchorGap-8)<=1,'A direct selector stays outside the complete search surface, including collision flips');
+   const closeBox=await dialog.locator('.dn-picker-close').boundingBox();
+   const headerBox=await dialog.locator('.dn-picker-header').boundingBox();
+   assert.equal(closeBox.width,44); assert.equal(closeBox.height,44);
+   assert(Math.abs(closeBox.y+closeBox.height/2-headerBox.y-headerBox.height/2)<=.5,'Every close control is vertically centred in its header');
+   assert(Math.abs(choiceFrame.x+choiceFrame.width-closeBox.x-closeBox.width-17)<=.5,'Every compact close control shares the same content gutter');
    assert.equal(await page.locator('.dn-search-overlay').count(),0,'Quick menus leave the results visible');
    assert.notEqual(await page.evaluate(()=>getComputedStyle(document.body).position),'fixed','A shortcut does not lock page scrolling');
    assert(choiceFooter.y+choiceFooter.height<=choiceFrame.y+choiceFrame.height);
+   if (await dialog.getByRole('searchbox').count()) {
+    const heading=await dialog.getByRole('heading').boundingBox();
+    const search=await dialog.getByRole('searchbox').boundingBox();
+    const close=await dialog.locator('.dn-picker-close').boundingBox();
+    assert(heading.width<=1,'The accessible title does not occupy desktop search space');
+    assert(search.width>=choiceFrame.width-160,'Desktop search uses the available header width');
+    assert(Math.abs(search.y+search.height/2-close.y-close.height/2)<1,'Search and close are vertically aligned');
+   }
+   if (width===1440) await page.screenshot({path:output+'/shortcut-'+locale+'-'+field+'-'+width+'.jpg',type:'jpeg',quality:90});
    await page.keyboard.press('Escape'); await dialog.waitFor({state:'hidden'});
    assert(await shortcut.evaluate(el=>el===document.activeElement),'Escape returns focus to the exact shortcut');
    assert.equal(new URL(page.url()).searchParams.toString(),'sort=price-asc','Cancelling selectors preserves the applied URL');
@@ -85,6 +112,7 @@ try {
   const identity=async(field,value,checked=true)=> {
    await dialog.locator('[data-field='+field+'] button').click();
    const popup=page.locator('.dn-filter-picker'); await popup.waitFor({state:'visible'});
+   if (field === 'model') await popup.getByRole('searchbox').fill(value);
    const choice=popup.locator('input[value="'+value+'"]');
    await choice.setChecked(checked);
    await page.keyboard.press('Escape'); await popup.waitFor({state:'hidden'});

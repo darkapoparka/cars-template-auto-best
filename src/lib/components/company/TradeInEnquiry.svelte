@@ -2,7 +2,9 @@
   import EntrySegments from '$components/ui/entry/EntrySegments.svelte';
   import EntryInput from '$components/ui/entry/EntryInput.svelte';
   import EntryAction from '$components/ui/entry/EntryAction.svelte';
-  import { trapDialogTab } from '$lib/ui/overlay';
+  import { preserveScrollOffset, trapDialogTab } from '$lib/ui/overlay';
+  import { appendEnquiryPhotos, removeEnquiryPhoto, releaseEnquiryPhotos, type EnquiryPhoto } from '$lib/ui/enquiry-photos';
+  import { shareEnquiry } from '$lib/ui/enquiry-share';
   import { getI18n } from '$lib/locale/context';
 
   const i18n = getI18n();
@@ -54,9 +56,10 @@
   let dialog: HTMLDialogElement;
   let form: HTMLFormElement;
   let heading: HTMLHeadingElement;
+  const attachHeading = (node: HTMLHeadingElement) => { heading = node; };
   let returnFocus: HTMLElement | undefined;
   let opened = false;
-  let scrollY = 0;
+  let releaseScroll: (() => void) | undefined;
   let step = $state(0);
   let purpose = $state('Продажба');
   let reference = $state('');
@@ -72,7 +75,7 @@
   let notes = $state('');
   let name = $state('');
   let phone = $state('');
-  let photos = $state<{ file: File; url: string }[]>([]);
+  let photos = $state<EnquiryPhoto[]>([]);
   let photoError = $state('');
   let feedback = $state('');
   let sharing = $state(false);
@@ -106,8 +109,7 @@
     step = nextStep;
     openedReference = reference;
     returnFocus = trigger;
-    scrollY = window.scrollY;
-    document.body.style.setProperty('--dn-tradein-scroll', `-${scrollY}px`);
+    releaseScroll = preserveScrollOffset('--dn-tradein-scroll');
     opened = true;
     feedback = '';
     dialog.showModal();
@@ -127,8 +129,8 @@
       }
     }
     opened = false;
-    document.body.style.removeProperty('--dn-tradein-scroll');
-    window.scrollTo({ top: scrollY, behavior: 'instant' });
+    releaseScroll?.();
+    releaseScroll = undefined;
     returnFocus?.isConnected && returnFocus.focus({ preventScroll: true });
   }
 
@@ -148,29 +150,17 @@
 
   function addPhotos(event: Event) {
     const input = event.currentTarget as HTMLInputElement;
-    photoError = '';
-    for (const file of Array.from(input.files || [])) {
-      if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
-        photoError = i18n.t("m_f584ec8f827b");
-        continue;
-      }
-      if (file.size > 10 * 1024 * 1024) {
-        photoError = i18n.t("m_c1140eeec913");
-        continue;
-      }
-      if (photos.some((photo) => photo.file.name === file.name && photo.file.size === file.size && photo.file.lastModified === file.lastModified)) continue;
-      if (photos.length >= 6) {
-        photoError = i18n.t("m_a59a2cac14f1");
-        break;
-      }
-      photos = [...photos, { file, url: URL.createObjectURL(file) }];
-    }
-    input.value = '';
+    try {
+      const result = appendEnquiryPhotos(photos, Array.from(input.files ?? []));
+      photos = result.photos;
+      photoError = result.error === 'type' ? i18n.t("m_f584ec8f827b")
+        : result.error === 'size' ? i18n.t("m_c1140eeec913")
+        : result.error === 'limit' ? i18n.t("m_a59a2cac14f1") : '';
+    } finally { input.value = ''; }
   }
 
   function removePhoto(url: string) {
-    URL.revokeObjectURL(url);
-    photos = photos.filter((photo) => photo.url !== url);
+    photos = removeEnquiryPhoto(photos, url);
     photoError = '';
   }
 
@@ -184,31 +174,24 @@
   }
 
   async function share() {
+    if (sharing) return;
     sharing = true;
     feedback = '';
     try {
-      const files = photos.map((photo) => photo.file);
-      if (files.length && !navigator.canShare?.({ files })) {
-        feedback = i18n.t("m_c1ee33fffd0f");
-        return;
-      }
-      if (!navigator.share) {
-        await copy();
-        return;
-      }
-      await navigator.share({ title: i18n.t("m_b9b49dbed887", { p0: brand.name }), text: summary, ...(files.length ? { files } : {}) });
-      feedback = i18n.t("m_26d3c9788f18", { p0: brand.name });
-    } catch (error) {
-      if (!(error instanceof Error && error.name === 'AbortError')) {
+      const files = photos.map(photo => photo.file);
+      const result = await shareEnquiry({ title: i18n.t("m_b9b49dbed887", { p0: brand.name }), text: summary, ...(files.length ? { files } : {}) });
+      if (result === 'unsupported-files') feedback = i18n.t("m_c1ee33fffd0f");
+      else if (result === 'copy') await copy();
+      else if (result === 'shared') {
+        feedback = i18n.t("m_26d3c9788f18", { p0: brand.name });
+      } else if (result === 'failed') {
         feedback = i18n.t("m_54deb07743c0");
       }
-    } finally {
-      sharing = false;
-    }
+    } finally { sharing = false; }
   }
 
   onDestroy(() => {
-    photos.forEach((photo) => URL.revokeObjectURL(photo.url));
+    releaseEnquiryPhotos(photos);
     restore();
   });
 </script>
@@ -259,12 +242,12 @@
 
 <dialog onkeydown={trapDialogTab} {@attach dialogViewport} class="dn-tradein-dialog" bind:this={dialog} aria-labelledby="tradein-title" onclose={restore} onclick={(event) => { if (event.target === event.currentTarget) dialog.close(); }}>
   <div class="dn-tradein-panel">
-    <header class="dn-tradein-header">
+    <header class="dn-mobile-overlay-heading dn-tradein-header">
       <div>
         <p>{i18n.t("m_c0ce3e0c1192")}</p>
-        <h2 id="tradein-title" tabindex="-1" bind:this={heading}>{step === 0 ? i18n.t("m_881ec3398409") : step === 1 ? i18n.t("m_3bcc77dee29d") : i18n.t("m_11669a1c9e37")}</h2>
+        <h2 id="tradein-title" tabindex="-1" {@attach attachHeading}>{step === 0 ? i18n.t("m_881ec3398409") : step === 1 ? i18n.t("m_3bcc77dee29d") : i18n.t("m_11669a1c9e37")}</h2>
       </div>
-      <button class="dn-tradein-close dn-icon-button" type="button" aria-label={i18n.t("m_f62bc38ddfaf")} onclick={() => dialog.close()}><Icon name="x" size={22} /></button>
+      <button class="dn-tradein-close dn-icon-button" type="button" aria-label={i18n.t("m_f62bc38ddfaf")} onclick={() => dialog.close()}><span class="dn-mobile-overlay-icon"><MobileActionIcon name="close" /></span><span class="dn-desktop-overlay-icon"><Icon name="x" size={22} /></span></button>
     </header>
 
     <div class="dn-tradein-progress" aria-label={i18n.t("m_c248b5704fda", { p0: step + 1, p1: steps[step] })}>
@@ -327,12 +310,12 @@
       {#if feedback && step < 2}<p class="dn-tradein-feedback" role="status">{feedback}</p>{/if}
     </form>
 
-    <footer class="dn-tradein-footer">
-      {#if step > 0}<button class="dn-tradein-back" type="button" onclick={() => move(step - 1)}><Icon name="arrow-left" size={17} />{i18n.t("m_76900f1bfd16")}</button>{/if}
+    <footer class="dn-tradein-footer dn-mobile-overlay-footer">
+      {#if step > 0}<button class="dn-tradein-back dn-mobile-overlay-clear" type="button" onclick={() => move(step - 1)}><Icon name="arrow-left" size={17} />{i18n.t("m_76900f1bfd16")}</button>{/if}
       {#if step < 2}
-        <button class="dn-tradein-primary" type="button" onclick={() => move(step + 1)}>{step === 0 ? i18n.t("m_7ef2846a7d92") : i18n.t("m_d2b55d5b18b9")}<Icon name="arrow-right" size={18} /></button>
+        <button class="dn-tradein-primary dn-mobile-overlay-action" type="button" onclick={() => move(step + 1)}><span class="dn-overlay-action-label">{step === 0 ? i18n.t("m_7ef2846a7d92") : i18n.t("m_d2b55d5b18b9")}</span><Icon name="arrow-right" size={18} /></button>
       {:else}
-        <button class="dn-tradein-primary" type="button" disabled={sharing} onclick={share}>{sharing ? i18n.t("m_7001d98040b4") : i18n.t("m_38602fbd1ebc")}<Icon name="arrow-right" size={18} /></button>
+        <button class="dn-tradein-primary" type="button" disabled={sharing} onclick={share}><span class="dn-overlay-action-label">{sharing ? i18n.t("m_7001d98040b4") : i18n.t("m_38602fbd1ebc")}</span><Icon name="arrow-right" size={18} /></button>
       {/if}
     </footer>
   </div>
@@ -433,7 +416,11 @@
     .dn-tradein-header { padding: var(--dn-overlay-header-padding); }
     .dn-tradein-header h2 { overflow-wrap: anywhere; font-size: var(--dn-text-subheading); }
     .dn-tradein-progress { padding: 0 16px 14px; }
-    .dn-tradein-body { padding: 18px 16px 22px; }
+    .dn-tradein-body { padding: var(--dn-space-5) var(--dn-overlay-gutter) var(--dn-space-6); }
+    .dn-tradein-progress { padding-inline: var(--dn-overlay-gutter); }
+    .dn-tradein-fields label, .dn-tradein-notes { font-weight: var(--dn-weight-medium); }
+    .dn-tradein-fields input, .dn-tradein-notes textarea { min-height: var(--dn-overlay-control-height); border: 0; background: var(--dn-entry-surface); font: var(--dn-overlay-field-font); }
+    .dn-tradein-fields input:focus, .dn-tradein-notes textarea:focus { outline: 2px solid var(--dn-focus); outline-offset: -2px; }
     .dn-tradein-footer { padding: 11px 16px max(12px,env(safe-area-inset-bottom)); }
     .dn-tradein-contact-block .dn-tradein-fields { grid-template-columns: 1fr; }
   }

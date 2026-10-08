@@ -2,7 +2,9 @@
   import EntrySegments from '$components/ui/entry/EntrySegments.svelte';
   import EntryInput from '$components/ui/entry/EntryInput.svelte';
   import EntryAction from '$components/ui/entry/EntryAction.svelte';
-  import { trapDialogTab } from '$lib/ui/overlay';
+  import { preserveScrollOffset, trapDialogTab } from '$lib/ui/overlay';
+  import { appendEnquiryPhotos, removeEnquiryPhoto, releaseEnquiryPhotos, type EnquiryPhoto } from '$lib/ui/enquiry-photos';
+  import { shareEnquiry } from '$lib/ui/enquiry-share';
   import { getI18n } from '$lib/locale/context';
   import { templateMessage } from '$lib/i18n/presentation';
   const i18n = getI18n();
@@ -61,9 +63,10 @@
   let dialog: HTMLDialogElement;
   let form: HTMLFormElement;
   let heading: HTMLHeadingElement;
+  const attachHeading = (node: HTMLHeadingElement) => { heading = node; };
   let entryEditor = $state<{ edit: (trigger?: HTMLElement) => Promise<void> }>();
   let returnFocus: HTMLElement | undefined;
-  let scrollY = 0;
+  let releaseScroll: (() => void) | undefined;
   let step = $state(0);
   let opened = false;
   let linkDraft = $state<string | null>(null);
@@ -80,7 +83,7 @@
   let name = $state('');
   let phone = $state('');
   let notes = $state('');
-  let photos = $state<{ file: File; url: string }[]>([]);
+  let photos = $state<EnquiryPhoto[]>([]);
   let photoError = $state('');
   let feedback = $state('');
   let completion = $state<'copied' | 'shared' | ''>('');
@@ -125,8 +128,7 @@
   async function show(trigger: HTMLElement, nextStep: number) {
     step = nextStep;
     returnFocus = trigger;
-    scrollY = window.scrollY;
-    document.body.style.setProperty('--dn-enquiry-scroll', `-${scrollY}px`);
+    releaseScroll = preserveScrollOffset('--dn-enquiry-scroll');
     opened = true;
     feedback = '';
     completion = '';
@@ -136,9 +138,10 @@
   }
 
   function restore() {
+    if (!opened) return;
     opened = false;
-    document.body.style.removeProperty('--dn-enquiry-scroll');
-    window.scrollTo({ top: scrollY, behavior: 'instant' });
+    releaseScroll?.();
+    releaseScroll = undefined;
     returnFocus?.isConnected && returnFocus.focus({ preventScroll: true });
   }
 
@@ -153,26 +156,17 @@
 
   function addPhotos(event: Event) {
     const input = event.currentTarget as HTMLInputElement;
-    photoError = '';
-    for (const file of Array.from(input.files || [])) {
-      if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
-        photoError = i18n.t("m_df14621607d6");
-        continue;
-      }
-      if (file.size > 10 * 1024 * 1024) {
-        photoError = i18n.t("m_c1140eeec913");
-        continue;
-      }
-      if (photos.some((photo) => photo.file.name === file.name && photo.file.size === file.size && photo.file.lastModified === file.lastModified)) continue;
-      if (photos.length >= 6) { photoError = 'Можете да добавите до 6 снимки.'; break; }
-      photos = [...photos, { file, url: URL.createObjectURL(file) }];
-    }
-    input.value = '';
+    try {
+      const result = appendEnquiryPhotos(photos, Array.from(input.files ?? []));
+      photos = result.photos;
+      photoError = result.error === 'type' ? i18n.t("m_df14621607d6")
+        : result.error === 'size' ? i18n.t("m_c1140eeec913")
+        : result.error === 'limit' ? 'Можете да добавите до 6 снимки.' : '';
+    } finally { input.value = ''; }
   }
 
   function removePhoto(url: string) {
-    URL.revokeObjectURL(url);
-    photos = photos.filter((photo) => photo.url !== url);
+    photos = removeEnquiryPhoto(photos, url);
     photoError = '';
   }
 
@@ -188,30 +182,25 @@
   }
 
   async function share() {
+    if (sharing) return;
     sharing = true;
     feedback = '';
     try {
-      const files = photos.map((photo) => photo.file);
-      if (files.length && !navigator.canShare?.({ files })) {
-        feedback = 'Този браузър не може да споделя снимки. Копирайте текста и добавете снимките в избраното приложение.';
-        return;
-      }
-      if (!navigator.share) {
-        await copy();
-        return;
-      }
-      await navigator.share({ title, text: summary, ...(files.length ? { files } : {}) });
-      completion = selling ? '' : 'shared';
-      feedback = selling ? i18n.t("m_09fcdf658591") : '';
-    } catch (error) {
-      if (!(error instanceof Error && error.name === 'AbortError')) {
+      const files = photos.map(photo => photo.file);
+      const result = await shareEnquiry({ title: title, text: summary, ...(files.length ? { files } : {}) });
+      if (result === 'unsupported-files') feedback = 'Този браузър не може да споделя снимки. Копирайте текста и добавете снимките в избраното приложение.';
+      else if (result === 'copy') await copy();
+      else if (result === 'shared') {
+        completion = selling ? '' : 'shared';
+        feedback = selling ? i18n.t("m_09fcdf658591") : '';
+      } else if (result === 'failed') {
         completion = '';
         feedback = i18n.t("m_f1eb07fa5cd0");
       }
     } finally { sharing = false; }
   }
 
-  onDestroy(() => photos.forEach((photo) => URL.revokeObjectURL(photo.url)));
+  onDestroy(() => releaseEnquiryPhotos(photos));
 </script>
 
 {#if inlineEntry}
@@ -259,9 +248,9 @@
 
 <dialog onkeydown={trapDialogTab} {@attach dialogViewport} class="dn-enquiry" class:dn-enquiry--import={!selling} aria-labelledby="enquiry-title" {@attach attachDialog} onclose={restore} onclick={(event) => { if (event.target === event.currentTarget) dialog.close(); }}>
   <div class="dn-enquiry-panel">
-    <header class="dn-enquiry-header">
-      <div><h2 id="enquiry-title" tabindex="-1" bind:this={heading}>{step === 0 ? (selling ? title : i18n.t("m_302415e752d4")) : step === 1 ? (selling ? i18n.t("m_0cd108851eb3") : i18n.t("m_a7f00a2555a1")) : i18n.t("m_a12d84419d88")}</h2></div>
-      <button class="dn-enquiry-close dn-icon-button" type="button" aria-label={i18n.t("m_0a778b356dc9")} onclick={() => dialog.close()}><Icon name="x" size={22} /></button>
+    <header class="dn-mobile-overlay-heading dn-enquiry-header">
+      <div><h2 id="enquiry-title" tabindex="-1" {@attach attachHeading}>{step === 0 ? (selling ? title : i18n.t("m_302415e752d4")) : step === 1 ? (selling ? i18n.t("m_0cd108851eb3") : i18n.t("m_a7f00a2555a1")) : i18n.t("m_a12d84419d88")}</h2></div>
+      <button class="dn-enquiry-close dn-icon-button" type="button" aria-label={i18n.t("m_0a778b356dc9")} onclick={() => dialog.close()}><span class="dn-mobile-overlay-icon"><MobileActionIcon name="close" /></span><span class="dn-desktop-overlay-icon"><Icon name="x" size={22} /></span></button>
     </header>
     <ol class="dn-enquiry-steps" aria-label={i18n.t("m_0781a49bafd0")}>
       {#each steps as label, index (label)}<li class:current={step === index} class:complete={step > index} aria-current={step === index ? 'step' : undefined}><span>{index + 1}</span>{label}</li>{/each}
@@ -319,10 +308,10 @@
       {#if feedback}<p class="dn-enquiry-feedback" role="status">{feedback}</p>{/if}
     </form>
 
-    <footer class="dn-enquiry-footer">
-      {#if step > 0}<button class="dn-enquiry-back" type="button" onclick={() => move(step - 1)}><Icon name="arrow-left" size={18} />{i18n.t("m_76900f1bfd16")}</button>{/if}
-      {#if step < 2}<button class="dn-enquiry-primary" type="button" onclick={() => move(step + 1)}>{step === 0 ? i18n.t("m_31fbef162594") : i18n.t("m_21ab579a4c37")}<Icon name="arrow-right" size={18} /></button>
-      {:else}<button class="dn-enquiry-primary" type="button" disabled={sharing} onclick={share}>{sharing ? i18n.t("m_7001d98040b4") : i18n.t("m_2aaec190e1b0")}<Icon name="arrow-right" size={18} /></button>{/if}
+    <footer class="dn-enquiry-footer dn-mobile-overlay-footer">
+      {#if step > 0}<button class="dn-enquiry-back dn-mobile-overlay-clear" type="button" onclick={() => move(step - 1)}><Icon name="arrow-left" size={18} />{i18n.t("m_76900f1bfd16")}</button>{/if}
+      {#if step < 2}<button class="dn-enquiry-primary dn-mobile-overlay-action" type="button" onclick={() => move(step + 1)}><span class="dn-overlay-action-label">{step === 0 ? i18n.t("m_31fbef162594") : i18n.t("m_21ab579a4c37")}</span><Icon name="arrow-right" size={18} /></button>
+      {:else}<button class="dn-enquiry-primary" type="button" disabled={sharing} onclick={share}><span class="dn-overlay-action-label">{sharing ? i18n.t("m_7001d98040b4") : i18n.t("m_2aaec190e1b0")}</span><Icon name="arrow-right" size={18} /></button>{/if}
     </footer>
   </div>
 </dialog>
@@ -409,7 +398,10 @@
     .dn-enquiry-header { padding: var(--dn-overlay-header-padding); }
     .dn-enquiry-header h2 { font-size: var(--dn-text-subheading); }
     .dn-enquiry-steps { gap: 14px; padding: 0 16px 16px; }
-    .dn-enquiry-body { flex: 1; padding: 20px 16px; }
+    .dn-enquiry-body { flex: 1; padding: var(--dn-space-5) var(--dn-overlay-gutter); }
+    .dn-enquiry-fields label, .dn-enquiry-notes { font-weight: var(--dn-weight-medium); }
+    .dn-enquiry-fields input, textarea { min-height: var(--dn-overlay-control-height); border: 0; background: var(--dn-entry-surface); font: var(--dn-overlay-field-font); }
+    .dn-enquiry-fields input:focus, textarea:focus-visible { outline: 2px solid var(--dn-focus); outline-offset: -2px; }
     .dn-enquiry-footer { padding: 12px 16px max(12px,env(safe-area-inset-bottom)); }
     .dn-enquiry-footer .dn-enquiry-primary { min-width: 0; overflow-wrap: anywhere; padding-inline: 12px; font-size: var(--dn-cta-size); }
   }

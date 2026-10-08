@@ -1,10 +1,12 @@
 <script lang="ts">
   import { MediaQuery } from 'svelte/reactivity';
+  import type { Snippet } from 'svelte';
   import type { Attachment } from 'svelte/attachments';
   import { currencySymbol } from '$lib/locale/core';
   import { getI18n } from '$lib/locale/context';
   import { templateMessage } from '$lib/i18n/presentation';
   import { listingBudgetCaps, listingFilterOptions, listingSelectionHas, listingTypeCount } from '$data/listing';
+  import { desktopMakeOptions } from '$data/desktop-makes';
   import {
     listingFacetOptionLabel, listingFacetOptions, listingFacetTitle,
     listingOptionsWithCurrent, listingSuggestionMatcher, toggleListingIdentity,
@@ -13,11 +15,16 @@
   import MobileActionIcon from '$components/layout/MobileActionIcon.svelte';
   import Icon from '$components/ui/Icon.svelte';
   import DesktopFilterChoice from './DesktopFilterChoice.svelte';
+  import DesktopMakeChoice from './DesktopMakeChoice.svelte';
+  import DesktopModelGroups, { type ModelPicker } from './DesktopModelGroups.svelte';
+  import type { PickerNavigation } from './FilterPopoverHeader.svelte';
 
-  let { field, draft = $bindable(), desktopChoices = false, onChoose, contentElement = $bindable() }: {
+  let { field, draft = $bindable(), desktopChoices = false, widePanel = false, header, onChoose, contentElement = $bindable() }: {
     field: ListingFacetField;
     draft: ListingDraft;
     desktopChoices?: boolean;
+    widePanel?: boolean;
+    header?: Snippet<[Snippet | undefined, PickerNavigation | undefined]>;
     onChoose?: () => void;
     contentElement?: HTMLDivElement;
   } = $props();
@@ -25,6 +32,7 @@
   const mobile = new MediaQuery('(max-width: 767px)', false);
   let search = $state('');
   let searchInput: HTMLInputElement;
+  let modelPicker = $state<ModelPicker>();
   const attachSearch: Attachment<HTMLInputElement> = node => { searchInput = node; };
   const attachContent: Attachment<HTMLDivElement> = node => { contentElement = node; return () => { contentElement = undefined; }; };
   const title = $derived(listingFacetTitle(field, i18n.locale));
@@ -33,12 +41,16 @@
   const maximumKey = $derived(field === 'price' ? 'priceMax' : 'yearMax');
   const searchable = $derived(!range && field !== 'mileage_max' && field !== 'sort' && field !== 'type');
   const searchLabel = $derived(field === 'make' ? i18n.t('m_150bec5925bd') : field === 'model' ? i18n.t('m_269619120191') : i18n.t('m_f0549fa54b59', { p0: title.toLocaleLowerCase(i18n.locale) }));
+  const searchContext = $derived(widePanel && field === 'model' ? modelPicker?.navigation()?.label : undefined);
+  const searchPrompt = $derived(widePanel ? i18n.t('inventory.search.context', { context: searchContext ?? title.toLocaleLowerCase(i18n.locale) }) : `${searchLabel}…`);
   const selected = $derived(field === 'sort' ? (draft.sort === 'default' ? '' : draft.sort)
     : field === 'price' || field === 'year' || field === 'equipment' || field === 'mileage_max' ? '' : draft[field]);
-  const choices = $derived(field === 'equipment' ? listingFacetOptions(field)
+  const choices = $derived(field === 'make' && desktopChoices && widePanel ? desktopMakeOptions(selected, i18n.locale)
+    : field === 'equipment' ? listingFacetOptions(field)
     : listingOptionsWithCurrent(listingFacetOptions(field, draft.make), selected));
   const matches = $derived(listingSuggestionMatcher(search, i18n.locale));
-  const optionLabel = (option: string) => listingFacetOptionLabel(field, option, i18n.locale);
+  const optionLabel = (option: string) => widePanel && !option && (field === 'make' || field === 'model')
+    ? i18n.t(field === 'make' ? 'inventory.search.allMakes' : 'inventory.search.allModels') : listingFacetOptionLabel(field, option, i18n.locale);
   const invalid = $derived(range && draft[minimumKey] !== '' && draft[maximumKey] !== '' && Number(draft[minimumKey]) > Number(draft[maximumKey]));
   const budgetPresets = listingBudgetCaps().map(String);
   const yearPresets = listingFilterOptions.years.filter(Boolean).slice(-4);
@@ -77,15 +89,18 @@
   {#if mobile.current}<MobileActionIcon {name} {size} />{:else}<Icon name={name === 'close' ? 'x' : 'search'} {size} />{/if}
 {/snippet}
 
-<div class="dn-facet-editor" class:searchable class:desktop-choices={desktopChoices}>
-  {#if searchable}
-    <div class="search-wrap">
-      <div class="search-field dn-mobile-search-field">
+{#snippet searchControl()}
+  <div class="search-field dn-mobile-search-field">
         {@render actionIcon('search')}
-        <input {@attach i18n.validation} {@attach attachSearch} type="search" bind:value={search} aria-label={searchLabel} placeholder={`${searchLabel}…`} autocomplete="off" onkeydown={event => { if (event.key === 'Enter') event.preventDefault(); }} />
+        <input {@attach i18n.validation} {@attach attachSearch} type="search" bind:value={search} aria-label={searchContext ? `${searchLabel}: ${searchContext}` : searchLabel} placeholder={searchPrompt} autocomplete="off" onkeydown={event => { if (event.key === 'Enter') event.preventDefault(); }} />
         {#if search}<button type="button" class="clear-search dn-icon-button" aria-label={i18n.t('m_c8191190a026')} onclick={() => { search = ''; searchInput.focus(); }}>{@render actionIcon('close')}</button>{/if}
-      </div>
-    </div>
+  </div>
+{/snippet}
+
+<div class="dn-facet-editor" class:searchable class:desktop-choices={desktopChoices} class:wide-panel={widePanel} class:make-grid={widePanel && field === 'make'}>
+  {#if header}{@render header(widePanel && searchable ? searchControl : undefined, modelPicker?.navigation())}{/if}
+  {#if searchable && !(header && widePanel)}
+    <div class="search-wrap">{@render searchControl()}</div>
   {/if}
   <div class="content" {@attach attachContent}>
     {#if range}
@@ -94,8 +109,8 @@
         <label>{templateMessage(i18n, 'To{p0}', { p0: field === 'price' ? ' (' + currencySymbol(i18n.locale) + ')' : '' })}<input {@attach i18n.validationFor(field)} type="number" inputmode="numeric" name={`${field}_max`} value={draft[maximumKey]} oninput={event => draft[maximumKey] = event.currentTarget.value} min={field === 'year' ? 1900 : 0} max={field === 'year' ? new Date().getFullYear() + 1 : undefined} step="1" placeholder={i18n.t('m_585b0741c5fb')} aria-invalid={invalid || undefined} /></label>
       </div>
       {#if invalid}<p role="alert">{i18n.t('m_8418439e87ac')}</p>{/if}
-      {#if mobile.current}
-        <div class="presets">
+      {#if mobile.current || widePanel}
+        <div class="presets" class:price-presets={field === 'price'}>
           {#each (field === 'price' ? budgetPresets : yearPresets) as value (value)}
             <button type="button" aria-pressed={(field === 'price' ? draft.priceMax : draft.yearMin) === value} onclick={() => choosePreset(value)}>{field === 'price' ? i18n.t('inventory.search.upTo', { value: new Intl.NumberFormat(i18n.locale).format(Number(value)), currency: currencySymbol(i18n.locale) }) : i18n.t('inventory.search.fromYear', { year: value })}</button>
           {/each}
@@ -110,20 +125,30 @@
           {/each}
         </div>
       {/if}
+    {:else if field === 'model' && desktopChoices && widePanel}
+      <DesktopModelGroups bind:this={modelPicker} makes={draft.make} selected={draft.model} {search} onchange={choose} />
     {:else}
       <fieldset>
         <legend class="dn-sr-only">{title}</legend>
         {#each choices as option (option)}
           {#if desktopChoices && matches(optionLabel(option))}
+            {#if widePanel && field === 'make'}
+              <DesktopMakeChoice value={option} label={optionLabel(option)} name={field} checked={isSelected(option)} onchange={choose} />
+            {:else}
               <DesktopFilterChoice value={option} label={optionLabel(option)} name={field}
-                multiple={field === 'make' || field === 'model' || field === 'equipment'}
+                multiple={field === 'make' || field === 'model' || field === 'equipment'} tile={widePanel}
                 checked={isSelected(option)} onchange={choose} />
+            {/if}
           {:else if !desktopChoices}
             <label class="choice dn-mobile-filter-choice" hidden={!matches(optionLabel(option))}>
-              <span>{optionLabel(option)}{#if field === 'type'} <span class="choice-count">{listingTypeCount(option)}</span>{/if}</span>
-              {#if field === 'equipment'}<input {@attach i18n.validation} class="dn-mobile-filter-check" type="checkbox" name="equipment" value={option} bind:group={draft.equipment} />
-              {:else if field === 'make' || field === 'model'}<input {@attach i18n.validation} class="dn-mobile-filter-check" type="checkbox" name={option ? field : undefined} value={option} checked={isSelected(option)} onchange={() => choose(option)} />
+              {#if field === 'equipment' || field === 'make' || field === 'model'}
+                <span class="dn-mobile-filter-checkbox">
+                  {#if field === 'equipment'}<input {@attach i18n.validation} class="dn-mobile-filter-check" type="checkbox" name="equipment" value={option} bind:group={draft.equipment} />
+                  {:else}<input {@attach i18n.validation} class="dn-mobile-filter-check" type="checkbox" name={option ? field : undefined} value={option} checked={isSelected(option)} onchange={() => choose(option)} />{/if}
+                  {#if mobile.current}<MobileActionIcon name="check" size={18} />{/if}
+                </span>
               {:else}<input {@attach i18n.validation} type="radio" name={field} value={option} checked={isSelected(option)} onclick={() => { if (selected === option) onChoose?.(); }} onchange={() => choose(option)} />{/if}
+              <span class="choice-label">{optionLabel(option)}{#if field === 'type'} <span class="choice-count">{listingTypeCount(option)}</span>{/if}</span>
             </label>
           {/if}
         {/each}
@@ -149,9 +174,23 @@
   fieldset { display: grid; gap: var(--dn-overlay-gap); padding: 0; margin: 0; border: 0; }
   .desktop-choices fieldset { gap: 0; }
   .desktop-choices .search-field { border: 1px solid var(--dn-line); border-radius: var(--dn-pill); background: var(--dn-white); }
+  @media (min-width: 992px) {
+    .wide-panel .content { flex: 1; }
+    .wide-panel fieldset { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--dn-space-2); }
+    .make-grid fieldset { grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(var(--dn-control-height-default) * 3 + var(--dn-space-1))), 1fr)); }
+    .wide-panel .range { width: min(100%, 488px); margin-inline: auto; }
+    .wide-panel .presets { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--dn-space-2); margin-top: var(--dn-space-4); }
+    .wide-panel .price-presets { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .wide-panel .presets button { min-width: 0; min-height: var(--dn-control-height-default); padding: var(--dn-space-2) var(--dn-space-3); border: 0; border-radius: var(--dn-radius-control); background: var(--dn-surface-subtle); color: var(--dn-ink); font: var(--dn-control-font); text-align: left; cursor: pointer; }
+    .wide-panel .price-presets button { padding-inline: var(--dn-space-2); }
+    .wide-panel .presets button:hover { background: var(--dn-surface-hover); }
+    .wide-panel .presets button[aria-pressed=true] { background: var(--dn-surface-hover); box-shadow: inset 0 0 0 1px var(--dn-line-emphasis); }
+    .wide-panel .presets button:focus-visible { outline: 2px solid var(--dn-focus); outline-offset: -2px; }
+  }
   .choice { display: flex; min-height: var(--dn-overlay-control-height); padding: var(--dn-space-2) var(--dn-space-4); gap: var(--dn-entry-action-gap); justify-content: space-between; align-items: center; border-radius: var(--dn-overlay-row-radius); background: var(--dn-home-panel); color: var(--dn-ink); font: var(--dn-field-font); cursor: pointer; }
   .choice[hidden] { display: none; }
   .choice > span { min-width: 0; overflow-wrap: anywhere; }
+  .choice-label { flex: 1; }
   .choice-count { margin-inline-start: var(--dn-space-2); color: var(--dn-muted); font-size: var(--dn-text-meta); }
   .choice:has(:checked) { background: var(--dn-selection-surface); color: var(--dn-ink); box-shadow: inset 0 0 0 1px var(--dn-selection-line); }
   .choice:has(input:focus-visible) { outline: 2px solid var(--dn-focus); outline-offset: -2px; }
@@ -169,7 +208,7 @@
     fieldset { gap: var(--dn-mobile-filter-control-gap); }
     .choice { padding: var(--dn-space-3); }
     .choice:has(:checked) { box-shadow: none; }
-    input[type=number] { min-height: var(--dn-control-height-entry-mobile); background: var(--dn-surface-subtle); border-color: var(--dn-line); font-variant-numeric: tabular-nums; }
+    input[type=number] { min-height: var(--dn-control-height-entry-mobile); background: var(--dn-entry-surface); border: 0; font-variant-numeric: tabular-nums; }
     .presets { display: flex; flex-wrap: wrap; gap: var(--dn-space-2); margin-top: var(--dn-space-4); }
     .presets button { min-height: var(--dn-control-hit-height); padding: var(--dn-space-2) var(--dn-space-3); border: 1px solid var(--dn-line); border-radius: var(--dn-radius-button); background: var(--dn-white); color: var(--dn-ink); font: var(--dn-control-font); cursor: pointer; }
     .presets button[aria-pressed=true] { border-color: var(--dn-line-emphasis); background: var(--dn-home-panel); color: var(--dn-ink); }
