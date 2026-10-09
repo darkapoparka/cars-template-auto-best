@@ -11,7 +11,7 @@ const browser = await launchBrowser();
 const results = [];
 try {
   for (const width of [1024, 1440, 1920]) {
-    for (const route of ['/', '/listing-grid'].filter(route => !process.env.DISCOVERY_ROUTE || route === process.env.DISCOVERY_ROUTE)) {
+    for (const route of ['/', '/cars'].filter(route => !process.env.DISCOVERY_ROUTE || route === process.env.DISCOVERY_ROUTE)) {
       const page = await returningPage(browser, { viewport: { width, height: 900 }, reducedMotion: 'reduce' });
       const errors = [];
       page.on('pageerror', error => errors.push(error.message));
@@ -77,7 +77,7 @@ try {
       }
       const facetWidths = await form.locator('.dn-discovery__facets > label, .dn-discovery__facets > .dn-identity-field').evaluateAll(elements => elements.map(el => el.getBoundingClientRect().width));
       assert.ok(Math.max(...facetWidths) - Math.min(...facetWidths) < 1);
-      if (width === 1440 && route === '/listing-grid') await form.screenshot({ path: `${output}/cars-search-panel.png` });
+      if (width === 1440 && route === '/cars') await form.screenshot({ path: `${output}/cars-search-panel.png` });
       const identity = async (field, value) => {
         await form.locator(`[data-field=${field}] button`).click();
         await page.locator(`.dn-filter-picker input[value="${value}"]`).click();
@@ -108,8 +108,10 @@ try {
         assert.equal(await dialog.getByRole('tab').count(), 0, 'Brand opens its choices directly without category navigation');
         const frame = await dialog.boundingBox();
         const footer = await dialog.locator('.dn-search-footer').boundingBox();
-        assert.equal(frame.width, 380);
-        assert.equal(await dialog.locator('.dn-search-apply').evaluate(el => getComputedStyle(el).backgroundColor),
+        const anchor = await page.locator('.dn-listing-filter').boundingBox();
+        assert(Math.abs(frame.width - Math.min(anchor.width, width - 32)) < 1, 'The make grid follows its discovery-panel anchor');
+        assert(frame.x >= 15 && frame.x + frame.width <= width - 15, 'The expanded make grid stays inside the viewport');
+        assert.equal(await dialog.locator('.dn-search-apply').evaluate(el => { const base = getComputedStyle(el).backgroundColor; return base === 'rgba(0, 0, 0, 0)' ? getComputedStyle(el, '::before').backgroundColor : base; }),
           await form.locator('.dn-discovery__submit').evaluate(el => getComputedStyle(el).backgroundColor),
           'Focused selector actions share the neutral black desktop search treatment');
         assert((await dialog.locator('.dn-search-apply').boundingBox()).height >= 44);
@@ -184,6 +186,7 @@ try {
         await form.locator('.dn-discovery__keyword').click();
         const searchIdentity = async (field, value) => {
           await dialog.locator(`[data-field=${field}] button`).click();
+          if (field === "model") await page.locator(".dn-filter-picker").getByRole("searchbox").fill(value);
           await page.locator(`.dn-filter-picker input[value="${value}"]`).click();
           await page.keyboard.press('Escape');
           await page.locator('.dn-filter-picker').waitFor({ state: 'hidden' });
@@ -191,6 +194,7 @@ try {
         await searchIdentity('make','BMW');
         await dialog.locator('[data-field=model] button').click();
         assert.equal(await page.locator('.dn-filter-picker input[value="RS 6 Avant"]').count(), 0, 'Model choices respect the draft brands');
+        await page.locator('.dn-filter-picker').getByRole('searchbox').fill('X6 M Sport');
         await page.locator('.dn-filter-picker input[value="X6 M Sport"]').check();
         await page.keyboard.press('Escape');
         await searchIdentity('make','Audi');
@@ -198,7 +202,7 @@ try {
         assert.equal(await dialog.locator('input[name=model]').count(), 0, 'Removing a brand clears incompatible models');
         if (width === 1440) await dialog.screenshot({ path: `${output}/cars-search-menu.png` });
         await dialog.locator('.dn-listing-filter__dialog-submit').click();
-        await page.waitForURL(url => appPath(url) === '/listing-grid' && url.searchParams.get('make') === 'Audi');
+        await page.waitForURL(url => appPath(url) === '/cars' && url.searchParams.get('make') === 'Audi');
         assert.equal(await page.locator('.dn-listing-results .dn-vehicle-card').count(), 2);
         await form.locator('[data-facet=price]').click();
         await dialog.getByRole('spinbutton', { name: 'Цена от · €', exact: true }).fill('90000');
@@ -207,7 +211,7 @@ try {
         await dialog.locator('.dn-search-reset').click();
         assert.equal(await dialog.locator('.dn-search-apply').isEnabled(), true);
         await dialog.locator('.dn-search-apply').click();
-        await page.waitForURL(url => appPath(url) === '/listing-grid' && url.searchParams.get('make') === 'Audi');
+        await page.waitForURL(url => appPath(url) === '/cars' && url.searchParams.get('make') === 'Audi');
         assert.equal(new URL(page.url()).searchParams.has('dn-picker-choice'), false);
         assert.equal(await page.locator('.dn-listing-results .dn-vehicle-card').count(), 2);
       }
@@ -217,7 +221,7 @@ try {
         assert.equal(await bar.isVisible(), false, 'Home discovery intentionally stays in the hero instead of becoming sticky');
         await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
         await form.locator('.dn-discovery__submit').click();
-        await page.waitForURL(url => appPath(url) === '/listing-grid' && url.searchParams.get('make') === 'Audi');
+        await page.waitForURL(url => appPath(url) === '/cars' && url.searchParams.get('make') === 'Audi');
         assert.equal(await page.locator('.dn-listing-results .dn-vehicle-card').count(), 2);
       } else {
         await page.evaluate(() => window.scrollTo({ top: 900, behavior: 'instant' }));
@@ -249,7 +253,7 @@ try {
         await page.evaluate(() => window.scrollTo({ top: 900, behavior: 'instant' }));
         await bar.waitFor({ state: 'visible' });
         await bar.locator('.dn-discovery-sticky__submit').click();
-        await page.waitForURL(url => appPath(url) === '/listing-grid' && url.searchParams.get('make') === 'Audi');
+        await page.waitForURL(url => appPath(url) === '/cars' && url.searchParams.get('make') === 'Audi');
         assert.equal(await page.locator('.dn-listing-results .dn-vehicle-card').count(), 2);
         await page.setViewportSize({ width: 390, height: 844 });
         await page.evaluate(() => window.scrollTo({ top: 900, behavior: 'instant' }));
@@ -270,7 +274,10 @@ try {
         } else {
           for (const [field, values] of [['make', brands], ['model', models]]) {
             await form.locator(`[data-facet=${field}]`).click();
-            for (const value of values) await page.locator(`#dn-listing-filter-dialog .dn-desktop-choice input[value="${value}"]`).check();
+            for (const value of values) {
+              if (field === "model") await page.locator("#dn-listing-filter-dialog").getByRole("searchbox").fill(value);
+              await page.locator(`#dn-listing-filter-dialog .dn-desktop-choice input[value="${value}"]`).check();
+            }
             await page.locator('#dn-listing-filter-dialog .dn-search-apply').click();
             await page.waitForURL(url => url.searchParams.getAll(field).length === 2);
           }
@@ -283,7 +290,10 @@ try {
         for (const [field, values] of [['make', brands], ['model', models]]) {
           assert.deepEqual(await multiSearch.locator(`input[type=hidden][name=${field}]`).evaluateAll(inputs => inputs.map(input => input.value)), values, 'Search preserves repeated applied selections');
           await multiSearch.locator(`[data-field=${field}] button`).click();
-          for (const value of values) assert(await page.locator(`.dn-filter-picker input[value="${value}"]`).isChecked());
+          for (const value of values) {
+            if (field === "model") await page.locator(".dn-filter-picker").getByRole("searchbox").fill(value);
+            assert(await page.locator(`.dn-filter-picker input[value="${value}"]`).isChecked());
+          }
           await page.keyboard.press('Escape');
           assert(await multiSearch.isVisible(), 'Escape closes the nested picker and retains native search');
         }

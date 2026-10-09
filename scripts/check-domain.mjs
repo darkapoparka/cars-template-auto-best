@@ -31,6 +31,11 @@ const listingDraft = await import(pathToFileURL(`${out}/listing-draft.mjs`));
 const modelCatalogue = await import(pathToFileURL(`${out}/model-catalogue.mjs`));
 const journeys = await import(pathToFileURL(`${out}/journeys.mjs`));
 const records = inventory.featuredVehicles;
+// Cache only pinned catalogue identities, never arbitrary URL selections.
+const unknownFamilies = modelCatalogue.catalogueFamilies('Unlisted Dealer Make');
+assert(Object.isFrozen(unknownFamilies));
+for (let index = 0; index < 2000; index++) assert.equal(modelCatalogue.catalogueFamilies('Unlisted Dealer Make ' + index), unknownFamilies);
+assert.equal(modelCatalogue.catalogueFamilies(' bMw '), modelCatalogue.catalogueFamilies('BMW'));
 const bmwFamilies = modelCatalogue.modelMakes(records, ['BMW'], [], ['BMW'])[0].families;
 assert.deepEqual(bmwFamilies.slice(0, 8).map(family => family.name), Array.from({ length: 8 }, (_, index) => `${index + 1} Series`));
 assert.equal(bmwFamilies.find(family => family.name === 'X Series').count, 2);
@@ -76,20 +81,9 @@ for (const locale of ['bg', 'en']) {
   assert.deepEqual(new Set(listing.listingFilterOptions.makes.filter(Boolean)), new Set(records.map(vehicle => vehicle.make)), 'The desktop catalogue never changes stock-derived model owners');
   assert.equal(listing.filterListingVehicles(records, listing.parseListingFilters(new URLSearchParams({ make: 'Toyota' })), locale).length, 0);
 }
-const demoContent = await import(pathToFileURL(out + '/demo-content.mjs'));
 const formatters = await import(pathToFileURL(out + '/locale-formatters.mjs'));
 const localeMessages = await import(pathToFileURL(out + '/locale-messages.mjs'));
 const localeCore = await import(pathToFileURL(out + '/locale-core.mjs'));
-for (let count = 0; count <= records.length; count++) {
-  const stock = Object.freeze(records.slice(0, count));
-  const showcases = demoContent.createDemoWorkflowShowcases(stock);
-  for (const [topic, positions] of [['trade-in', [0, 3, 5]], ['import', [1, 2, 4]]]) {
-    assert.deepEqual(showcases[topic].vehicles, positions.filter(position => position < count).map(position => stock[position]), 'Sparse dealer inventory never emits undefined cards');
-    assert.notEqual(showcases[topic].vehicles, stock);
-  }
-}
-assert.deepEqual(demoContent.demoWorkflowShowcases['trade-in'].vehicles.map(vehicle => vehicle.id), [1, 4, 7]);
-assert.deepEqual(demoContent.demoWorkflowShowcases.import.vehicles.map(vehicle => vehicle.id), [2, 3, 6]);
 for (const locale of ['en', 'bg']) {
   const first = formatters.localeFormatters(locale);
   assert.equal(formatters.localeFormatters(locale), first, 'Repeated rendering reuses formatters');
@@ -105,6 +99,15 @@ for (const locale of ['en', 'bg']) {
   }
 }
 assert.throws(() => formatters.localeFormatters('invalid'), /Language is not enabled/);
+
+const catalog = await import(pathToFileURL(out + '/locale-catalog.mjs'));
+for (const locale of ['en', 'bg']) for (const [key, pattern] of Object.entries(catalog[locale])) {
+  const parameters = Object.fromEntries([...pattern.matchAll(/\{([a-zA-Z][a-zA-Z0-9_]*)\}/g)].map(([, name]) => [name, 'Reviewed ' + name]));
+  assert.equal(localeMessages.message(locale, key, parameters), pattern.replace(/\{([a-zA-Z][a-zA-Z0-9_]*)\}/g, (_, name) => parameters[name]), locale + ': ' + key);
+}
+for (const locale of ['en', 'bg']) for (const value of ['', '80000', '1e3', 0, -1, 1234.56, NaN, Infinity]) {
+  assert.equal(listingDraft.formatListingNumber(value, locale), new Intl.NumberFormat(localeCore.intlLocale(locale)).format(Number(value)));
+}
 
 const presentation = await import(pathToFileURL(`${out}/locale-presentation.mjs`));
 for (const source of ['Бензин/ЛПГ', 'Бензин / ЛПГ', 'Petrol/LPG', 'Petrol / LPG']) {
@@ -266,8 +269,16 @@ assert.deepEqual(listing.listingBudgetCaps(records), [60000, 80000, 100000]);
 for (const cap of listing.listingBudgetCaps(records)) {
   assert(listing.filterListingVehicles(records, listing.parseListingFilters(new URLSearchParams({ price_max: String(cap) }))).length > 0);
 }
-for (const value of ['//example.com/listing-grid', '/\\example.com', 'javascript:alert(1)', '/contact', '/listing-grid/evil', 'https://example.com/listing-grid']) assert.equal(journeys.listReturn(value, '/listing-grid'), '/listing-grid');
-assert.equal(journeys.listReturn('/listing-grid?make=BMW#vehicle-4', '/listing-grid'), '/listing-grid?make=BMW#vehicle-4');
+for (const value of ['//example.com/cars', '/\\example.com', 'javascript:alert(1)', '/contact', '/cars/evil', 'https://example.com/cars']) assert.equal(journeys.listReturn(value, '/cars'), '/cars');
+assert.equal(journeys.listReturn('/cars?make=BMW#vehicle-4', '/cars'), '/cars?make=BMW#vehicle-4');
+assert.equal(journeys.listReturn('/listing-grid?make=BMW#vehicle-4', '/cars'), '/cars?make=BMW#vehicle-4');
+for (const locale of ['en', 'bg']) {
+  assert.equal(journeys.listReturn(`/${locale}/listing-grid?make=BMW&make=Audi#vehicle-4`, '/cars'), `/${locale}/cars?make=BMW&make=Audi#vehicle-4`);
+  assert.equal(journeys.listReturn(`/${locale}/cars?make=BMW#vehicle-4`, '/cars'), `/${locale}/cars?make=BMW#vehicle-4`);
+}
+for (const value of ['//example.com/listing-grid', 'https://example.com/listing-grid', '/listing-grid/evil', '/variant-2/en/listing-grid']) {
+  assert.equal(journeys.listReturn(value, '/cars'), '/cars');
+}
 for (const value of ['0', '01', '1x', '999', 'BMW']) assert.equal(journeys.selectedVehicle(value), null);
 assert.equal(journeys.selectedVehicle('4').id, 4);
 
